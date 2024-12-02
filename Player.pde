@@ -10,6 +10,7 @@ class Player {
   PImage[] side_sprite = new PImage[numFrames];
   PImage rocketLauncher_sprite;
   PImage rocket_sprite;
+  PImage sword_sprite;
   
   // Character
   PVector pos = new PVector(0,0);
@@ -21,7 +22,7 @@ class Player {
   float timer1Max = 0.0;
   float timer2Max = 0.0;
   float timer3Max = 0.0;
-  float swordTimer = 0.3;
+  float swordTimer = 1.0;
   float spikeTimer = 0.7;
   float bowPullback = 0.5;
   float boostTimer = 3.0;
