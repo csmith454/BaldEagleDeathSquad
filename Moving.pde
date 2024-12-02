@@ -67,12 +67,12 @@ class Moving implements State {
         // Makes the sword rotate around the player.
         translate(player.pixelSize/2,player.pixelSize);
         float degree = -90;
-        if (player.inputBuffer[5] && player.timer1 >= player.swordTimer/2) {
+        if (player.inputBuffer[5] && player.timer1 >= player.swordTimer) {
           player.timer1 = 0.0;
         }
         if (player.timer1 < player.swordTimer) {
           degree = 140;
-          degree -= lerp(0,100,player.timer1 * (1/player.swordTimer));
+          degree -= lerp(0,100,player.timer1 * (1/player.swordTimer/2));
         }
         if (mouseY != height / 2 && mouseX != width / 2) {
           degree = atan2((mouseY - height/2),(mouseX - width/2)) + radians(degree);
