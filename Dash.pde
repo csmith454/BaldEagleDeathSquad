@@ -1,4 +1,4 @@
-adclass Dash implements State {
+class Dash implements State {
   boolean [] dashBuffer;;
   float timer = 0.0;
   float seconds = 0.5;

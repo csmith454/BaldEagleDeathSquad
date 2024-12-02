@@ -61,6 +61,26 @@ class Moving implements State {
       if (player.abilities[0]) {
         // Sword
         player.timer1Max = player.swordTimer;
+        pushMatrix();
+        translate(-player.pos.x-player.pixelSize/2,-player.pos.y-player.pixelSize);
+        
+        // Makes the sword rotate around the player.
+        translate(player.pixelSize/2,player.pixelSize);
+        float degree = -90;
+        if (player.inputBuffer[5] && player.timer1 >= player.swordTimer) {
+          player.timer1 = 0.0;
+        }
+        if (player.timer1 < player.swordTimer/1.5) {
+          degree = 140;
+          degree -= lerp(0,100,player.timer1 * 1.5 * (1/player.swordTimer));
+        }
+        if (mouseY != height / 2 && mouseX != width / 2) {
+          degree = atan2((mouseY - height/2),(mouseX - width/2)) + radians(degree);
+          rotate(degree);
+        }
+        translate(-player.pixelSize/2,-player.pixelSize);
+        image(player.sword_sprite,0,-player.pixelSize * 0.1,player.pixelSize,player.pixelSize);
+        popMatrix();
       }
       else if (player.abilities[1]) {
         // Spike

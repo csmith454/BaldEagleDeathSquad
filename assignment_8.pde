@@ -55,6 +55,7 @@ void setup() {
   }
   player.rocketLauncher_sprite = loadImage("rocketLauncher.png");
   player.rocket_sprite = loadImage("rocket.png");
+  player.sword_sprite = loadImage("sword.png");
   
 }
 
