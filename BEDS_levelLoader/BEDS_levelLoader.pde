@@ -17,6 +17,9 @@ ArrayList<Spawn> spawn1;
 ArrayList<Spawn> spawn2;
 ArrayList<Spawn> spawn3;
 
+int gameState;
+GUI g;
+
 void setup() {
 
   size(592,592);
@@ -32,10 +35,24 @@ void setup() {
   spawn3 = new ArrayList<Spawn>();
   
   loadData();
+  
+  gameState = 0;
+  g = new GUI();
+  g.display(gameState);
 }
 
 void draw() {
-  L1.displayLevel();
+  g.display(gameState);
+  
+  if (gameState == 1) {
+    L1.displayLevel();
+  }
+  else if (gameState == 2) {
+    // display level 2
+  }
+  else if (gameState == 3) {
+    //display level 3
+  }
 }
 
 ArrayList<PImage> L1createTilesToDraw() {
