@@ -4,7 +4,7 @@ class Player {
   float animLength = 1;
   
   // Sprites
-  int pixelSize = 100;
+  int pixelSize = 32;
   PImage[] front_sprite = new PImage[numFrames];
   PImage[] back_sprite = new PImage[numFrames];
   PImage[] side_sprite = new PImage[numFrames];
@@ -78,6 +78,11 @@ class Player {
     if (timer3 < timer3Max) {
       timer3 += 1.0/frameRate;
     }
+  }
+  
+  void updatePos(PVector pos) {
+    this.pos.x += pos.x;
+    this.pos.y += pos.y;
   }
   
   void keyPressed() {

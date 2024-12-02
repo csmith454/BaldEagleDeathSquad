@@ -20,6 +20,7 @@ ArrayList<Spawn> spawn1;
 ArrayList<Spawn> spawn2;
 ArrayList<Spawn> spawn3;
 
+boolean startOfLevel = true;
 int gameState;
 GUI g;
 
@@ -40,7 +41,7 @@ void setup() {
   
   loadData();
   
-  gameState = 0;
+  gameState = 1;
   g = new GUI();
   g.display(gameState);
   
@@ -63,26 +64,30 @@ void draw() {
   g.display(gameState);
   
   if (gameState == 1) {
+    background(255);
+    camera.move_camera();
     L1.displayLevel();
+    player.update();
+    if (startOfLevel) {
+      player.updatePos(new PVector(-250,-350)); // Make this the spawn position
+      startOfLevel = false;
+      println("a");
+    }
+    for (Rocket rocket: rockets) {
+      rocket.display_move();
+    }
   }
   else if (gameState == 2) {
     // display level 2
+    camera.move_camera();
+    player.update();
   }
   else if (gameState == 3) {
     //display level 3
+    camera.move_camera();
+    player.update();
   }
   
-  background(255);
-  camera.move_camera();
-  fill(255,0,0);
-  rect(100,100,100,100);
-  rect(-500,-500,100,100);
-  rect(-600,0,100,100);
-  fill(255);
-  for (Rocket rocket: rockets) {
-    rocket.display_move();
-  }
-  player.update();
 }
 
 void keyPressed() {
