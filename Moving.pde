@@ -70,9 +70,9 @@ class Moving implements State {
         if (player.inputBuffer[5] && player.timer1 >= player.swordTimer) {
           player.timer1 = 0.0;
         }
-        if (player.timer1 < player.swordTimer) {
+        if (player.timer1 < player.swordTimer/1.5) {
           degree = 140;
-          degree -= lerp(0,100,player.timer1 * (1/player.swordTimer/2));
+          degree -= lerp(0,100,player.timer1 * 1.5 * (1/player.swordTimer));
         }
         if (mouseY != height / 2 && mouseX != width / 2) {
           degree = atan2((mouseY - height/2),(mouseX - width/2)) + radians(degree);

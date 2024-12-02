@@ -22,7 +22,7 @@ class Player {
   float timer1Max = 0.0;
   float timer2Max = 0.0;
   float timer3Max = 0.0;
-  float swordTimer = 1.0;
+  float swordTimer = 0.7;
   float spikeTimer = 0.7;
   float bowPullback = 0.5;
   float boostTimer = 3.0;
