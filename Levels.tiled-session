@@ -1,0 +1,72 @@
+{
+    "Map/SizeTest": {
+        "height": 4300,
+        "width": 2
+    },
+    "activeFile": "tiles/level2/Level2.tmx",
+    "expandedProjectPaths": [
+        "."
+    ],
+    "fileStates": {
+        "Level1.tmj": {
+            "scale": 0.8247,
+            "selectedLayer": 1,
+            "viewCenter": {
+                "x": 197.6476294410089,
+                "y": 242.5124287619741
+            }
+        },
+        "tiles/level1/Level1.tmj": {
+            "scale": 0.62,
+            "selectedLayer": 0,
+            "viewCenter": {
+                "x": 283.06451612903226,
+                "y": 374.1935483870968
+            }
+        },
+        "tiles/level1/Level1.tsj": {
+            "dynamicWrapping": true,
+            "scaleInDock": 1,
+            "scaleInEditor": 1
+        },
+        "tiles/level1/tiles/level1/Level1.tsj": {
+            "scaleInDock": 1
+        },
+        "tiles/level2/Level2.tmx": {
+            "scale": 1,
+            "selectedLayer": 0,
+            "viewCenter": {
+                "x": 295.5,
+                "y": 296
+            }
+        },
+        "tiles/level2/Level2.tsj": {
+            "dynamicWrapping": false
+        },
+        "tiles/level2/Level2.tsx": {
+            "scaleInDock": 1,
+            "scaleInEditor": 1
+        }
+    },
+    "last.externalTilesetPath": "/Users/colesmith/Desktop/Coding/324E/BEDS/tiles/level1",
+    "last.imagePath": "/Users/colesmith/Desktop/Coding/324E/tiles/level1",
+    "map.height": 37,
+    "map.lastUsedFormat": "tmx",
+    "map.tileHeight": 16,
+    "map.tileWidth": 16,
+    "map.width": 37,
+    "openFiles": [
+        "tiles/level2/Level2.tmx",
+        "tiles/level2/Level2.tsx"
+    ],
+    "project": "Levels.tiled-project",
+    "recentFiles": [
+        "tiles/level2/Level2.tsx",
+        "tiles/level2/Level2.tmx",
+        "tiles/level1/Level1.tsj",
+        "tiles/level1/Level1.tmj",
+        "Level1.tmj"
+    ],
+    "tileset.lastUsedFormat": "tsx",
+    "tileset.type": 1
+}
