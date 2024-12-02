@@ -69,6 +69,7 @@ void draw() {
     L1.displayLevel();
     player.update();
     if (startOfLevel) {
+      // change PVector pos to spawn vector position
       player.updatePos(new PVector(-250,-350)); // Make this the spawn position
       startOfLevel = false;
       println("a");
