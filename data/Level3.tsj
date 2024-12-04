@@ -6,93 +6,111 @@
      "width":1
     },
  "margin":0,
- "name":"Level1",
+ "name":"Level3",
  "spacing":0,
- "tilecount":14,
+ "tilecount":17,
  "tiledversion":"1.11.0",
  "tileheight":16,
  "tiles":[
         {
          "id":0,
-         "image":"box.png",
+         "image":"basementbrick.png",
          "imageheight":16,
          "imagewidth":16
         }, 
         {
          "id":1,
-         "image":"boxFace.png",
+         "image":"basementmoss.png",
          "imageheight":16,
          "imagewidth":16
         }, 
         {
          "id":2,
-         "image":"brick.png",
+         "image":"basementmossbrickBottom.png",
          "imageheight":16,
          "imagewidth":16
         }, 
         {
          "id":3,
-         "image":"grass.png",
+         "image":"ground.png",
          "imageheight":16,
          "imagewidth":16
         }, 
         {
          "id":4,
-         "image":"pipe.png",
+         "image":"basementpipeB.png",
          "imageheight":16,
          "imagewidth":16
         }, 
         {
          "id":5,
-         "image":"pipewheel.png",
+         "image":"basementpipeBL.png",
          "imageheight":16,
          "imagewidth":16
         }, 
         {
          "id":6,
-         "image":"roof.png",
+         "image":"basementpipeBR.png",
          "imageheight":16,
          "imagewidth":16
         }, 
         {
          "id":7,
-         "image":"roofL.png",
+         "image":"basementpipeCenter.png",
          "imageheight":16,
          "imagewidth":16
         }, 
         {
          "id":8,
-         "image":"roofLightR.png",
+         "image":"basementpipeL.png",
          "imageheight":16,
          "imagewidth":16
         }, 
         {
          "id":9,
-         "image":"roofR.png",
+         "image":"basementpipeR.png",
          "imageheight":16,
          "imagewidth":16
         }, 
         {
          "id":10,
-         "image":"roofRightFace.png",
+         "image":"basementpipeTL.png",
          "imageheight":16,
          "imagewidth":16
         }, 
         {
          "id":11,
-         "image":"roofTL.png",
+         "image":"basementpipeTop.png",
          "imageheight":16,
          "imagewidth":16
         }, 
         {
          "id":12,
-         "image":"roofTR.png",
+         "image":"basementpipeTR.png",
          "imageheight":16,
          "imagewidth":16
         }, 
         {
          "id":13,
          "image":"insidefloor.png",
+         "imageheight":16,
+         "imagewidth":16
+        }, 
+        {
+         "id":14,
+         "image":"basementwater.png",
+         "imageheight":16,
+         "imagewidth":16
+        }, 
+        {
+         "id":15,
+         "image":"basementbridge.png",
+         "imageheight":16,
+         "imagewidth":16
+        }, 
+        {
+         "id":16,
+         "image":"basementbridgeL.png",
          "imageheight":16,
          "imagewidth":16
         }],
