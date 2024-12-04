@@ -5,11 +5,10 @@ class Rocket {
   float vel;
   PImage rocket_sprite;
   float[] matrix;
-  float[] trans;
-  float[] invTrans;
-  float[] rotZ;
   PVector hitbox = new PVector(0,0);
   float size;
+  float lifetime = 10;
+  float count = 0;
   
   Rocket(PVector pos, float degree, PImage sprite, int pixelSize, float[] matrix) {
     this.pos = pos;
@@ -22,15 +21,11 @@ class Rocket {
   }
   
   void display() {
-    this.trans = new float[] {1,0,-pos.x,
-                  0,1,-pos.y,
-                  0,0,1};
-    this.invTrans = new float[] {1,0,pos.x,
-                    0,1,pos.y,
-                    0,0,1};
     pushMatrix();
     translate(-pos.x,-pos.y);
-    matrix = this.multMatrix(matrix,trans);
+    matrix = this.multMatrix(matrix,new float[] {1,0,-pos.x,
+                                                0,1,-pos.y,
+                                                0,0,1});
     rotate(degree);
     printMatrix();
     println(matrix);
@@ -43,13 +38,15 @@ class Rocket {
     
     noFill();
     stroke(255);
-    //ellipse(this.matrix[2],this.matrix[5],size,size); // Hitbox
+    ellipse(this.matrix[2],this.matrix[5],size,size); // Hitbox
     
     this.hitbox = new PVector(this.matrix[2],this.matrix[5]);
     matrix = this.multMatrix(matrix,new float[] {1,0,-sin(degree) * (player.pixelSize * 0.9),
                                                 0,1,cos(degree) * (player.pixelSize * 0.9),
                                                 0,0,1});
-    matrix = this.multMatrix(matrix,invTrans);
+    matrix = this.multMatrix(matrix,new float[] {1,0,pos.x,
+                                                0,1,pos.y,
+                                                0,0,1});
   }
   
   void move() {
@@ -57,12 +54,13 @@ class Rocket {
   }
   
   void display_move() {
+    count += 1/frameRate;
     this.display();
     this.move();
   }
   
   boolean check_collision(PVector otherPos, float otherSize) {
-    float dist = this.pos.dist(otherPos);
+    float dist = this.hitbox.dist(otherPos);
     if (dist <= this.size + otherSize) {
       return true;
     }

@@ -1,8 +1,12 @@
 ArrayList<Rocket> rockets = new ArrayList<Rocket>();
+ArrayList<Rocket> remove_rockets = new ArrayList<Rocket>();
+ArrayList<Spike> spikes = new ArrayList<Spike>();
+ArrayList<Spike> remove_spikes = new ArrayList<Spike>();
+
 float[] matrix = {1,0,0,
                   0,1,0,
                   0,0,1}; // Used for manually storing transformations that happen to the world matrix. Processing doesn't have a way that I know of to actually get the matrix to be used by code, so I keep track of my own matrix for use in monitoring positions.
-Player player = new Player(rockets, matrix);
+Player player = new Player(matrix, rockets, spikes);
 Camera camera = new Camera(player.pos);
 
 JSONObject level1;
@@ -60,6 +64,12 @@ void setup() {
   player.rocketLauncher_sprite = loadImage("rocketLauncher.png");
   player.rocket_sprite = loadImage("rocket.png");
   player.sword_sprite = loadImage("sword.png");
+  player.spike_sprite = loadImage("spike.png");
+  for (int i = 0; i < 3; i++) {
+    String imageName = "bow_" + nf(i + 1, 1) + ".png";
+    player.bow_sprite[i] = loadImage(imageName);
+  }
+  player.arrow = loadImage("arrow.png");
   
 }
 
@@ -70,15 +80,29 @@ void draw() {
     background(255);
     camera.move_camera();
     L1.displayLevel();
-    player.update();
     if (startOfLevel) {
       player.updatePos(new PVector(-250,-350)); // Make this the spawn position
       startOfLevel = false;
       println("a");
     }
+    // Handles all character game objects
     for (Rocket rocket: rockets) {
       rocket.display_move();
+      if (rocket.count >= rocket.lifetime) {
+        remove_rockets.add(rocket);
+      }
     }
+    for (Spike spike: spikes) {
+      spike.display();
+      if (spike.count >= spike.lifetime) {
+        remove_spikes.add(spike);
+      }
+    }
+    rockets.removeAll(remove_rockets);
+    spikes.removeAll(remove_spikes);
+    remove_rockets.clear();
+    remove_spikes.clear();
+    player.update();
   }
   else if (gameState == 2) {
     // display level 2

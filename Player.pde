@@ -12,8 +12,12 @@ class Player {
   PImage rocketLauncher_sprite;
   PImage rocket_sprite;
   PImage sword_sprite;
+  PImage spike_sprite;
+  PImage[] bow_sprite = new PImage[3];
+  PImage arrow;
   
   // Character
+  float speed = 2;
   PVector pos = new PVector(0,0);
   float size = 14;
   PVector hitBoxPos = new PVector(0,0);
@@ -27,14 +31,14 @@ class Player {
   float timer2Max = 0.0;
   float timer3Max = 0.0;
   float swordTimer = 0.7;
-  float spikeTimer = 0.7;
+  float spikeTimer = 1.5;
   float bowPullback = 0.5;
   float boostTimer = 3.0;
   float slowTimer = 5.0;
   float jumpTimer = 1.0;
   float rocketTimer = 2.0;
   float blockTimer = 2.5;
-  float blockCount = 3;
+  int blockCount = 3;
   float windAmount = 100;
   
   
@@ -49,9 +53,11 @@ class Player {
   
   // Other Entitites
   ArrayList<Rocket> rockets;
+  ArrayList<Spike> spikes;
   
-  Player(ArrayList<Rocket> rockets, float[] matrix) {
+  Player(float[] matrix, ArrayList<Rocket> rockets, ArrayList<Spike> spikes) {
     this.rockets = rockets;
+    this.spikes = spikes;
     stateMachine = new StateMachine();
     for (int i = 0; i < abilities.length; i++) {
       abilities[i] = true; // Currently set to true for testing purposes, later set it to false when abiliies become unlockable.
@@ -86,9 +92,8 @@ class Player {
     
     noFill();
     stroke(255);
-    //ellipse(-pos.x,-pos.y,size,size); // Hurtbox
-    //ellipse(hitBoxPos.x,hitBoxPos.y,hitBoxSize,hitBoxSize); //Hitbox
-    println(hitBoxPos, "Hitbox");
+    ellipse(-pos.x,-pos.y,size,size); // Hurtbox
+    ellipse(hitBoxPos.x,hitBoxPos.y,hitBoxSize,hitBoxSize); //Hitbox
   }
   
   void updatePos(PVector pos) {
