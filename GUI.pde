@@ -1,4 +1,6 @@
 class GUI {
+  // font can be found here https://www.fontsquirrel.com/fonts/sh-pinscher
+  // the font's license can be found here https://www.fontsquirrel.com/license/sh-pinscher
   PFont shPinscherReg;
   // start and end screen display
   String title;

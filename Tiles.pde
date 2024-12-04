@@ -5,6 +5,7 @@ class Tiles {
   float x;
   float y;
   
+  
   Tiles(JSONArray data, ArrayList<PImage> tilesToDraw) {
     this.data = data.toIntArray();
     this.tilesToDraw = tilesToDraw;
