@@ -56,147 +56,195 @@
          "name":"Collisions",
          "objects":[
                 {
-                 "height":58.4269662921348,
+                 "height":58.427,
                  "id":1,
                  "name":"",
                  "rotation":0,
                  "type":"",
                  "visible":true,
-                 "width":591.011235955056,
-                 "x":1.12359550561798,
+                 "width":591.011,
+                 "x":1.1236,
                  "y":0
                 }, 
                 {
-                 "height":530.337078651685,
+                 "height":530.337,
                  "id":2,
                  "name":"",
                  "rotation":0,
                  "type":"",
                  "visible":true,
-                 "width":13.4831460674158,
-                 "x":577.52808988764,
-                 "y":60.6741573033708
+                 "width":13.4831,
+                 "x":577.528,
+                 "y":60.6742
                 }, 
                 {
-                 "height":528.089887640449,
+                 "height":528.09,
                  "id":3,
                  "name":"",
                  "rotation":0,
                  "type":"",
                  "visible":true,
-                 "width":14.6067415730337,
-                 "x":1.12359550561798,
-                 "y":62.9213483146067
+                 "width":14.6067,
+                 "x":1.1236,
+                 "y":62.9213
                 }, 
                 {
-                 "height":13.4831460674157,
+                 "height":13.4831,
                  "id":4,
                  "name":"",
+                 "properties":[
+                        {
+                         "name":"water",
+                         "type":"bool",
+                         "value":true
+                        }],
                  "rotation":0,
                  "type":"",
                  "visible":true,
-                 "width":204.494382022472,
-                 "x":65.1685393258427,
-                 "y":97.7528089887641
+                 "width":204.494,
+                 "x":65.1685,
+                 "y":97.7528
                 }, 
                 {
-                 "height":138.202247191011,
+                 "height":138.202,
                  "id":5,
                  "name":"",
+                 "properties":[
+                        {
+                         "name":"water",
+                         "type":"bool",
+                         "value":true
+                        }],
                  "rotation":0,
                  "type":"",
                  "visible":true,
-                 "width":61.7977528089888,
-                 "x":64.0449438202247,
-                 "y":115.730337078652
+                 "width":61.7978,
+                 "x":64.0449,
+                 "y":115.73
                 }, 
                 {
-                 "height":170.786516853933,
+                 "height":170.787,
                  "id":6,
                  "name":"",
+                 "properties":[
+                        {
+                         "name":"water",
+                         "type":"bool",
+                         "value":true
+                        }],
                  "rotation":0,
                  "type":"",
                  "visible":true,
-                 "width":61.7977528089888,
-                 "x":65.1685393258427,
-                 "y":307.865168539326
+                 "width":61.7978,
+                 "x":65.1685,
+                 "y":307.865
                 }, 
                 {
-                 "height":44.9438202247191,
+                 "height":44.9438,
                  "id":7,
                  "name":"",
+                 "properties":[
+                        {
+                         "name":"water",
+                         "type":"bool",
+                         "value":true
+                        }],
                  "rotation":0,
                  "type":"",
                  "visible":true,
-                 "width":47.1910112359551,
-                 "x":65.1685393258427,
-                 "y":484.269662921348
+                 "width":47.191,
+                 "x":65.1685,
+                 "y":484.27
                 }, 
                 {
-                 "height":13.4831460674156,
+                 "height":13.4831,
                  "id":8,
                  "name":"",
+                 "properties":[
+                        {
+                         "name":"water",
+                         "type":"bool",
+                         "value":true
+                        }],
                  "rotation":0,
                  "type":"",
                  "visible":true,
-                 "width":348.314606741573,
-                 "x":178.651685393258,
-                 "y":514.606741573034
+                 "width":348.315,
+                 "x":178.652,
+                 "y":514.607
                 }, 
                 {
-                 "height":203.370786516854,
+                 "height":203.371,
                  "id":9,
                  "name":"",
+                 "properties":[
+                        {
+                         "name":"water",
+                         "type":"bool",
+                         "value":true
+                        }],
                  "rotation":0,
                  "type":"",
                  "visible":true,
-                 "width":61.7977528089888,
-                 "x":465.168539325843,
-                 "y":308.988764044944
+                 "width":61.7978,
+                 "x":465.169,
+                 "y":308.989
                 }, 
                 {
-                 "height":15.7303370786517,
+                 "height":15.7303,
                  "id":10,
                  "name":"",
+                 "properties":[
+                        {
+                         "name":"water",
+                         "type":"bool",
+                         "value":true
+                        }],
                  "rotation":0,
                  "type":"",
                  "visible":true,
-                 "width":203.370786516854,
-                 "x":322.47191011236,
-                 "y":96.6292134831461
+                 "width":203.371,
+                 "x":322.472,
+                 "y":96.6292
                 }, 
                 {
-                 "height":139.325842696629,
+                 "height":139.326,
                  "id":11,
                  "name":"",
+                 "properties":[
+                        {
+                         "name":"water",
+                         "type":"bool",
+                         "value":true
+                        }],
                  "rotation":0,
                  "type":"",
                  "visible":true,
-                 "width":61.7977528089887,
-                 "x":464.044943820225,
-                 "y":115.730337078652
+                 "width":61.7978,
+                 "x":464.045,
+                 "y":115.73
                 }, 
                 {
-                 "height":28.0898876404494,
+                 "height":28.0899,
                  "id":12,
                  "name":"",
                  "rotation":0,
                  "type":"",
                  "visible":true,
-                 "width":75.2808988764045,
-                 "x":19.1011235955056,
-                 "y":562.921348314607
+                 "width":75.2809,
+                 "x":19.1011,
+                 "y":562.921
                 }, 
                 {
-                 "height":28.0898876404494,
+                 "height":28.0899,
                  "id":13,
                  "name":"",
                  "rotation":0,
                  "type":"",
                  "visible":true,
-                 "width":380.898876404494,
-                 "x":194.38202247191,
-                 "y":561.797752808989
+                 "width":380.899,
+                 "x":194.382,
+                 "y":561.798
                 }],
          "opacity":1,
          "type":"objectgroup",
@@ -210,26 +258,26 @@
          "name":"Spawns",
          "objects":[
                 {
-                 "height":25.8426966292135,
+                 "height":25.8427,
                  "id":14,
                  "name":"",
                  "rotation":0,
                  "type":"",
                  "visible":true,
-                 "width":52.808988764045,
-                 "x":269.662921348315,
-                 "y":65.1685393258427
+                 "width":52.809,
+                 "x":269.663,
+                 "y":65.1685
                 }, 
                 {
-                 "height":22.4719101123595,
+                 "height":22.4719,
                  "id":15,
                  "name":"",
                  "rotation":0,
                  "type":"",
                  "visible":true,
-                 "width":76.4044943820225,
-                 "x":104.494382022472,
-                 "y":567.415730337079
+                 "width":76.4045,
+                 "x":104.494,
+                 "y":567.416
                 }],
          "opacity":1,
          "type":"objectgroup",
@@ -246,7 +294,7 @@
  "tilesets":[
         {
          "firstgid":1,
-         "source":"Level3.tsx"
+         "source":"..\/..\/tiles\/Level3.tsx"
         }],
  "tilewidth":16,
  "type":"map",

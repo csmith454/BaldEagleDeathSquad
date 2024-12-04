@@ -41,7 +41,7 @@ void setup() {
   
   loadData();
   
-  gameState = 1;
+  gameState = 3;
   g = new GUI();
   g.display(gameState);
   
@@ -69,7 +69,7 @@ void draw() {
     L1.displayLevel();
     player.update();
     if (startOfLevel) {
-      player.updatePos(new PVector(-L1.spawns.get(0).x,-L1.spawns.get(0).y)); // Make this the spawn position
+      player.updatePos(new PVector(-L1.spawns.get(1).x-20,-L1.spawns.get(1).y)); // Make this the spawn position
       startOfLevel = false;
       println("a");
     }
@@ -84,7 +84,7 @@ void draw() {
     L2.displayLevel();
     player.update();
     if (startOfLevel) {
-      player.updatePos(new PVector(-L2.spawns.get(0).x,-L2.spawns.get(0).y)); // Make this the spawn position
+      player.updatePos(new PVector(-L2.spawns.get(1).x-20,-L2.spawns.get(1).y)); // Make this the spawn position
       startOfLevel = false;
       println("a");
     }
@@ -99,7 +99,7 @@ void draw() {
     L3.displayLevel();
     player.update();
     if (startOfLevel) {
-      player.updatePos(new PVector(-L3.spawns.get(1).x,-L3.spawns.get(1).y)); // Make this the spawn position
+      player.updatePos(new PVector(-L3.spawns.get(1).x-20,-L3.spawns.get(1).y)); // Make this the spawn position
       startOfLevel = false;
       println("a");
     }
