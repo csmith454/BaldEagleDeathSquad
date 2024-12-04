@@ -1,8 +1,9 @@
 class Moving implements State {
   float degree = 0;
+  float hitBoxSize_Store;
   
-  Moving() {
-
+  Moving(float hitBoxSize) {
+    hitBoxSize_Store = hitBoxSize;
   }
   
   void onEnter() {
@@ -62,10 +63,12 @@ class Moving implements State {
         // Sword
         player.timer1Max = player.swordTimer;
         pushMatrix();
-        translate(-player.pos.x-player.pixelSize/2,-player.pos.y-player.pixelSize);
+        translate(-player.pos.x,-player.pos.y);
+        player.matrix = player.multMatrix(player.matrix, new float[] {1,0,-player.pos.x,
+                                                      0,1,-player.pos.y,
+                                                      0,0,1});
         
         // Makes the sword rotate around the player.
-        translate(player.pixelSize/2,player.pixelSize);
         float degree = -90;
         if (player.inputBuffer[5] && player.timer1 >= player.swordTimer) {
           player.timer1 = 0.0;
@@ -73,14 +76,29 @@ class Moving implements State {
         if (player.timer1 < player.swordTimer/1.5) {
           degree = 140;
           degree -= lerp(0,100,player.timer1 * 1.5 * (1/player.swordTimer));
+          player.hitBoxSize = this.hitBoxSize_Store;
+        }
+        else {
+          player.hitBoxSize = 0;
         }
         if (mouseY != height / 2 && mouseX != width / 2) {
           degree = atan2((mouseY - height/2),(mouseX - width/2)) + radians(degree);
           rotate(degree);
         }
+        player.matrix = player.multMatrix(player.matrix,new float[] {1,0,sin(degree) * (player.pixelSize * 0.7),
+                                                                    0,1,-cos(degree) * (player.pixelSize * 0.7),
+                                                                    0,0,1});
         translate(-player.pixelSize/2,-player.pixelSize);
         image(player.sword_sprite,0,-player.pixelSize * 0.1,player.pixelSize,player.pixelSize);
+        player.hitBoxPos = new PVector(player.matrix[2],player.matrix[5]);
+        println(player.hitBoxPos);
         popMatrix();
+        player.matrix = player.multMatrix(player.matrix,new float[] {1,0,-sin(degree) * (player.pixelSize * 0.7),
+                                                                    0,1,cos(degree) * (player.pixelSize * 0.7),
+                                                                    0,0,1});
+        player.matrix = player.multMatrix(player.matrix, new float[] {1,0,player.pos.x,
+                                                      0,1,player.pos.y,
+                                                      0,0,1});
       }
       else if (player.abilities[1]) {
         // Spike
@@ -126,7 +144,7 @@ class Moving implements State {
         image(player.rocketLauncher_sprite,0,-player.pixelSize * 0.1,player.pixelSize,player.pixelSize);
         if (player.inputBuffer[5] && player.timer3 >= player.rocketTimer) {
           player.timer3 = 0.0;
-          player.rockets.add(new Rocket(new PVector(player.pos.x, player.pos.y),degree,player.rocket_sprite, player.pixelSize));
+          player.rockets.add(new Rocket(new PVector(player.pos.x, player.pos.y),degree,player.rocket_sprite, player.pixelSize, player.matrix));
         }
         popMatrix();
       }

@@ -2,6 +2,7 @@ class Player {
   // Animation
   int numFrames = 4;
   float animLength = 1;
+  float[] matrix;
   
   // Sprites
   int pixelSize = 32;
@@ -14,6 +15,9 @@ class Player {
   
   // Character
   PVector pos = new PVector(0,0);
+  float size = 14;
+  PVector hitBoxPos = new PVector(0,0);
+  float hitBoxSize = 20;
   boolean[] abilities = new boolean[9];
   boolean firstEquipped = false;
   float timer1 = 5.0;
@@ -46,15 +50,16 @@ class Player {
   // Other Entitites
   ArrayList<Rocket> rockets;
   
-  Player(ArrayList<Rocket> rockets) {
+  Player(ArrayList<Rocket> rockets, float[] matrix) {
     this.rockets = rockets;
     stateMachine = new StateMachine();
     for (int i = 0; i < abilities.length; i++) {
       abilities[i] = true; // Currently set to true for testing purposes, later set it to false when abiliies become unlockable.
     }
+    this.matrix = matrix;
     
     // STATES
-    Moving moving = new Moving();
+    Moving moving = new Moving(hitBoxSize);
     Dash dash = new Dash();
     
     // TRANSITIONS
@@ -78,11 +83,25 @@ class Player {
     if (timer3 < timer3Max) {
       timer3 += 1.0/frameRate;
     }
+    
+    noFill();
+    stroke(255);
+    //ellipse(-pos.x,-pos.y,size,size); // Hurtbox
+    //ellipse(hitBoxPos.x,hitBoxPos.y,hitBoxSize,hitBoxSize); //Hitbox
+    println(hitBoxPos, "Hitbox");
   }
   
   void updatePos(PVector pos) {
     this.pos.x += pos.x;
     this.pos.y += pos.y;
+  }
+  
+  boolean check_collision(PVector otherPos, float otherSize) {
+    float dist = this.pos.dist(otherPos);
+    if (dist <= this.size + otherSize) {
+      return true;
+    }
+    return false;
   }
   
   void keyPressed() {
@@ -133,5 +152,21 @@ class Player {
   
   void mouseReleased() {
     this.inputBuffer[5] = false;
+  }
+  
+  float[] multMatrix(float[] m1, float[] m2) {
+    int size = int(sqrt(m1.length));
+    float[] returnMatrix;
+    returnMatrix = new float[size*size];
+    for (int row = 0; row < size; row++) {
+      for (int column = 0; column < size; column++) {
+        float total = 0;
+        for (int i = 0; i < size; i++) {
+          total += m1[row*size + i] * m2[i * size + column];
+        }
+        returnMatrix[row*size + column] = total;
+      }
+    }
+    return returnMatrix;
   }
 }

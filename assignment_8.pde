@@ -1,5 +1,8 @@
 ArrayList<Rocket> rockets = new ArrayList<Rocket>();
-Player player = new Player(rockets);
+float[] matrix = {1,0,0,
+                  0,1,0,
+                  0,0,1}; // Used for manually storing transformations that happen to the world matrix. Processing doesn't have a way that I know of to actually get the matrix to be used by code, so I keep track of my own matrix for use in monitoring positions.
+Player player = new Player(rockets, matrix);
 Camera camera = new Camera(player.pos);
 
 JSONObject level1;

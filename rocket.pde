@@ -4,22 +4,52 @@ class Rocket {
   int pixelSize;
   float vel;
   PImage rocket_sprite;
+  float[] matrix;
+  float[] trans;
+  float[] invTrans;
+  float[] rotZ;
+  PVector hitbox = new PVector(0,0);
+  float size;
   
-  Rocket(PVector pos, float degree, PImage sprite, int pixelSize) {
+  Rocket(PVector pos, float degree, PImage sprite, int pixelSize, float[] matrix) {
     this.pos = pos;
     this.degree = degree;
     this.rocket_sprite = sprite;
     this.pixelSize = pixelSize;
     this.vel = pixelSize*3.5;
+    this.matrix = matrix;
+    size = 12;
   }
   
   void display() {
+    this.trans = new float[] {1,0,-pos.x,
+                  0,1,-pos.y,
+                  0,0,1};
+    this.invTrans = new float[] {1,0,pos.x,
+                    0,1,pos.y,
+                    0,0,1};
     pushMatrix();
     translate(-pos.x,-pos.y);
+    matrix = this.multMatrix(matrix,trans);
     rotate(degree);
+    printMatrix();
+    println(matrix);
     translate(-player.pixelSize/2,-player.pixelSize/2);
+    matrix = this.multMatrix(matrix,new float[] {1,0,sin(degree) * (player.pixelSize * 0.9),
+                                                0,1,-cos(degree) * (player.pixelSize * 0.9),
+                                                0,0,1});
     image(rocket_sprite,0,-player.pixelSize * 0.9,player.pixelSize,player.pixelSize);
     popMatrix();
+    
+    noFill();
+    stroke(255);
+    //ellipse(this.matrix[2],this.matrix[5],size,size); // Hitbox
+    
+    this.hitbox = new PVector(this.matrix[2],this.matrix[5]);
+    matrix = this.multMatrix(matrix,new float[] {1,0,-sin(degree) * (player.pixelSize * 0.9),
+                                                0,1,cos(degree) * (player.pixelSize * 0.9),
+                                                0,0,1});
+    matrix = this.multMatrix(matrix,invTrans);
   }
   
   void move() {
@@ -29,5 +59,29 @@ class Rocket {
   void display_move() {
     this.display();
     this.move();
+  }
+  
+  boolean check_collision(PVector otherPos, float otherSize) {
+    float dist = this.pos.dist(otherPos);
+    if (dist <= this.size + otherSize) {
+      return true;
+    }
+    return false;
+  }
+  
+  float[] multMatrix(float[] m1, float[] m2) {
+    int size = int(sqrt(m1.length));
+    float[] returnMatrix;
+    returnMatrix = new float[size*size];
+    for (int row = 0; row < size; row++) {
+      for (int column = 0; column < size; column++) {
+        float total = 0;
+        for (int i = 0; i < size; i++) {
+          total += m1[row*size + i] * m2[i * size + column];
+        }
+        returnMatrix[row*size + column] = total;
+      }
+    }
+    return returnMatrix;
   }
 }
