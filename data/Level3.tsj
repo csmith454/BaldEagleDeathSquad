@@ -6,147 +6,111 @@
      "width":1
     },
  "margin":0,
- "name":"Level2",
+ "name":"Level3",
  "spacing":0,
- "tilecount":23,
+ "tilecount":17,
  "tiledversion":"1.11.0",
  "tileheight":16,
  "tiles":[
         {
          "id":0,
-         "image":"insidebox.png",
+         "image":"basementbrick.png",
          "imageheight":16,
          "imagewidth":16
         }, 
         {
          "id":1,
-         "image":"insideboxFace.png",
+         "image":"basementmoss.png",
          "imageheight":16,
          "imagewidth":16
         }, 
         {
          "id":2,
-         "image":"insidebrick.png",
+         "image":"basementmossbrickBottom.png",
          "imageheight":16,
          "imagewidth":16
         }, 
         {
          "id":3,
-         "image":"insidecontainerB.png",
+         "image":"ground.png",
          "imageheight":16,
          "imagewidth":16
         }, 
         {
          "id":4,
-         "image":"insidecontainerBL.png",
+         "image":"basementpipeB.png",
          "imageheight":16,
          "imagewidth":16
         }, 
         {
          "id":5,
-         "image":"insidecontainerBR.png",
+         "image":"basementpipeBL.png",
          "imageheight":16,
          "imagewidth":16
         }, 
         {
          "id":6,
-         "image":"insidecontainerCenter.png",
+         "image":"basementpipeBR.png",
          "imageheight":16,
          "imagewidth":16
         }, 
         {
          "id":7,
-         "image":"insidecontainerL.png",
+         "image":"basementpipeCenter.png",
          "imageheight":16,
          "imagewidth":16
         }, 
         {
          "id":8,
-         "image":"insidecontainerR.png",
+         "image":"basementpipeL.png",
          "imageheight":16,
          "imagewidth":16
         }, 
         {
          "id":9,
-         "image":"insidecontainerT.png",
+         "image":"basementpipeR.png",
          "imageheight":16,
          "imagewidth":16
         }, 
         {
          "id":10,
-         "image":"insidecontainerTL.png",
+         "image":"basementpipeTL.png",
          "imageheight":16,
          "imagewidth":16
         }, 
         {
          "id":11,
-         "image":"insidecontainerTopB.png",
+         "image":"basementpipeTop.png",
          "imageheight":16,
          "imagewidth":16
         }, 
         {
          "id":12,
-         "image":"insidecontainerTopBR.png",
+         "image":"basementpipeTR.png",
          "imageheight":16,
          "imagewidth":16
         }, 
         {
          "id":13,
-         "image":"insidecontainerTopT.png",
-         "imageheight":16,
-         "imagewidth":16
-        }, 
-        {
-         "id":14,
-         "image":"insidecontainerTopTL.png",
-         "imageheight":16,
-         "imagewidth":16
-        }, 
-        {
-         "id":15,
-         "image":"insidecontainerTopTR.png",
-         "imageheight":16,
-         "imagewidth":16
-        }, 
-        {
-         "id":16,
-         "image":"insidecontainerTR.png",
-         "imageheight":16,
-         "imagewidth":16
-        }, 
-        {
-         "id":17,
          "image":"insidefloor.png",
          "imageheight":16,
          "imagewidth":16
         }, 
         {
-         "id":18,
-         "image":"insidegrate.png",
+         "id":14,
+         "image":"basementwater.png",
          "imageheight":16,
          "imagewidth":16
         }, 
         {
-         "id":19,
-         "image":"insidegrateBottom.png",
+         "id":15,
+         "image":"basementbridge.png",
          "imageheight":16,
          "imagewidth":16
         }, 
         {
-         "id":20,
-         "image":"insidegrateBR.png",
-         "imageheight":16,
-         "imagewidth":16
-        }, 
-        {
-         "id":21,
-         "image":"insidegrateRight.png",
-         "imageheight":16,
-         "imagewidth":16
-        }, 
-        {
-         "id":22,
-         "image":"insidercontainerTopBL.png",
+         "id":16,
+         "image":"basementbridgeL.png",
          "imageheight":16,
          "imagewidth":16
         }],
