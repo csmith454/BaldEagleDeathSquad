@@ -16,14 +16,14 @@ class RectButton extends Button {
   }
   
   void display() {
-    if (this.locked == true) {
+    if (this.locked) {
       rec.setFill(color(152,141,141));
     }
     else {
       rec.setFill(c);
     }
     shape(rec,pos.x,pos.y);
-    text(text,pos.x,pos.y);
+    text(text,pos.x,pos.y+5);
   }
   
   void animateButton() {
@@ -36,7 +36,7 @@ class RectButton extends Button {
         scaleRec.setFill(c);
       } 
       shape(scaleRec,pos.x,pos.y);
-      text(text,pos.x,pos.y);
+      text(text,pos.x,pos.y+5);
     }
   }
   

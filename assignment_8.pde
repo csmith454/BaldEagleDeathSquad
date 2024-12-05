@@ -27,13 +27,15 @@ ArrayList<Spawn> spawn1;
 ArrayList<Spawn> spawn2;
 ArrayList<Spawn> spawn3;
 
+StringDict records;
+HighScore hs;
 boolean startOfLevel = true;
 int gameState;
 GUI g;
 
 void setup() {
   noSmooth();
-  size(1600,800);
+  size(1000,800);
   frameRate(60);
   
   allCollisions = new ArrayList<ArrayList<Collision>>();
@@ -47,10 +49,14 @@ void setup() {
   spawn3 = new ArrayList<Spawn>();
   
   loadData();
-  
+  String[] keys = loadStrings("initials.txt");
+  String[] values = loadStrings("scores.txt");
+  hs = new HighScore(keys,values);
+
   gameState = 0;
   g = new GUI();
   g.display(gameState);
+  hs.display(gameState);
   
   // Initialize sprites for player character
   for (int i = 0; i < player.numFrames; i++) {
@@ -74,8 +80,10 @@ void setup() {
 }
 
 void draw() {
-  // if number of zombies in array is zero then change gameState
+  // if number of zombies in array is zero then chenge to gameState 10
+  // if no zombies and gameState is 3 then transition to GUI gameState 12 and display HS sequence
   g.display(gameState);
+  hs.display(gameState);
   
   if (gameState == 1) {
     background(255);
@@ -141,9 +149,6 @@ void draw() {
       rocket.display_move();
     }
   }
-  else if (gameState == 10) {
-    
-  }
 }
 
 void keyPressed() {
@@ -156,15 +161,7 @@ void keyReleased() {
 }
 
 void mousePressed() {
-  if (g.level1Select.isPressed()) {
-    gameState = 1;
-  }
-  if (g.level2Select.isPressed()) {
-    gameState = 2;
-  }
-  if (g.level3Select.isPressed()) {
-    gameState = 3;
-  }
+  g.mousePressed();
   player.mousePressed();
 }
 

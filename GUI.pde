@@ -7,6 +7,8 @@ class GUI {
   String nextLevel;
   String endLevel;
   String credits;
+  String congrats;
+  
   //String highScores;
   RectButton level1Select;
   RectButton level2Select;
@@ -16,12 +18,12 @@ class GUI {
   RectButton PUChoice2;
   RectButton PUChoice3;
   RectButton PUChoice4;
+  RectButton returnToMenu;
+  RectButton controlsB;
   
   // HUD display 
   int zCount;
-  String oneControls;
-  String twoControls;
-  String threeControls;
+  String controls;
   int startTime;
   int runTime;
   int endTime;
@@ -40,11 +42,20 @@ class GUI {
     credits = "BALD EAGLE DEATH SQUAD STUDIOS";
     nextLevel = "Well done.\nSelect a power-up to move to the next level.\nYou're going to need it.";
     endLevel = "Good try.\nYou'll need to do better to defeat\nTHE HIVE";
+    congrats = "You beat all three levels!\nCongratulations!";
+    controls = "Use WASD to navigate your player around the map.\nClick Left Mouse Button to use your selected ability.\nSelect different abilities with the '1', '2', '3'.\nKeep in mind that you will only have one ability until you beat level 1.\nUse Spacebar to DO A FLIP!";
     
     //create buttons
-    level1Select = new RectButton(1*width/5,3*height/5,color(137,43,51),"Level 1",false,75,100);
-    level2Select = new RectButton(1.5*width/5,3*height/5,color(242,205,71),"Level 2",true,75,100);
-    level3Select = new RectButton(2*width/5,3*height/5,color(11,188,116),"Level 3",true,75,100);
+    level1Select = new RectButton(1.5*width/10,3*height/5,color(137,43,51),"Level 1",false,80,90);
+    level2Select = new RectButton(3*width/10,3*height/5,color(242,205,71),"Level 2",true,80,90);
+    level3Select = new RectButton(4.5*width/10,3*height/5,color(11,188,116),"Level 3",true,80,90);
+    mute = new RectButton(4.5*width/5,0.5*height/5,color(100),"Mute",false,90,100);
+    PUChoice1 = new RectButton(3*width/10,2.5*height/5,color(50,100,200),"Option 1",false,200,200);
+    PUChoice2 = new RectButton(7*width/10,2.5*height/5,color(50,100,200),"Option 2",false,200,200);
+    PUChoice3 = new RectButton(3*width/10,2.5*height/5,color(50,100,200),"Option 1-1",false,200,200);
+    PUChoice4 = new RectButton(7*width/10,2.5*height/5,color(50,100,200),"Option 2-2",false,200,200);
+    returnToMenu = new RectButton(width/2,4*height/5,color(50,100,200),"Return to main menu",false,200,250);
+    controlsB = new RectButton(3.9*width/5,0.5*height/5,color(100),"Controls",false,90,100);
     
     healthBarHeight = 50;
     rectMode(CENTER);
@@ -54,7 +65,7 @@ class GUI {
     healthOutline = createShape(RECT,0,0,5,50);
     healthOutline.setStroke(3);
     healthOutline.setFill(color(0));
-    abilityDeck = createShape(RECT,0,0,60,30);
+    abilityDeck = createShape(RECT,0,0,75,25);
     abilityDeck.setFill(color(214,89,76));
     
   }
@@ -65,9 +76,9 @@ class GUI {
       background(0);
       textAlign(CENTER);
       textSize(80);
-      text(title,width/4,2.5*height/5);
+      text(title,3*width/10,2.5*height/5);
       textSize(16);
-      text(credits,width/4,2.65*height/5);
+      text(credits,3*width/10,2.65*height/5);
       textSize(32);
       level1Select.display();
       level1Select.animateButton();
@@ -75,32 +86,65 @@ class GUI {
       level2Select.animateButton();
       level3Select.display();
       level3Select.animateButton();
-      
-      // display scores
-      
+      mute.display();
+      mute.animateButton();
+      controlsB.display();
+      controlsB.animateButton();
     }
-    else if (gameState == 10) {        // success screen
+    else if (gameState == 10) {   // success screen
+      background(0);
       String endTime = getTimeFormat(runTime);
       startTime = millis();
       // display endscreen
       textAlign(CENTER);
       textSize(42);
-      text(nextLevel,width/4,2.25*height/5);
+      text(nextLevel,width/2,1*height/5);
       textSize(32);
-      text("Time elapsed",width/4,2.5*height/5);
-      text(endTime,width/4+50,2.5*height/5);
+      text("Time elapsed: ",1*width/10,0.5*height/5);
+      text(endTime,2*width/10,0.5*height/5);
       // present selection for next power up
-      
+      if (level2Select.locked == true) {
+        PUChoice1.display();
+        PUChoice1.animateButton();
+        PUChoice2.display();
+        PUChoice2.animateButton();
+      }
+      else {
+        PUChoice3.display();
+        PUChoice3.animateButton();
+        PUChoice4.display();
+        PUChoice4.animateButton();
+      }
     }
     else if (gameState == 11){        // fail screen
+      background(0);
       String endTime = getTimeFormat(runTime);
       startTime = millis();
       // display endscreen
       textAlign(CENTER);
-      text("Time elapse",width/2,height/2+30);
-      text(endTime,width/2,height/2+50);
-      //present button to return to main menu
-      
+      text(zCount,width/2,1.5*height/5);
+      text(endLevel,width/2,2*height/5);
+      text("Time elapsed: ",1*width/10,0.5*height/5);
+      text(endTime,2*width/10,0.5*height/5);
+      // present button to return to main menu
+      returnToMenu.display();
+      returnToMenu.animateButton();
+    }
+    else if (gameState == 12) {    // completed all levels
+      background(0);
+      textSize(54);
+      text(congrats,width/2,2*height/5);
+      returnToMenu.display();
+      returnToMenu.animateButton();
+    }
+    else if (gameState == 13) {    // controls explanation
+      background(0);
+      textSize(54);
+      text(title,width/2,1*height/5);
+      textSize(28);
+      text(controls,width/2,2*height/5);
+      returnToMenu.display();
+      returnToMenu.animateButton();
     }
  }   
  
@@ -111,15 +155,15 @@ class GUI {
      //zCount = "Zombies left: " + str(ZombiesArray.size());
      zCount = 50;
      textAlign(LEFT);
-     textSize(16);
+     textSize(12);
      fill(255);
-     text(zCount,-playerPos.x-195,-playerPos.y-75);
-     text("Time elapsed: ",-playerPos.x-85,-playerPos.y-85);
-     text(getTimeFormat(runTime),-playerPos.x-10,-playerPos.y-85);
-     shape(healthOutline,-playerPos.x-195,-playerPos.y-40);
-     shape(healthBar,-playerPos.x-195,-playerPos.y-40);
+     text(zCount,-playerPos.x-120,-playerPos.y-75);
+     text("Time elapsed: ",-playerPos.x-120,-playerPos.y-85);
+     text(getTimeFormat(runTime),-playerPos.x-60,-playerPos.y-85);
+     shape(healthOutline,-playerPos.x-120,-playerPos.y);
+     shape(healthBar,-playerPos.x-120,-playerPos.y);
      
-     shape(abilityDeck,-playerPos.x-25,-playerPos.y+75);
+     shape(abilityDeck,-playerPos.x,-playerPos.y+75);
      // display ability icons
      
    }
@@ -135,5 +179,57 @@ class GUI {
     
     formatted = minStr + ":" + secStr;
     return formatted;
+  }
+  
+  void mousePressed() {
+    if (gameState == 0) {
+      if (level1Select.isPressed()) {
+      gameState = 1;
+      }
+      else if (level2Select.isPressed()) {
+        gameState = 2;
+      }
+      else if (level3Select.isPressed()) {
+        gameState = 3;
+      }  
+      if (controlsB.isPressed()) {
+        gameState = 13;
+      }
+      if (mute.isPressed()) {
+      // stop sound
+      }
+    }
+    if (gameState > 10) {
+      if (returnToMenu.isPressed()) {
+      gameState = 0;
+      }
+    }
+    
+    if (gameState == 10) {
+      if (level2Select.locked == true) {
+        if (PUChoice1.isPressed()) {
+          level2Select.locked = false;
+          // add new ability
+          gameState = 2;
+        }
+        else if (PUChoice2.isPressed()) {
+          level2Select.locked = false;
+          // add new ability
+          gameState = 2;
+        }
+      }
+      else {
+        if (PUChoice3.isPressed()) {
+          level3Select.locked = false;
+          // add new ability
+          gameState = 3;
+        }  
+        else if (PUChoice4.isPressed()) {
+          level3Select.locked = false;
+          // add new ability
+          gameState = 3;
+        }
+      }
+    }
   }
 }
