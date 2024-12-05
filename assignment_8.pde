@@ -48,7 +48,7 @@ void setup() {
   
   loadData();
   
-  gameState = 3;
+  gameState = 0;
   g = new GUI();
   g.display(gameState);
   
@@ -74,12 +74,15 @@ void setup() {
 }
 
 void draw() {
+  // if number of zombies in array is zero then change gameState
   g.display(gameState);
   
   if (gameState == 1) {
     background(255);
     camera.move_camera();
     L1.displayLevel();
+    g.displayHUD(gameState,player.pos);    // eventually pass in player health
+    
     if (startOfLevel) {
       player.updatePos(new PVector(-L1.spawns.get(1).x-20,-L1.spawns.get(1).y)); // Make this the spawn position
       startOfLevel = false;
@@ -109,6 +112,8 @@ void draw() {
     background(255);
     camera.move_camera();
     L2.displayLevel();
+    g.displayHUD(gameState,player.pos);    // eventually pass in player health
+    
     player.update();
     if (startOfLevel) {
       player.updatePos(new PVector(-L2.spawns.get(1).x-20,-L2.spawns.get(1).y)); // Make this the spawn position
@@ -124,6 +129,8 @@ void draw() {
     background(255);
     camera.move_camera();
     L3.displayLevel();
+    g.displayHUD(gameState,player.pos);    // eventually pass in player health
+    
     player.update();
     if (startOfLevel) {
       player.updatePos(new PVector(-L3.spawns.get(1).x-20,-L3.spawns.get(1).y)); // Make this the spawn position
@@ -134,7 +141,9 @@ void draw() {
       rocket.display_move();
     }
   }
-  
+  else if (gameState == 10) {
+    
+  }
 }
 
 void keyPressed() {
@@ -147,6 +156,15 @@ void keyReleased() {
 }
 
 void mousePressed() {
+  if (g.level1Select.isPressed()) {
+    gameState = 1;
+  }
+  if (g.level2Select.isPressed()) {
+    gameState = 2;
+  }
+  if (g.level3Select.isPressed()) {
+    gameState = 3;
+  }
   player.mousePressed();
 }
 
