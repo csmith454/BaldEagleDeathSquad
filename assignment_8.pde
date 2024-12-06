@@ -1,4 +1,4 @@
-boolean showHitbox = true;
+boolean showHitbox = false;
 
 ArrayList<Rocket> rockets = new ArrayList<Rocket>();
 ArrayList<Rocket> remove_rockets = new ArrayList<Rocket>();
@@ -158,7 +158,7 @@ void levelLogic(Level L, ArrayList<Collision> collisions) {
   if (startOfLevel) {
     player.updatePos(new PVector(-L.spawns.get(1).x-20,-L.spawns.get(1).y)); // Make this the spawn position
     startOfLevel = false;
-    spawnZombies(20);
+    spawnZombies(1);
   }
   
   // Handles all character game objects
