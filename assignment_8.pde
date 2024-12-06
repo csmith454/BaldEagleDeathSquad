@@ -1,4 +1,4 @@
-boolean showHitbox = false;
+boolean showHitbox = true;
 
 ArrayList<Rocket> rockets = new ArrayList<Rocket>();
 ArrayList<Rocket> remove_rockets = new ArrayList<Rocket>();
@@ -96,6 +96,17 @@ void setup() {
 }
 
 void draw() {
+  if (zombies.size() == 0 && gameState == 3) {
+    if (frameCount > 10000) {
+      gameState = 12;
+    }
+  }
+  else if (zombies.size() == 0 && frameCount > 10000) {
+    
+    gameState = 10;
+  }
+  // if number of zombies in array is zero then chenge to gameState 10
+  // if no zombies and gameState is 3 then transition to GUI gameState 12 and display HS sequence
   g.display(gameState);
   
   if (gameState == 1) {
@@ -184,36 +195,10 @@ void levelLogic(Level L, ArrayList<Collision> collisions) {
 
 void collisionLevel(ArrayList<Collision> collisions) {
   for (Collision collision: collisions) {
-    if (collision.water) {
+    if (collision.water || collision.box) {
       if (showHitbox) {
         noFill();
         stroke(color(0,0,255));
-        rect(collision.x,collision.y,collision.w,collision.h);
-      }
-      if (player.check_collision_square(new PVector(collision.x+collision.w/2,collision.y+collision.h/2), new PVector(collision.w,collision.h))) {
-        if (player.isDashing && player.jumpInternalTimer >= player.jumpInternalSeconds * 0.9 ) {
-          player.jumpInternalTimer = 0;
-        }
-        if (!player.isDashing) {
-          if (-player.pos.x > collision.x + collision.w) {
-            player.vel.x -= player.pixelSize * player.speed/frameRate/player.accelModifier*2;
-          }
-          else if (-player.pos.x < collision.x) {
-            player.vel.x += player.pixelSize * player.speed/frameRate/player.accelModifier*2;
-          }
-          if (-player.pos.y > collision.y + collision.h) {
-            player.vel.y -= player.pixelSize * player.speed/frameRate/player.accelModifier*2;
-          }
-          else if (-player.pos.y < collision.y) {
-            player.vel.y += player.pixelSize * player.speed/frameRate/player.accelModifier*2;
-          }
-        }
-      }
-    }
-    else if (collision.box) {
-      if (showHitbox) {
-        noFill();
-        stroke(150);
         rect(collision.x,collision.y,collision.w,collision.h);
       }
       if (player.check_collision_square(new PVector(collision.x+collision.w/2,collision.y+collision.h/2), new PVector(collision.w,collision.h))) {
@@ -255,6 +240,24 @@ void collisionLevel(ArrayList<Collision> collisions) {
         }
         else if (-player.pos.y < collision.y) {
           player.vel.y += player.pixelSize * player.speed/frameRate/player.accelModifier*2;
+        }
+      }
+    }
+  }
+  for (Zombie zombie: zombies) {
+    for (Collision collision: collisions) {
+      if (zombie.check_collision_square(new PVector(collision.x+collision.w/2,collision.y+collision.h/2), new PVector(collision.w,collision.h))) {
+        if (zombie.position.x > collision.x + collision.w) {
+          zombie.velocity.x += zombie.speed;
+        }
+        else if (zombie.position.x < collision.x) {
+          zombie.velocity.x -= zombie.speed;
+        }
+        if (zombie.position.y > collision.y + collision.h) {
+          zombie.velocity.y += zombie.speed;
+        }
+        else if (zombie.position.y < collision.y) {
+          zombie.velocity.y -= zombie.speed;
         }
       }
     }
