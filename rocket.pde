@@ -15,7 +15,7 @@ class Rocket {
     this.degree = degree;
     this.rocket_sprite = sprite;
     this.pixelSize = pixelSize;
-    this.vel = pixelSize*3.5;
+    this.vel = pixelSize*5;
     this.matrix = matrix;
     size = 12;
   }
@@ -27,8 +27,6 @@ class Rocket {
                                                 0,1,-pos.y,
                                                 0,0,1});
     rotate(degree);
-    printMatrix();
-    println(matrix);
     translate(-player.pixelSize/2,-player.pixelSize/2);
     matrix = this.multMatrix(matrix,new float[] {1,0,sin(degree) * (player.pixelSize * 0.9),
                                                 0,1,-cos(degree) * (player.pixelSize * 0.9),
@@ -36,9 +34,11 @@ class Rocket {
     image(rocket_sprite,0,-player.pixelSize * 0.9,player.pixelSize,player.pixelSize);
     popMatrix();
     
-    noFill();
-    stroke(255);
-    ellipse(this.matrix[2],this.matrix[5],size,size); // Hitbox
+    if (showHitbox) {
+      noFill();
+      stroke(255);
+      ellipse(this.matrix[2],this.matrix[5],size,size); // Hitbox
+    }
     
     this.hitbox = new PVector(this.matrix[2],this.matrix[5]);
     matrix = this.multMatrix(matrix,new float[] {1,0,-sin(degree) * (player.pixelSize * 0.9),

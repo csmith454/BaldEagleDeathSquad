@@ -19,10 +19,15 @@ class Player {
   // Character
   float speed = 2;
   PVector pos = new PVector(0,0);
+  PVector vel = new PVector(0,0);
+  PVector accel = new PVector(0,0);
+  float accelModifier = 4;
+  int diagonal = 0;
   float size = 14;
   PVector hitBoxPos = new PVector(0,0);
   float hitBoxSize = 20;
   boolean[] abilities = new boolean[9];
+  boolean isDashing = false;
   boolean firstEquipped = false;
   float timer1 = 5.0;
   float timer2 = 5.0;
@@ -36,6 +41,8 @@ class Player {
   float boostTimer = 3.0;
   float slowTimer = 5.0;
   float jumpTimer = 1.0;
+  float jumpInternalTimer = 0.0;
+  float jumpInternalSeconds = 0.5;
   float rocketTimer = 2.0;
   float blockTimer = 2.5;
   int blockCount = 3;
@@ -80,6 +87,35 @@ class Player {
     pushMatrix();
     stateMachine.tick();
     popMatrix();
+    
+    if (vel.x >= 0.1) {
+      vel.x -= player.pixelSize * player.speed/frameRate/player.accelModifier/2;
+    }
+    else if (vel.x <= -0.1) {
+      vel.x += player.pixelSize * player.speed/frameRate/player.accelModifier/2;
+    }
+    else {
+      vel.x = 0;
+    }
+    if (vel.y >= 0.1) {
+      vel.y -= player.pixelSize * player.speed/frameRate/player.accelModifier/2;
+    }
+    else if (vel.y <= -0.1) {
+      vel.y += player.pixelSize * player.speed/frameRate/player.accelModifier/2;
+    }
+    else {
+      vel.y = 0;
+    }
+    
+    float change = pixelSize * speed/frameRate;
+    if (diagonal >= 2) { // If the player is moving diagonally, cut speed for each direction.
+        change /= 1.41421356237;
+    }
+    
+    vel.x = constrain(vel.x + accel.x,-change,change);
+    vel.y = constrain(vel.y + accel.y,-change,change);
+    pos.add(vel);
+    
     if (timer1 < timer1Max) {
       timer1 += 1.0/frameRate;
     }
@@ -90,10 +126,12 @@ class Player {
       timer3 += 1.0/frameRate;
     }
     
-    noFill();
-    stroke(255);
-    ellipse(-pos.x,-pos.y,size,size); // Hurtbox
-    ellipse(hitBoxPos.x,hitBoxPos.y,hitBoxSize,hitBoxSize); //Hitbox
+    if (showHitbox) {
+      noFill();
+      stroke(255);
+      ellipse(-pos.x,-pos.y,size,size); // Hurtbox
+      ellipse(hitBoxPos.x,hitBoxPos.y,hitBoxSize,hitBoxSize); //Hitbox
+    }
   }
   
   void updatePos(PVector pos) {
@@ -101,11 +139,20 @@ class Player {
     this.pos.y += pos.y;
   }
   
-  boolean check_collision(PVector otherPos, float otherSize) {
+  boolean check_collision_sphere(PVector otherPos, float otherSize) {
     float dist = this.pos.dist(otherPos);
     if (dist <= this.size + otherSize) {
       return true;
     }
+    return false;
+  }
+  
+  boolean check_collision_square(PVector otherPos, PVector otherSize) {
+    float deltaX = Math.abs(-this.pos.x - otherPos.x);
+    float deltaY = Math.abs(-this.pos.y - otherPos.y);
+    if (deltaX < (this.size/2 + otherSize.x/2) && deltaY < (this.size/2 + otherSize.y/2)) {
+    return true;
+  }
     return false;
   }
   

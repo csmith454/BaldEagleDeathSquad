@@ -1,3 +1,5 @@
+boolean showHitbox = false;
+
 ArrayList<Rocket> rockets = new ArrayList<Rocket>();
 ArrayList<Rocket> remove_rockets = new ArrayList<Rocket>();
 ArrayList<Spike> spikes = new ArrayList<Spike>();
@@ -8,6 +10,18 @@ float[] matrix = {1,0,0,
                   0,0,1}; // Used for manually storing transformations that happen to the world matrix. Processing doesn't have a way that I know of to actually get the matrix to be used by code, so I keep track of my own matrix for use in monitoring positions.
 Player player = new Player(matrix, rockets, spikes);
 Camera camera = new Camera(player.pos);
+
+// Zombie information
+ArrayList<Zombie> zombies;
+ArrayList<PVector> meatPellets;
+boolean showNextLevelScreen = false;
+boolean gameStarted = true;
+int level = 1;
+float mutationRate = 2.0;
+PImage zombieSouthTexture;
+PImage zombieNorthTexture;
+PImage zombieEastWestTexture;
+boolean flipTexture;
 
 JSONObject level1;
 JSONObject level2;
@@ -48,6 +62,10 @@ void setup() {
   spawn2 = new ArrayList<Spawn>();
   spawn3 = new ArrayList<Spawn>();
   
+  // Zombie information
+  zombies = new ArrayList<Zombie>();
+  meatPellets = new ArrayList<PVector>();
+  
   loadData();
   String[] keys = loadStrings("initials.txt");
   String[] values = loadStrings("scores.txt");
@@ -77,6 +95,10 @@ void setup() {
   }
   player.arrow = loadImage("arrow.png");
   
+  // Initialize sprites for zombies
+  zombieSouthTexture = loadImage("zombie_facing_south.png");
+  zombieNorthTexture = loadImage("zombie_facing_north.png");
+  zombieEastWestTexture = loadImage("zombie_facing_eastwest.png");
 }
 
 void draw() {
@@ -86,68 +108,16 @@ void draw() {
   hs.display(gameState);
   
   if (gameState == 1) {
-    background(255);
-    camera.move_camera();
-    L1.displayLevel();
-    g.displayHUD(gameState,player.pos);    // eventually pass in player health
-    
-    if (startOfLevel) {
-      player.updatePos(new PVector(-L1.spawns.get(1).x-20,-L1.spawns.get(1).y)); // Make this the spawn position
-      startOfLevel = false;
-      println("a");
-    }
-    // Handles all character game objects
-    for (Rocket rocket: rockets) {
-      rocket.display_move();
-      if (rocket.count >= rocket.lifetime) {
-        remove_rockets.add(rocket);
-      }
-    }
-    for (Spike spike: spikes) {
-      spike.display();
-      if (spike.count >= spike.lifetime) {
-        remove_spikes.add(spike);
-      }
-    }
-    rockets.removeAll(remove_rockets);
-    spikes.removeAll(remove_spikes);
-    remove_rockets.clear();
-    remove_spikes.clear();
-    player.update();
+    // display level 1
+    levelLogic(L1, collision1);
   }
   else if (gameState == 2) {
     // display level 2
-    background(255);
-    camera.move_camera();
-    L2.displayLevel();
-    g.displayHUD(gameState,player.pos);    // eventually pass in player health
-    
-    player.update();
-    if (startOfLevel) {
-      player.updatePos(new PVector(-L2.spawns.get(1).x-20,-L2.spawns.get(1).y)); // Make this the spawn position
-      startOfLevel = false;
-      println("a");
-    }
-    for (Rocket rocket: rockets) {
-      rocket.display_move();
-    }
+    levelLogic(L2, collision2);
   }
   else if (gameState == 3) {
     //display level 3
-    background(255);
-    camera.move_camera();
-    L3.displayLevel();
-    g.displayHUD(gameState,player.pos);    // eventually pass in player health
-    
-    player.update();
-    if (startOfLevel) {
-      player.updatePos(new PVector(-L3.spawns.get(1).x-20,-L3.spawns.get(1).y)); // Make this the spawn position
-      startOfLevel = false;
-      println("a");
-    }
-    for (Rocket rocket: rockets) {
-      rocket.display_move();
-    }
+    levelLogic(L3, collision3);
   }
 }
 
@@ -167,6 +137,138 @@ void mousePressed() {
 
 void mouseReleased() {
   player.mouseReleased();
+}
+
+// Functions
+
+void levelLogic(Level L, ArrayList<Collision> collisions) {
+  background(255);
+  camera.move_camera();
+  L.displayLevel();
+  g.displayHUD(gameState,player.pos);    // eventually pass in player health
+  if (startOfLevel) {
+    player.updatePos(new PVector(-L.spawns.get(1).x-20,-L.spawns.get(1).y)); // Make this the spawn position
+    startOfLevel = false;
+    spawnZombies(20);
+  }
+  
+  // Handles all character game objects
+  for (Rocket rocket: rockets) {
+    rocket.display_move();
+    if (rocket.count >= rocket.lifetime) {
+      remove_rockets.add(rocket);
+    }
+  }
+  for (Spike spike: spikes) {
+    spike.display();
+    if (spike.count >= spike.lifetime) {
+      remove_spikes.add(spike);
+    }
+  }
+  rockets.removeAll(remove_rockets);
+  spikes.removeAll(remove_spikes);
+  remove_rockets.clear();
+  remove_spikes.clear();
+  player.update();
+  
+  // Handles collisions
+  collisionLevel(collisions);
+  
+  // Handles zombie logic
+  for (Zombie zombie : zombies) {
+    zombie.move(zombies, player.pos);
+    zombie.sufferHunger();
+    zombie.display();
+
+    if (zombie.decomposing && !zombie.pelletGenerated) {
+      meatPellets.add(zombie.position.copy());
+      zombie.pelletGenerated = true;
+    }
+  }
+
+  for (PVector meatPellet : meatPellets) {
+    fill(139, 69, 19);
+    ellipse(meatPellet.x, meatPellet.y, 10, 10);
+  }
+}
+
+void collisionLevel(ArrayList<Collision> collisions) {
+  for (Collision collision: collisions) {
+    if (collision.water) {
+      if (showHitbox) {
+        noFill();
+        stroke(color(0,0,255));
+        rect(collision.x,collision.y,collision.w,collision.h);
+      }
+      if (player.check_collision_square(new PVector(collision.x+collision.w/2,collision.y+collision.h/2), new PVector(collision.w,collision.h))) {
+        if (player.isDashing && player.jumpInternalTimer >= player.jumpInternalSeconds * 0.9 ) {
+          player.jumpInternalTimer = 0;
+        }
+        if (!player.isDashing) {
+          if (-player.pos.x > collision.x + collision.w) {
+            player.vel.x -= player.pixelSize * player.speed/frameRate/player.accelModifier*2;
+          }
+          else if (-player.pos.x < collision.x) {
+            player.vel.x += player.pixelSize * player.speed/frameRate/player.accelModifier*2;
+          }
+          if (-player.pos.y > collision.y + collision.h) {
+            player.vel.y -= player.pixelSize * player.speed/frameRate/player.accelModifier*2;
+          }
+          else if (-player.pos.y < collision.y) {
+            player.vel.y += player.pixelSize * player.speed/frameRate/player.accelModifier*2;
+          }
+        }
+      }
+    }
+    else if (collision.box) {
+      if (showHitbox) {
+        noFill();
+        stroke(150);
+        rect(collision.x,collision.y,collision.w,collision.h);
+      }
+      if (player.check_collision_square(new PVector(collision.x+collision.w/2,collision.y+collision.h/2), new PVector(collision.w,collision.h))) {
+        if (player.isDashing && player.jumpInternalTimer >= player.jumpInternalSeconds * 0.9 ) {
+          player.jumpInternalTimer = 0;
+        }
+        if (!player.isDashing) {
+          if (-player.pos.x > collision.x + collision.w) {
+            player.vel.x -= player.pixelSize * player.speed/frameRate/player.accelModifier*2;
+          }
+          else if (-player.pos.x < collision.x) {
+            player.vel.x += player.pixelSize * player.speed/frameRate/player.accelModifier*2;
+          }
+          if (-player.pos.y > collision.y + collision.h) {
+            player.vel.y -= player.pixelSize * player.speed/frameRate/player.accelModifier*2;
+          }
+          else if (-player.pos.y < collision.y) {
+            player.vel.y += player.pixelSize * player.speed/frameRate/player.accelModifier*2;
+          }
+        }
+      }
+    }
+    else {
+      if (showHitbox) {
+        noFill();
+        stroke(255);
+        rect(collision.x,collision.y,collision.w,collision.h);
+      }
+      if (player.check_collision_square(new PVector(collision.x+collision.w/2,collision.y+collision.h/2), new PVector(collision.w,collision.h))) {
+        
+        if (-player.pos.x > collision.x + collision.w) {
+          player.vel.x -= player.pixelSize * player.speed/frameRate/player.accelModifier*2;
+        }
+        else if (-player.pos.x < collision.x) {
+          player.vel.x += player.pixelSize * player.speed/frameRate/player.accelModifier*2;
+        }
+        if (-player.pos.y > collision.y + collision.h) {
+          player.vel.y -= player.pixelSize * player.speed/frameRate/player.accelModifier*2;
+        }
+        else if (-player.pos.y < collision.y) {
+          player.vel.y += player.pixelSize * player.speed/frameRate/player.accelModifier*2;
+        }
+      }
+    }
+  }
 }
 
 ArrayList<PImage> L1createTilesToDraw() {
@@ -354,4 +456,66 @@ void loadData(){
   L1 = new Level(t1.createBackground(),allCollisions.get(0),allSpawns.get(0));
   L2 = new Level(t2.createBackground(),allCollisions.get(1),allSpawns.get(1));
   L3 = new Level(t3.createBackground(),allCollisions.get(2),allSpawns.get(2));
+}
+
+
+
+// Zombie functions
+void spawnZombies(int numZombies) {
+  zombies.clear();
+  meatPellets.clear();
+  for (int i = 0; i < numZombies; i++) {
+    PVector startPosition = new PVector(random(500), random(500));
+    zombies.add(new Zombie(startPosition));
+  }
+}
+
+int countZombiesAlive() {
+  int count = 0;
+  for (Zombie zombie : zombies) {
+    if (zombie.alive) {
+      count++;
+    }
+  }
+  return count;
+}
+
+void evolveZombies() {
+  zombies.sort((z1, z2) -> z2.score - z1.score);
+
+  int topZombiesCount = min(4, zombies.size());
+  ArrayList<Zombie> topZombies = new ArrayList<Zombie>();
+  for (int i = 0; i < topZombiesCount; i++) {
+    topZombies.add(zombies.get(i));
+  }
+
+  float avgSize = 0;
+  float avgSense = 0;
+  float avgSpeed = 0;
+  float avgHungerDrain = 0;
+  float avgDamage = 0;
+
+  for (Zombie topZombie : topZombies) {
+    avgSize += topZombie.size;
+    avgSense += topZombie.sense;
+    avgSpeed += topZombie.speed;
+    avgHungerDrain += topZombie.hungerDrain;
+    avgDamage += topZombie.damage;
+  }
+
+  avgSize /= topZombiesCount;
+  avgSense /= topZombiesCount;
+  avgSpeed /= topZombiesCount;
+  avgHungerDrain /= topZombiesCount;
+  avgDamage /= topZombiesCount;
+
+  mutationRate *= 0.9;
+
+  for (Zombie zombie : zombies) {
+    zombie.size = avgSize + random(-mutationRate, mutationRate);
+    zombie.sense = avgSense + random(-mutationRate * 10, mutationRate * 10);
+    zombie.speed = avgSpeed + random(-mutationRate * 0.1, mutationRate * 0.1);
+    zombie.hungerDrain = avgHungerDrain + random(-mutationRate * 0.1, mutationRate * 0.1);
+    zombie.damage = avgDamage + random(-mutationRate, mutationRate);
+  }
 }

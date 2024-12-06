@@ -20,7 +20,6 @@ class Collision {
       this.properties = c.getJSONArray("properties");
       this.special = properties.getJSONObject(0);
       this.specialStr = special.getString("name");
-      println(specialStr);
       if (specialStr.equals("box")) {
         box = true;
         water = false;
