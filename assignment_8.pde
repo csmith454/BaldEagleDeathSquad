@@ -151,7 +151,7 @@ void mouseReleased() {
 // Functions
 
 void levelLogic(Level L, ArrayList<Collision> collisions) {
-  background(255);
+  background(0);
   camera.move_camera();
   L.displayLevel();
   g.displayHUD(gameState,player.pos);    // eventually pass in player health

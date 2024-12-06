@@ -278,11 +278,11 @@ class Zombie {
       imageMode(CENTER);
 
       if (directionFacing.equals("south")) {
-        image(zombieSouthTexture, 0, 0, size * 2, size * 2);
+        image(zombieSouthTexture, 0, 0, size * 1.2, size * 1.2);
       } else if (directionFacing.equals("north")) {
-        image(zombieNorthTexture, 0, 0, size * 2, size * 2);
+        image(zombieNorthTexture, 0, 0, size * 1.2, size * 1.2);
       } else {
-        image(zombieEastWestTexture, 0, 0, size * 2, size * 2);
+        image(zombieEastWestTexture, 0, 0, size * 1.2, size * 1.2);
       }
       if (showHitbox) {
         noFill();
