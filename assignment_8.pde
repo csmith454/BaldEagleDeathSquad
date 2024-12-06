@@ -41,13 +41,15 @@ ArrayList<Spawn> spawn1;
 ArrayList<Spawn> spawn2;
 ArrayList<Spawn> spawn3;
 
+StringDict records;
+HighScore hs;
 boolean startOfLevel = true;
 int gameState;
 GUI g;
 
 void setup() {
   noSmooth();
-  size(1600,800);
+  size(1000,800);
   frameRate(60);
   
   allCollisions = new ArrayList<ArrayList<Collision>>();
@@ -65,10 +67,14 @@ void setup() {
   meatPellets = new ArrayList<PVector>();
   
   loadData();
-  
-  gameState = 1;
+  String[] keys = loadStrings("initials.txt");
+  String[] values = loadStrings("scores.txt");
+  hs = new HighScore(keys,values);
+
+  gameState = 0;
   g = new GUI();
   g.display(gameState);
+  hs.display(gameState);
   
   // Initialize sprites for player character
   for (int i = 0; i < player.numFrames; i++) {
@@ -108,6 +114,7 @@ void draw() {
   // if number of zombies in array is zero then chenge to gameState 10
   // if no zombies and gameState is 3 then transition to GUI gameState 12 and display HS sequence
   g.display(gameState);
+  hs.display(gameState);
   
   if (gameState == 1) {
     // display level 1
@@ -121,7 +128,6 @@ void draw() {
     //display level 3
     levelLogic(L3, collision3);
   }
-  
 }
 
 void keyPressed() {
@@ -134,6 +140,7 @@ void keyReleased() {
 }
 
 void mousePressed() {
+  g.mousePressed();
   player.mousePressed();
 }
 
@@ -147,6 +154,7 @@ void levelLogic(Level L, ArrayList<Collision> collisions) {
   background(255);
   camera.move_camera();
   L.displayLevel();
+  g.displayHUD(gameState,player.pos);    // eventually pass in player health
   if (startOfLevel) {
     player.updatePos(new PVector(-L.spawns.get(1).x-20,-L.spawns.get(1).y)); // Make this the spawn position
     startOfLevel = false;

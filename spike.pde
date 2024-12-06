@@ -16,6 +16,7 @@ class Spike {
   }
   
   void display() {
+    noFill();
     image(spike_sprite,pos.x - pixelSize/2,pos.y - pixelSize/2,pixelSize,pixelSize);
     if (showHitbox) {
       noFill();
