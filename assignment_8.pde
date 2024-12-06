@@ -196,6 +196,7 @@ void levelLogic(Level L, ArrayList<Collision> collisions) {
   }
 
   for (PVector meatPellet : meatPellets) {
+    noStroke();
     fill(139, 69, 19);
     ellipse(meatPellet.x, meatPellet.y, 10, 10);
   }

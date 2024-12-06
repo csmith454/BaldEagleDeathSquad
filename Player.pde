@@ -1,4 +1,5 @@
 class Player {
+  boolean spike;
   // Animation
   int numFrames = 4;
   float animLength = 1;
@@ -178,6 +179,9 @@ class Player {
     }
     else if (key == '2') {
       this.firstEquipped = false;
+    }
+    if (key == 'p' || key == 'P') {
+      this.spike = !spike;
     }
   }
   

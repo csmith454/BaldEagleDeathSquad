@@ -57,7 +57,7 @@ class Moving implements State {
     // Abilities
     if (player.firstEquipped) {
        //Handles tier 1 abilities.
-      if (player.abilities[0]) {
+      if (!player.spike) {
         // Sword
         player.timer1Max = player.swordTimer;
         pushMatrix();
@@ -97,7 +97,7 @@ class Moving implements State {
                                                       0,1,player.pos.y,
                                                       0,0,1});
       }
-      else if (player.abilities[1]) {
+      else if (player.spike) {
         // Spike
         player.timer1Max = player.spikeTimer;
         pushMatrix();
