@@ -5,7 +5,6 @@ class Zombie {
   
   PVector acceleration;
   float size;
-  float hitboxSize;
   float sense;
   float speed;
   float maxForce;
@@ -46,7 +45,6 @@ class Zombie {
     if (!alive) return;
     swarmSense(zombieList, playerPosition);
 
-    hitboxSize = size * 2;
     handleWallCollision();
     if (!alive) return;
 
@@ -78,18 +76,18 @@ class Zombie {
 
   void handleWallCollision() {
 
-    if (position.x < hitboxSize / 2) {
-      position.x = hitboxSize / 2;
+    if (position.x < size) {
+      position.x = size;
       velocity.x *= -1;
-    } else if (position.x > width - hitboxSize / 2) {
-      position.x = width - hitboxSize / 2;
+    } else if (position.x > width - size) {
+      position.x = width - size;
       velocity.x *= -1;
     }
-    if (position.y < hitboxSize / 2) {
-      position.y = hitboxSize / 2;
+    if (position.y < size) {
+      position.y = size;
       velocity.y *= -1;
-    } else if (position.y > height - hitboxSize / 2) {
-      position.y = height - hitboxSize / 2;
+    } else if (position.y > height - size) {
+      position.y = height - size;
       velocity.y *= -1;
     }
   }
@@ -99,12 +97,12 @@ class Zombie {
     for (Zombie other : zombieList) {
       if (other != this && other.alive) {
         float distance = PVector.dist(position, other.position);
-        if (distance < hitboxSize) {
+        if (distance < size * 2) {
           PVector repulsion = PVector.sub(position, other.position).normalize();
           repulsion.mult(0.5);
           applyForce(repulsion);
 
-          float overlap = hitboxSize - distance;
+          float overlap = size * 2 - distance;
           PVector adjustment = repulsion.copy().mult(overlap * 0.05);
           position.add(adjustment);
           other.position.sub(adjustment);
@@ -113,17 +111,34 @@ class Zombie {
     }
 
     float playerDistance = PVector.dist(position, playerPosition);
-    if (playerDistance < (hitboxSize / 2) + 15 && playerDistance > size * 0.5) {
+    if (playerDistance < (size) + 15 && playerDistance > size * 0.5) {
       PVector repulsion = PVector.sub(position, playerPosition).normalize();
       repulsion.mult(1);
       applyForce(repulsion);
 
-      float overlap = (size / 2) + (15) - playerDistance;
+      float overlap = (size) + (15) - playerDistance;
       PVector adjustment = repulsion.copy().mult(overlap * 0.1);
       position.add(adjustment);
 
       score++;
     }
+  }
+  
+  boolean check_collision_sphere(PVector otherPos, float otherSize) {
+    float dist = this.position.dist(otherPos);
+    if (dist <= this.size + otherSize) {
+      return true;
+    }
+    return false;
+  }
+  
+  boolean check_collision_square(PVector otherPos, PVector otherSize) {
+    float deltaX = Math.abs(this.position.x - otherPos.x);
+    float deltaY = Math.abs(this.position.y - otherPos.y);
+    if (deltaX < (this.size/2 + otherSize.x/2) && deltaY < (this.size/2 + otherSize.y/2)) {
+    return true;
+  }
+    return false;
   }
 
   void swarmSense(ArrayList<Zombie> zombieList, PVector playerPosition) {
@@ -253,7 +268,7 @@ class Zombie {
   void display() {
     if (decomposing) {
       fill(139, 69, 19);
-      ellipse(position.x, position.y, hitboxSize, hitboxSize);
+      ellipse(position.x, position.y, size * 2, size * 2);
     } else if (alive) {
       pushMatrix();
       translate(position.x, position.y);
@@ -269,7 +284,11 @@ class Zombie {
       } else {
         image(zombieEastWestTexture, 0, 0, size * 2, size * 2);
       }
-
+      if (showHitbox) {
+        noFill();
+        stroke(color(255,0,0));
+        ellipse(0,0,size,size);
+      }
       imageMode(CORNER);
       popMatrix();
     }

@@ -1,6 +1,6 @@
 class Camera {
   PVector playerPos;
-  float scaleSize = 5;
+  float scaleSize = 4;
   
   Camera(PVector pos) {
     this.playerPos = pos;

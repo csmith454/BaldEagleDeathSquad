@@ -17,6 +17,7 @@ class Player {
   PImage arrow;
   
   // Character
+  float health = 100;
   float speed = 2;
   PVector pos = new PVector(0,0);
   PVector vel = new PVector(0,0);
