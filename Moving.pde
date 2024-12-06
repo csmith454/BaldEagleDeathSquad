@@ -18,88 +18,86 @@ class Moving implements State {
     
     // Handles player movement
     player.idle = true;
-    int diagonal = 0;
+    player.diagonal = 0;
     PVector change = new PVector(0,0);
+    int vert = 0;
+    int horiz = 0;
     if (player.inputBuffer[2]) {
-      change.x += player.pixelSize * player.speed/frameRate;
+      change.x += player.pixelSize * player.speed/frameRate/player.accelModifier;
       player.direction = "side";
       player.idle = false;
       player.left = true;
-      diagonal += 1;
+      player.diagonal += 1;
+      horiz = 1;
     }
     if (player.inputBuffer[3]) {
-      change.x += -player.pixelSize * player.speed/frameRate;
+      change.x += -player.pixelSize * player.speed/frameRate/player.accelModifier;
       player.direction = "side";
       player.idle = false;
       player.left = false;
-      diagonal += 1;
+      player.diagonal += 1;
+      horiz = -1;
     }
     if (player.inputBuffer[0]) {
-      change.y += player.pixelSize * player.speed/frameRate;
+      change.y += player.pixelSize * player.speed/frameRate/player.accelModifier;
       player.direction = "up";
       player.idle = false;
-      diagonal += 1;
+      player.diagonal += 1;
+      vert = 1;
     }
     if (player.inputBuffer[1]) {
-      change.y += -player.pixelSize * player.speed/frameRate;
+      change.y += -player.pixelSize * player.speed/frameRate/player.accelModifier;
       player.direction = "down";
       player.idle = false;
-      diagonal += 1;
+      player.diagonal += 1;
+      vert = -1;
     }
-    if (diagonal >= 2) { // If the player is moving diagonally, cut speed for each direction.
-      if (change.x != 0) {
-        change.x /= 1.41421356237;
-      }
-      if (change.y != 0) {
-        change.y /= 1.41421356237;
-      }
-    }
-    player.pos.add(change);
+    player.accel = (change);
     
     // Abilities
     if (player.firstEquipped) {
-      // Handles tier 1 abilities.
-      //if (player.abilities[0]) {
-      //  // Sword
-      //  player.timer1Max = player.swordTimer;
-      //  pushMatrix();
-      //  translate(-player.pos.x,-player.pos.y);
-      //  player.matrix = player.multMatrix(player.matrix, new float[] {1,0,-player.pos.x,
-      //                                                0,1,-player.pos.y,
-      //                                                0,0,1});
+       //Handles tier 1 abilities.
+      if (player.abilities[0]) {
+        // Sword
+        player.timer1Max = player.swordTimer;
+        pushMatrix();
+        translate(-player.pos.x,-player.pos.y);
+        player.matrix = player.multMatrix(player.matrix, new float[] {1,0,-player.pos.x,
+                                                      0,1,-player.pos.y,
+                                                      0,0,1});
         
-      //  // Makes the sword rotate around the player.
-      //  float degree = -90;
-      //  if (player.inputBuffer[5] && player.timer1 >= player.swordTimer) {
-      //    player.timer1 = 0.0;
-      //  }
-      //  if (player.timer1 < player.swordTimer/1.5) {
-      //    degree = 140;
-      //    degree -= lerp(0,100,player.timer1 * 1.5 * (1/player.swordTimer));
-      //    player.hitBoxSize = this.hitBoxSize_Store;
-      //  }
-      //  else {
-      //    player.hitBoxSize = 0;
-      //  }
-      //  if (mouseY != height / 2 && mouseX != width / 2) {
-      //    degree = atan2((mouseY - height/2),(mouseX - width/2)) + radians(degree);
-      //    rotate(degree);
-      //  }
-      //  player.matrix = player.multMatrix(player.matrix,new float[] {1,0,sin(degree) * (player.pixelSize * 0.7),
-      //                                                              0,1,-cos(degree) * (player.pixelSize * 0.7),
-      //                                                              0,0,1});
-      //  translate(-player.pixelSize/2,-player.pixelSize);
-      //  image(player.sword_sprite,0,-player.pixelSize * 0.1,player.pixelSize,player.pixelSize);
-      //  player.hitBoxPos = new PVector(player.matrix[2],player.matrix[5]);
-      //  popMatrix();
-      //  player.matrix = player.multMatrix(player.matrix,new float[] {1,0,-sin(degree) * (player.pixelSize * 0.7),
-      //                                                              0,1,cos(degree) * (player.pixelSize * 0.7),
-      //                                                              0,0,1});
-      //  player.matrix = player.multMatrix(player.matrix, new float[] {1,0,player.pos.x,
-      //                                                0,1,player.pos.y,
-      //                                                0,0,1});
-      //}
-      if (player.abilities[1]) {
+        // Makes the sword rotate around the player.
+        float degree = -90;
+        if (player.inputBuffer[5] && player.timer1 >= player.swordTimer) {
+          player.timer1 = 0.0;
+        }
+        if (player.timer1 < player.swordTimer/1.5) {
+          degree = 140;
+          degree -= lerp(0,100,player.timer1 * 1.5 * (1/player.swordTimer));
+          player.hitBoxSize = this.hitBoxSize_Store;
+        }
+        else {
+          player.hitBoxSize = 0;
+        }
+        if (mouseY != height / 2 && mouseX != width / 2) {
+          degree = atan2((mouseY - height/2),(mouseX - width/2)) + radians(degree);
+          rotate(degree);
+        }
+        player.matrix = player.multMatrix(player.matrix,new float[] {1,0,sin(degree) * (player.pixelSize * 0.7),
+                                                                    0,1,-cos(degree) * (player.pixelSize * 0.7),
+                                                                    0,0,1});
+        translate(-player.pixelSize/2,-player.pixelSize);
+        image(player.sword_sprite,0,-player.pixelSize * 0.1,player.pixelSize,player.pixelSize);
+        player.hitBoxPos = new PVector(player.matrix[2],player.matrix[5]);
+        popMatrix();
+        player.matrix = player.multMatrix(player.matrix,new float[] {1,0,-sin(degree) * (player.pixelSize * 0.7),
+                                                                    0,1,cos(degree) * (player.pixelSize * 0.7),
+                                                                    0,0,1});
+        player.matrix = player.multMatrix(player.matrix, new float[] {1,0,player.pos.x,
+                                                      0,1,player.pos.y,
+                                                      0,0,1});
+      }
+      else if (player.abilities[1]) {
         // Spike
         player.timer1Max = player.spikeTimer;
         pushMatrix();

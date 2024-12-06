@@ -17,7 +17,11 @@ class Spike {
   
   void display() {
     image(spike_sprite,pos.x - pixelSize/2,pos.y - pixelSize/2,pixelSize,pixelSize);
-    ellipse(this.pos.x,this.pos.y,this.size,this.size); //Hitbox
+    if (showHitbox) {
+      noFill();
+      stroke(255);
+      ellipse(this.pos.x,this.pos.y,this.size,this.size); //Hitbox
+    }
     count += 1/frameRate;
   }
   
