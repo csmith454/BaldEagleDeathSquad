@@ -93,7 +93,6 @@ class Zombie {
   }
 
   void handleCollisions(ArrayList<Zombie> zombieList, PVector playerPosition) {
-
     for (Zombie other : zombieList) {
       if (other != this && other.alive) {
         float distance = PVector.dist(position, other.position);
@@ -111,22 +110,27 @@ class Zombie {
     }
 
     float playerDistance = PVector.dist(position, playerPosition);
-    if (playerDistance < (size) + 15 && playerDistance > size * 0.5) {
+    // playerDistance < (size) + player.size && playerDistance > size * 0.5
+    if (this.check_collision_sphere(playerPosition, player.size)) {
       PVector repulsion = PVector.sub(position, playerPosition).normalize();
       repulsion.mult(1);
       applyForce(repulsion);
 
-      float overlap = (size) + (15) - playerDistance;
+      float overlap = (size) + (player.size) - playerDistance;
       PVector adjustment = repulsion.copy().mult(overlap * 0.1);
       position.add(adjustment);
 
       score++;
     }
+    if (this.check_collision_sphere(player.hitBoxPos, player.hitBoxSize)) {
+      this.decomposing = true;
+      this.alive = false;
+    }
   }
   
   boolean check_collision_sphere(PVector otherPos, float otherSize) {
     float dist = this.position.dist(otherPos);
-    if (dist <= this.size + otherSize) {
+    if (dist <= this.size/2 + otherSize/2) {
       return true;
     }
     return false;
@@ -266,10 +270,7 @@ class Zombie {
   }
 
   void display() {
-    if (decomposing) {
-      fill(139, 69, 19);
-      ellipse(position.x, position.y, size * 2, size * 2);
-    } else if (alive) {
+    if (alive) {
       pushMatrix();
       translate(position.x, position.y);
       if (directionFacing.equals("eastwest") && facingRight) {
