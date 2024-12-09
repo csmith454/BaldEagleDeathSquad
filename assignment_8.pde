@@ -85,6 +85,48 @@ void setup() {
     imageName = "side_" + nf(i + 1, 1) + ".png";
     player.side_sprite[i] = loadImage(imageName);
   }
+  for (int i = 0; i < player.numFrames; i++) {
+      player.front_sprite_I[i] = player.front_sprite[i].copy();
+      player.front_sprite_I[i].loadPixels();
+      for (int j = 0; j < player.front_sprite_I[i].pixels.length; j++) {
+        color c = player.front_sprite_I[i].pixels[j];
+        float a = alpha(c);
+        if (a > 0) {
+          float r = red(c) * 1.5;
+          float g = green(c) * 2;
+          float b = blue(c) * 2;
+          player.front_sprite_I[i].pixels[j] = color(constrain(r, 0, 255), constrain(g, 0, 255), constrain(b, 0, 255));
+        }
+      }
+    }
+    for (int i = 0; i < player.numFrames; i++) {
+      player.side_sprite_I[i] = player.side_sprite[i].copy();
+      player.side_sprite_I[i].loadPixels();
+      for (int j = 0; j < player.side_sprite_I[i].pixels.length; j++) {
+        color c = player.side_sprite_I[i].pixels[j];
+        float a = alpha(c);
+        if (a > 0) {
+          float r = red(c) * 1.5;
+          float g = green(c) * 2;
+          float b = blue(c) * 2;
+          player.side_sprite_I[i].pixels[j] = color(constrain(r, 0, 255), constrain(g, 0, 255), constrain(b, 0, 255));
+        }
+      }
+    }
+    for (int i = 0; i < player.numFrames; i++) {
+      player.back_sprite_I[i] = player.back_sprite[i].copy();
+      player.back_sprite_I[i].loadPixels();
+      for (int j = 0; j < player.back_sprite_I[i].pixels.length; j++) {
+        color c = player.back_sprite_I[i].pixels[j];
+        float a = alpha(c);
+        if (a > 0) {
+          float r = red(c) * 1.5;
+          float g = green(c) * 2;
+          float b = blue(c) * 2;
+          player.back_sprite_I[i].pixels[j] = color(constrain(r, 0, 255), constrain(g, 0, 255), constrain(b, 0, 255));
+        }
+      }
+    }
   player.rocketLauncher_sprite = loadImage("rocketLauncher.png");
   player.rocket_sprite = loadImage("rocket.png");
   player.sword_sprite = loadImage("sword.png");
@@ -158,7 +200,7 @@ void levelLogic(Level L, ArrayList<Collision> collisions) {
   if (startOfLevel) {
     player.updatePos(new PVector(-L.spawns.get(1).x-20,-L.spawns.get(1).y)); // Make this the spawn position
     startOfLevel = false;
-    spawnZombies(1);
+    spawnZombies(7);
   }
   
   // Handles all character game objects
@@ -180,7 +222,7 @@ void levelLogic(Level L, ArrayList<Collision> collisions) {
   remove_spikes.clear();
   player.update();
   
-  // Handles collisions
+  // Handles wall collisions, zombie to gameObject/player collisiosn are handled in the zombie class.
   collisionLevel(collisions);
   
   // Handles zombie logic
@@ -216,16 +258,16 @@ void collisionLevel(ArrayList<Collision> collisions) {
         }
         if (!player.isDashing) {
           if (-player.pos.x > collision.x + collision.w) {
-            player.vel.x -= player.pixelSize * player.speed/frameRate/player.accelModifier*2;
+            player.vel.x -= player.pixelSize * player.speed/frameRate/player.acelModifier*2;
           }
           else if (-player.pos.x < collision.x) {
-            player.vel.x += player.pixelSize * player.speed/frameRate/player.accelModifier*2;
+            player.vel.x += player.pixelSize * player.speed/frameRate/player.acelModifier*2;
           }
           if (-player.pos.y > collision.y + collision.h) {
-            player.vel.y -= player.pixelSize * player.speed/frameRate/player.accelModifier*2;
+            player.vel.y -= player.pixelSize * player.speed/frameRate/player.acelModifier*2;
           }
           else if (-player.pos.y < collision.y) {
-            player.vel.y += player.pixelSize * player.speed/frameRate/player.accelModifier*2;
+            player.vel.y += player.pixelSize * player.speed/frameRate/player.acelModifier*2;
           }
         }
       }
@@ -239,16 +281,16 @@ void collisionLevel(ArrayList<Collision> collisions) {
       if (player.check_collision_square(new PVector(collision.x+collision.w/2,collision.y+collision.h/2), new PVector(collision.w,collision.h))) {
         
         if (-player.pos.x > collision.x + collision.w) {
-          player.vel.x -= player.pixelSize * player.speed/frameRate/player.accelModifier*2;
+          player.vel.x -= player.pixelSize * player.speed/frameRate/player.acelModifier*2;
         }
         else if (-player.pos.x < collision.x) {
-          player.vel.x += player.pixelSize * player.speed/frameRate/player.accelModifier*2;
+          player.vel.x += player.pixelSize * player.speed/frameRate/player.acelModifier*2;
         }
         if (-player.pos.y > collision.y + collision.h) {
-          player.vel.y -= player.pixelSize * player.speed/frameRate/player.accelModifier*2;
+          player.vel.y -= player.pixelSize * player.speed/frameRate/player.acelModifier*2;
         }
         else if (-player.pos.y < collision.y) {
-          player.vel.y += player.pixelSize * player.speed/frameRate/player.accelModifier*2;
+          player.vel.y += player.pixelSize * player.speed/frameRate/player.acelModifier*2;
         }
       }
     }

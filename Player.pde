@@ -10,6 +10,9 @@ class Player {
   PImage[] front_sprite = new PImage[numFrames];
   PImage[] back_sprite = new PImage[numFrames];
   PImage[] side_sprite = new PImage[numFrames];
+  PImage[] front_sprite_I = new PImage[numFrames];
+  PImage[] back_sprite_I = new PImage[numFrames];
+  PImage[] side_sprite_I = new PImage[numFrames];
   PImage rocketLauncher_sprite;
   PImage rocket_sprite;
   PImage sword_sprite;
@@ -22,15 +25,20 @@ class Player {
   float speed = 2;
   PVector pos = new PVector(0,0);
   PVector vel = new PVector(0,0);
-  PVector accel = new PVector(0,0);
-  float accelModifier = 4;
+  PVector acel = new PVector(0,0);
+  float acelModifier = 4;
   int diagonal = 0;
   float size = 14;
   PVector hitBoxPos = new PVector(0,0);
   float hitBoxSize = 20;
+  PVector hitstunDirection;
+  float knockback;
   boolean[] abilities = new boolean[9];
   boolean isDashing = false;
-  boolean firstEquipped = false;
+  boolean firstEquipped = true;
+  boolean damaged = false;
+  boolean invincible = false;
+  float invincibleTimer = 0.0;
   float timer1 = 5.0;
   float timer2 = 5.0;
   float timer3 = 5.0;
@@ -76,9 +84,12 @@ class Player {
     // STATES
     Moving moving = new Moving(hitBoxSize);
     Dash dash = new Dash();
+    Hitstun hitstun = new Hitstun();
     
     // TRANSITIONS
     stateMachine.at(moving, dash, () -> moving.toDash());
+    stateMachine.at(moving, hitstun, () -> moving.toHitstun());
+    stateMachine.at(hitstun, moving, () -> hitstun.toMoving());
     stateMachine.at(dash,moving, () -> dash.toMoving());
     
     // START STATE
@@ -86,24 +97,34 @@ class Player {
   }
   
   void update() {
+    println(health);
     pushMatrix();
     stateMachine.tick();
     popMatrix();
     
+    // Handle invincibility
+    if (invincibleTimer >= 0.0) {
+      invincibleTimer -= 1/frameRate;
+    }
+    else {
+      invincible = false;
+    }
+    
+    // decceleration
     if (vel.x >= 0.1) {
-      vel.x -= player.pixelSize * player.speed/frameRate/player.accelModifier/2;
+      vel.x -= player.pixelSize * player.speed/frameRate/player.acelModifier/2;
     }
     else if (vel.x <= -0.1) {
-      vel.x += player.pixelSize * player.speed/frameRate/player.accelModifier/2;
+      vel.x += player.pixelSize * player.speed/frameRate/player.acelModifier/2;
     }
     else {
       vel.x = 0;
     }
     if (vel.y >= 0.1) {
-      vel.y -= player.pixelSize * player.speed/frameRate/player.accelModifier/2;
+      vel.y -= player.pixelSize * player.speed/frameRate/player.acelModifier/2;
     }
     else if (vel.y <= -0.1) {
-      vel.y += player.pixelSize * player.speed/frameRate/player.accelModifier/2;
+      vel.y += player.pixelSize * player.speed/frameRate/player.acelModifier/2;
     }
     else {
       vel.y = 0;
@@ -114,8 +135,8 @@ class Player {
         change /= 1.41421356237;
     }
     
-    vel.x = constrain(vel.x + accel.x,-change,change);
-    vel.y = constrain(vel.y + accel.y,-change,change);
+    vel.x = constrain(vel.x + acel.x,-change,change);
+    vel.y = constrain(vel.y + acel.y,-change,change);
     pos.add(vel);
     
     if (timer1 < timer1Max) {

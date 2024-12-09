@@ -110,9 +110,9 @@ class Zombie {
     }
 
     float playerDistance = PVector.dist(position, playerPosition);
-    // playerDistance < (size) + player.size && playerDistance > size * 0.5
     if (this.check_collision_sphere(playerPosition, player.size)) {
       PVector repulsion = PVector.sub(position, playerPosition).normalize();
+      // zombie prevented from overlapping player
       repulsion.mult(1);
       applyForce(repulsion);
 
@@ -121,6 +121,14 @@ class Zombie {
       position.add(adjustment);
 
       score++;
+      // Player is damaged
+      if (!player.invincible) {
+        player.hitstunDirection = repulsion;
+        player.knockback = damage/7;
+        player.damaged = true;
+        player.health -= damage;
+      }
+      
     }
     if (this.check_collision_sphere(player.hitBoxPos, player.hitBoxSize)) {
       this.decomposing = true;

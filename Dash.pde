@@ -30,23 +30,23 @@ class Dash implements State {
     player.diagonal = 0;
     PVector change = new PVector(0,0);
     if (this.dashBuffer[2]) {
-      change.x += player.pixelSize*player.speed/frameRate/player.accelModifier;
+      change.x += player.pixelSize*player.speed/frameRate/player.acelModifier;
       player.diagonal += 1;
     }
     if (this.dashBuffer[3]) {
-      change.x -= player.pixelSize*player.speed/frameRate/player.accelModifier;
+      change.x -= player.pixelSize*player.speed/frameRate/player.acelModifier;
       player.diagonal += 1;
     }
     if (this.dashBuffer[0]) {
-      change.y += player.pixelSize*player.speed/frameRate/player.accelModifier;
+      change.y += player.pixelSize*player.speed/frameRate/player.acelModifier;
       player.diagonal += 1;
     }
     if (this.dashBuffer[1]) {
-      change.y -= player.pixelSize*player.speed/frameRate/player.accelModifier;
+      change.y -= player.pixelSize*player.speed/frameRate/player.acelModifier;
       player.diagonal += 1;
     }
-    player.accel = (change);
-    
+    player.acel = (change);
+   
     float xPos = -player.pos.x;
     pushMatrix();
     if (player.left) {
@@ -75,13 +75,28 @@ class Dash implements State {
       translate(-player.pixelSize,0);
     }
     if (player.direction == "down") {
-      image(player.front_sprite[0],0,0,player.pixelSize,player.pixelSize);
+      if (!player.invincible) {
+        image(player.front_sprite[0],0,0,player.pixelSize,player.pixelSize);
+      }
+      else {
+        image(player.front_sprite_I[0],0,0,player.pixelSize,player.pixelSize);
+      }
     }
     else if (player.direction == "up") {
-      image(player.back_sprite[0], 0,0,player.pixelSize,player.pixelSize);
+      if (!player.invincible) {
+        image(player.back_sprite[0], 0,0,player.pixelSize,player.pixelSize);
+      }
+      else {
+        image(player.front_sprite_I[0],0,0,player.pixelSize,player.pixelSize);
+      }
     }
     else if (player.direction == "side") {
-      image(player.side_sprite[0], 0,0,player.pixelSize,player.pixelSize);
+      if (!player.invincible) {
+        image(player.side_sprite[0], 0,0,player.pixelSize,player.pixelSize);
+      }
+      else {
+        image(player.front_sprite_I[0],0,0,player.pixelSize,player.pixelSize);
+      }
     }
     popMatrix();
   }

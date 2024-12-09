@@ -12,6 +12,8 @@ class Moving implements State {
   
   void onExit() {
     player.hitBoxSize = 0.0;
+    player.acel.x = 0;
+    player.acel.y = 0;
   }
   
   void tick() {
@@ -23,7 +25,7 @@ class Moving implements State {
     int vert = 0;
     int horiz = 0;
     if (player.inputBuffer[2]) {
-      change.x += player.pixelSize * player.speed/frameRate/player.accelModifier;
+      change.x += player.pixelSize * player.speed/frameRate/player.acelModifier;
       player.direction = "side";
       player.idle = false;
       player.left = true;
@@ -31,7 +33,7 @@ class Moving implements State {
       horiz = 1;
     }
     if (player.inputBuffer[3]) {
-      change.x += -player.pixelSize * player.speed/frameRate/player.accelModifier;
+      change.x += -player.pixelSize * player.speed/frameRate/player.acelModifier;
       player.direction = "side";
       player.idle = false;
       player.left = false;
@@ -39,20 +41,20 @@ class Moving implements State {
       horiz = -1;
     }
     if (player.inputBuffer[0]) {
-      change.y += player.pixelSize * player.speed/frameRate/player.accelModifier;
+      change.y += player.pixelSize * player.speed/frameRate/player.acelModifier;
       player.direction = "up";
       player.idle = false;
       player.diagonal += 1;
       vert = 1;
     }
     if (player.inputBuffer[1]) {
-      change.y += -player.pixelSize * player.speed/frameRate/player.accelModifier;
+      change.y += -player.pixelSize * player.speed/frameRate/player.acelModifier;
       player.direction = "down";
       player.idle = false;
       player.diagonal += 1;
       vert = -1;
     }
-    player.accel = (change);
+    player.acel = (change);
     
     // Abilities
     if (player.firstEquipped) {
@@ -200,19 +202,41 @@ class Moving implements State {
     }
     translate(xPos-player.pixelSize/2,-player.pos.y-player.pixelSize*0.8);
     if (player.direction == "down") {
-      image(player.front_sprite[frame],0,0,player.pixelSize,player.pixelSize);
+      if (!player.invincible) {
+        image(player.side_sprite[0], 0,0,player.pixelSize,player.pixelSize);
+      }
+      else {
+        image(player.front_sprite_I[0],0,0,player.pixelSize,player.pixelSize);
+      }
     }
     else if (player.direction == "up") {
-      image(player.back_sprite[frame],0,0,player.pixelSize,player.pixelSize);
+      if (!player.invincible) {
+        image(player.side_sprite[0], 0,0,player.pixelSize,player.pixelSize);
+      }
+      else {
+        image(player.front_sprite_I[0],0,0,player.pixelSize,player.pixelSize);
+      }
     }
     else if (player.direction == "side") {
-      image(player.side_sprite[frame],0,0,player.pixelSize,player.pixelSize);
+      if (!player.invincible) {
+        image(player.side_sprite[0], 0,0,player.pixelSize,player.pixelSize);
+      }
+      else {
+        image(player.front_sprite_I[0],0,0,player.pixelSize,player.pixelSize);
+      }
     }
     popMatrix();
   }
   
   Boolean toDash() {
     if (player.inputBuffer[4]) {
+      return true;
+    }
+    return false;
+  }
+  
+  boolean toHitstun() {
+    if (player.damaged) {
       return true;
     }
     return false;
