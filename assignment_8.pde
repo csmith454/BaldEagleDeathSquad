@@ -102,17 +102,20 @@ void setup() {
 }
 
 void draw() {
-  if (zombies.size() == 0 && gameState == 3) {
-    if (frameCount > 10000) {
-      gameState = 12;
-    }
+  // control transitions between levels
+  if (countZombiesAlive() == 0 && gameState == 3 && startOfLevel == false) {
+    gameState = 20;
+    startOfLevel = true;
   }
-  else if (zombies.size() == 0 && frameCount > 10000) {
-    
+  else if (countZombiesAlive() == 0 && gameState == 1 && startOfLevel == false) {
     gameState = 10;
+    startOfLevel = true;
   }
-  // if number of zombies in array is zero then chenge to gameState 10
-  // if no zombies and gameState is 3 then transition to GUI gameState 12 and display HS sequence
+  else if (countZombiesAlive() == 0 && gameState == 2 && startOfLevel == false) {
+    gameState = 11;
+    startOfLevel = true;
+  }
+  
   g.display(gameState);
   hs.display(gameState);
   
@@ -455,12 +458,10 @@ void loadData(){
   allSpawns.add(spawn3);
   
   // create level objects 
-  L1 = new Level(t1.createBackground(),allCollisions.get(0),allSpawns.get(0));
-  L2 = new Level(t2.createBackground(),allCollisions.get(1),allSpawns.get(1));
-  L3 = new Level(t3.createBackground(),allCollisions.get(2),allSpawns.get(2));
+  L1 = new Level(1,t1.createBackground(),allCollisions.get(0),allSpawns.get(0));
+  L2 = new Level(2,t2.createBackground(),allCollisions.get(1),allSpawns.get(1));
+  L3 = new Level(3,t3.createBackground(),allCollisions.get(2),allSpawns.get(2));
 }
-
-
 
 // Zombie functions
 void spawnZombies(int numZombies) {
