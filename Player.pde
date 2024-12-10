@@ -137,8 +137,8 @@ class Player {
   }
   
   void updatePos(PVector pos) {
-    this.pos.x += pos.x;
-    this.pos.y += pos.y;
+    this.pos.x = pos.x;
+    this.pos.y = pos.y;
   }
   
   boolean check_collision_sphere(PVector otherPos, float otherSize) {
