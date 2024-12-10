@@ -71,7 +71,7 @@ void setup() {
   String[] values = loadStrings("scores.txt");
   hs = new HighScore(keys,values);
 
-  gameState = 0;
+  gameState = 20;
   g = new GUI();
   g.display(gameState);
   hs.display(gameState);

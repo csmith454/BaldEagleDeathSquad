@@ -43,7 +43,7 @@ class GUI {
     credits = "BALD EAGLE DEATH SQUAD STUDIOS";
     nextLevel = "Well done.\nSelect a power-up to move to the next level.\nYou're going to need it.";
     endLevel = "Good try.\nYou'll need to do better to defeat\nTHE HIVE";
-    congrats = "You beat all three levels!\nCongratulations!";
+    congrats = "You beat all three levels.\nWe're quite impressed.";
     controls = "Use WASD to navigate your player around the map.\nClick Left Mouse Button to use your selected ability.\nSelect different abilities with '1', '2', '3'.\nKeep in mind that you will only have one ability until you beat level 1.\nUse Spacebar to DO A FLIP!";
     
     //create buttons
@@ -56,14 +56,15 @@ class GUI {
     returnToMenu = new RectButton(width/2,4*height/5,color(50,100,200),"Return to main menu",200,250);
     controlsB = new RectButton(3.9*width/5,0.5*height/5,color(100),"Controls",90,100);
     
-    healthBarHeight = 50;
+    // height must be connected to player health in final
+    healthBarHeight = 50;    // delete this after
     rectMode(CENTER);
-    healthBar = createShape(RECT,0,0,5,50);
+    healthBar = createShape(RECT,0,0,5,50);    // delete this after
     healthBar.setStroke(0);
     healthBar.setFill(color(255,50,50));
     healthOutline = createShape(RECT,0,0,5,50);
-    healthOutline.setStroke(3);
-    healthOutline.setFill(color(0));
+    healthOutline.setStroke(color(0));
+    healthOutline.setFill(color(255));
     abilityDeck = createShape(RECT,0,0,75,25);
     abilityDeck.setFill(color(214,89,76));
     rectMode(CORNER);
@@ -140,7 +141,7 @@ class GUI {
       background(0);
       textSize(54);
       fill(255);
-      text(congrats,width/2,2*height/5);
+      text(congrats,width/2,height/2-50);
       textSize(28);
       returnToMenu.display();
       returnToMenu.animateButton();
@@ -169,8 +170,10 @@ class GUI {
      text("Time elapsed: ",-playerPos.x-120,-playerPos.y-85);
      text(getTimeFormat(runTime),-playerPos.x-60,-playerPos.y-85);
      shape(healthOutline,-playerPos.x-120,-playerPos.y);
-     shape(healthBar,-playerPos.x-120,-playerPos.y);
-     
+     //healthBar = createShape(RECT,0,0,5,healthBarHeight);    // pass in player health to .displayHUD and normalize to height of healthbar
+     //healthBar.setStroke(0);
+     //healthBar.setFill(color(255,50,50));
+     shape(healthBar,-playerPos.x-120,-playerPos.y);    // delete this after
      shape(abilityDeck,-playerPos.x,-playerPos.y+75);
      // display ability icons
      
