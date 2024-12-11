@@ -10,6 +10,10 @@ class GUI {
   String PU4;
   String PU5;
   String PU6;
+  String PU7;
+  String PU8;
+  String PU9;
+  String initialChoice;
   String nextLevel;
   String endLevel;
   String credits;
@@ -27,6 +31,9 @@ class GUI {
   RectButton PUChoice4;
   RectButton PUChoice5;
   RectButton PUChoice6;
+  RectButton PUChoice7;
+  RectButton PUChoice8;
+  RectButton PUChoice9;
   RectButton returnToMenu;
   RectButton controlsB;
   
@@ -53,25 +60,32 @@ class GUI {
     title = "THE HIVE";
     credits = "BALD EAGLE DEATH SQUAD STUDIOS";
     nextLevel = "Well done.\nSelect a power-up to move to the next level.\nYou're going to need it.";
+    initialChoice = "Select your first weapon\nand prepare for the worst.";
     endLevel = "Good try.\nYou'll need to do better to defeat\nTHE HIVE";
     congrats = "You beat all three levels.\nWe're quite impressed.";
-    controls = "Use WASD to navigate your player around the map.\nClick Left Mouse Button to use your selected ability.\nSelect different abilities with '1', '2', '3'.\nKeep in mind that you will only have one ability until you beat level 1.\nUse Spacebar to DO A FLIP!";
-    PU1 = "";
-    PU2 = "";
-    PU3 = "";
-    PU4 = "";
-    PU5 = "";
-    PU6 = "";
+    controls = "Use WASD to navigate your player around the map.\nClick Left Mouse Button to use your selected ability.\nSelect different abilities with '1' and '2'.\nKeep in mind that you will only have one ability until you beat level 1.\nUse Spacebar to activate your passive ability if chosen";
+    PU1 = "Guts' Sword\nHow did that\nget here?";
+    PU2 = "Placeable Spikes\nThe zombies won't\nknow what hit\nthem.";
+    PU3 = "Bow + Arrow\nChannel your inner\nLegolas.";
+    PU4 = "Roller Blades\nNow the zombies\nare going to be\nreally confused when\nyou speed by them.";
+    PU5 = "Slowness Field\nSome eldritch magic\nyou picked up\nalong the way will\nslow down zombies\naround you.";
+    PU6 = "DO A FLIP!\nSelf explanatory?";
+    PU7 = "Bazooka\nReally take out\nyour anger.";
+    PU8 = "Placable boxes\nBlock those\npesky zombies.";
+    PU9 = "Fus Ro Dah\nWait do we have\nto pay for the\nrights to this? ";
     
     //create buttons
     begin = new RectButton(3*width/10,3*height/5,color(137,43,51),"Click to try your luck.",80,300);
     mute = new RectButton(4.5*width/5,0.5*height/5,color(100),"Mute",90,100);
-    PUChoice1 = new RectButton(2*width/10,2.5*height/5,color(50,100,200),PU1,200,200);
-    PUChoice2 = new RectButton(5*width/10,2.5*height/5,color(50,100,200),PU2,200,200);
-    PUChoice3 = new RectButton(8*width/10,2.5*height/5,color(50,100,200),PU3,200,200);
-    PUChoice4 = new RectButton(2*width/10,2.5*height/5,color(50,100,200),PU4,200,200);
-    PUChoice5 = new RectButton(5*width/10,2.5*height/5,color(50,100,200),PU5,200,200);
-    PUChoice6 = new RectButton(8*width/10,2.5*height/5,color(50,100,200),PU6,200,200);
+    PUChoice1 = new RectButton(2*width/10,2.5*height/5,color(50,100,200),PU1,250,250);
+    PUChoice2 = new RectButton(5*width/10,2.5*height/5,color(50,100,200),PU2,250,250);
+    PUChoice3 = new RectButton(8*width/10,2.5*height/5,color(50,100,200),PU3,250,250);
+    PUChoice4 = new RectButton(2*width/10,2.5*height/5,color(50,100,200),PU4,250,250);
+    PUChoice5 = new RectButton(5*width/10,2.5*height/5,color(50,100,200),PU5,250,250);
+    PUChoice6 = new RectButton(8*width/10,2.5*height/5,color(50,100,200),PU6,250,250);
+    PUChoice7 = new RectButton(2*width/10,2.5*height/5,color(50,100,200),PU7,250,250);
+    PUChoice8 = new RectButton(5*width/10,2.5*height/5,color(50,100,200),PU8,250,250);
+    PUChoice9 = new RectButton(8*width/10,2.5*height/5,color(50,100,200),PU9,250,250);
     returnToMenu = new RectButton(width/2,4*height/5,color(50,100,200),"Return to main menu",200,250);
     controlsB = new RectButton(3.9*width/5,0.5*height/5,color(100),"Controls",90,100);
     
@@ -105,6 +119,20 @@ class GUI {
       controlsB.display();
       controlsB.animateButton();
     }
+    else if (gameState == 9) {
+      background(0);
+      textAlign(CENTER);
+      textSize(42);
+      fill(255);
+      text(initialChoice,width/2,1*height/5);
+      textSize(32);
+      PUChoice1.display();
+      PUChoice1.animateButton();
+      PUChoice2.display();
+      PUChoice2.animateButton();
+      PUChoice3.display();
+      PUChoice3.animateButton();
+    }
     else if (gameState == 10) {   // first progression; to second level
       background(0);
       String endTime = getTimeFormat(runTime);
@@ -118,12 +146,12 @@ class GUI {
       textSize(32);
       text("Time elapsed: ",1*width/10,0.5*height/5);
       text(endTime,2*width/10,0.5*height/5);
-        PUChoice1.display();
-        PUChoice1.animateButton();
-        PUChoice2.display();
-        PUChoice2.animateButton();
-        PUChoice3.display();
-        PUChoice3.animateButton();
+      PUChoice4.display();
+      PUChoice4.animateButton();
+      PUChoice5.display();
+      PUChoice5.animateButton();
+      PUChoice6.display();
+      PUChoice6.animateButton();
     }
     else if (gameState == 11) {    // second progression; to third level
       background(0);
@@ -139,12 +167,12 @@ class GUI {
       text("Time elapsed: ",1*width/10,0.5*height/5);
       text(endTime,2*width/10,0.5*height/5);
       // present selection for next power up
-        PUChoice4.display();
-        PUChoice4.animateButton();
-        PUChoice5.display();
-        PUChoice5.animateButton();
-        PUChoice6.display();
-        PUChoice6.animateButton();
+      PUChoice7.display();
+      PUChoice7.animateButton();
+      PUChoice8.display();
+      PUChoice8.animateButton();
+      PUChoice9.display();
+      PUChoice9.animateButton();
     }
     else if (gameState == 12){        // fail screen
       background(0);
@@ -153,8 +181,10 @@ class GUI {
       // display endscreen
       textAlign(CENTER);
       fill(255);
+      textSize(42);
       text(zCount,width/2,1.5*height/5);
       text(endLevel,width/2,2*height/5);
+      textSize(32);
       text("Time elapsed: ",1*width/10,0.5*height/5);
       text(endTime,2*width/10,0.5*height/5);
       // present button to return to main menu
@@ -237,7 +267,7 @@ class GUI {
   void mousePressed() {
     if (gameState == 0) {
       if (begin.isPressed()) {
-      gameState = 1;
+      gameState = 9;
       }
       else if (controlsB.isPressed()) {
         gameState = 13;
@@ -251,31 +281,45 @@ class GUI {
         gameState = 0;
       }
     }
-    else if (gameState == 10) {
+    else if (gameState == 9) {
       if (PUChoice1.isPressed()) {
-        player.abilities[1] = true;
-        gameState = 2;
+        player.abilities[0] = true;
+        gameState = 1;
       }
       else if (PUChoice2.isPressed()) {
-        player.abilities[2] = true;
-        gameState = 2;
+        player.abilities[1] = true;
+        gameState = 1;
       }
       else if (PUChoice3.isPressed()) {
+        player.abilities[2] = true;
+        gameState = 1;
+      }
+    }
+    else if (gameState == 10) {
+      if (PUChoice4.isPressed()) {
         player.abilities[3] = true;
+        gameState = 2;
+      }
+      else if (PUChoice5.isPressed()) {
+        player.abilities[4] = true;
+        gameState = 2;
+      }
+      else if (PUChoice6.isPressed()) {
+        player.abilities[5] = true;
         gameState = 2;
       }
     }  
     else if (gameState == 11) {
-      if (PUChoice4.isPressed()) {
-        player.abilities[4] = true;
+      if (PUChoice7.isPressed()) {
+        player.abilities[6] = true;
         gameState = 3;
       }  
-      else if (PUChoice5.isPressed()) {
-        player.abilities[5] = true;
+      else if (PUChoice8.isPressed()) {
+        player.abilities[7] = true;
         gameState = 3;
       }
-      else if (PUChoice6.isPressed()) {
-        player.abilities[6] = true;
+      else if (PUChoice9.isPressed()) {
+        player.abilities[8] = true;
         gameState = 3;
       }
     }

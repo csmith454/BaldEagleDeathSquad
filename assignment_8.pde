@@ -184,6 +184,10 @@ void draw() {
     startOfLevel = true;
   }
   
+  if (player.health <= 0) {
+    gameState = 12;
+  }
+  
   g.display(gameState);
   hs.display(gameState);
   

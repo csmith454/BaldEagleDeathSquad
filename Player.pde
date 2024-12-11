@@ -85,10 +85,7 @@ class Player {
     this.arrows = arrows;
     stateMachine = new StateMachine();
     for (int i = 0; i < abilities.length; i++) {
-      abilities[i] = false; // Currently set to true for testing purposes, later set it to false when abiliies become unlockable.
-      abilities[2] = true;
-      abilities[3] = true;
-      abilities[8] = true;
+      abilities[i] = false; // Currently set to true for testing purposes, later set it to false when abilities become unlockable.
     }
     this.matrix = matrix;
     

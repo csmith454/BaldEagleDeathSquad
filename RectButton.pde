@@ -19,7 +19,7 @@ class RectButton extends Button {
   
   void display() {
     shape(rec,pos.x,pos.y);
-    text(text,pos.x,pos.y+5);
+    text(text,pos.x,pos.y-5);
   }
   
   void animateButton() {
