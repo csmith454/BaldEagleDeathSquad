@@ -13,6 +13,10 @@ class GUI {
   String PU7;
   String PU8;
   String PU9;
+  String deck1 = "Sword\nSpikes\nBow";
+  String deck2 = "Speed+\nSlowField\nFlip";
+  String deck3 = "Bazooka\nBox\nFRD";
+  String[] abilitiesToDisplay = {"'1'\n","'2'\n","'Spacebar'\n"};
   String initialChoice;
   String nextLevel;
   String endLevel;
@@ -67,8 +71,8 @@ class GUI {
     PU1 = "Guts' Sword\nHow did that\nget here?";
     PU2 = "Placeable Spikes\nThe zombies won't\nknow what hit\nthem.";
     PU3 = "Bow + Arrow\nChannel your inner\nLegolas.";
-    PU4 = "Roller Blades\nNow the zombies\nare going to be\nreally confused when\nyou speed by them.";
-    PU5 = "Slowness Field\nSome eldritch magic\nyou picked up\nalong the way will\nslow down zombies\naround you.";
+    PU4 = "Roller Blades\nYou're going to\nbe fast now!";
+    PU5 = "Slowness Field\nSome eldritch magic\nthat will slow \ndown zombies around you.";
     PU6 = "DO A FLIP!\nSelf explanatory?";
     PU7 = "Bazooka\nReally take out\nyour anger.";
     PU8 = "Placable boxes\nBlock those\npesky zombies.";
@@ -94,7 +98,7 @@ class GUI {
     healthOutline = createShape(RECT,0,0,5,50);
     healthOutline.setStroke(color(0));
     healthOutline.setFill(color(255));
-    abilityDeck = createShape(RECT,0,0,75,25);
+    abilityDeck = createShape(RECT,0,0,75,30);
     abilityDeck.setFill(color(214,89,76));
     textBox = createShape(RECT,0,0,100,50);
     textBox.setFill(color(255));
@@ -248,7 +252,10 @@ class GUI {
      shape(healthBar,-playerPos.x-120,-playerPos.y);   
      shape(abilityDeck,-playerPos.x,-playerPos.y+75);
      // display ability icons
-     
+     textSize(5);
+     text(abilitiesToDisplay[0]+deck1,-playerPos.x-35,-playerPos.y+70);
+     text(abilitiesToDisplay[1]+deck2,-playerPos.x-15,-playerPos.y+70);
+     text(abilitiesToDisplay[2]+deck3,-playerPos.x+5,-playerPos.y+70);
    }
  }
  String getTimeFormat(int runTime) {

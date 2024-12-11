@@ -19,14 +19,16 @@ class RectButton extends Button {
   
   void display() {
     shape(rec,pos.x,pos.y);
-    text(text,pos.x,pos.y-5);
+    textSize(25);
+    text(text,pos.x,pos.y);
   }
   
   void animateButton() {
     distance = new PVector(abs(mouseX-pos.x),abs(mouseY-pos.y));
     if (distance.x < w/2 && distance.y < h/2) {
       shape(scaleRec,pos.x,pos.y);
-      text(text,pos.x,pos.y+5);
+      textSize(30);
+      text(text,pos.x,pos.y);
     }
   }
   
