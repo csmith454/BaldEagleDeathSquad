@@ -342,6 +342,9 @@ class Moving implements State {
         }
         else {
           image(player.wind_sprite[0],0,-player.pixelSize * 0.1,player.pixelSize,player.pixelSize);
+          for (Zombie zombie: zombies) {
+            zombie.isWinded = false;
+          }
         }
         popMatrix();
         if (player.inputBuffer[5] && player.timer3 > 0.0 && player.ability3Cooldown == false) {
