@@ -225,7 +225,7 @@ void levelLogic(Level L, ArrayList<Collision> collisions) {
   background(0);
   camera.move_camera();
   L.displayLevel();
-  g.displayHUD(gameState,player.pos);    // eventually pass in player health
+  g.displayHUD(gameState,player.pos,player.health);    // eventually pass in player health
   if (startOfLevel) {
     player.updatePos(new PVector(-L.spawns.get(1).x-20,-L.spawns.get(1).y)); // Make this the spawn position
     startOfLevel = false;

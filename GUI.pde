@@ -33,7 +33,7 @@ class GUI {
   int totalTime;
   PShape healthOutline;
   PShape healthBar;
-  int healthBarHeight;
+  float healthBarHeight;
   PShape abilityDeck;
   
   GUI() {
@@ -60,11 +60,7 @@ class GUI {
     controlsB = new RectButton(3.9*width/5,0.5*height/5,color(100),"Controls",90,100);
     
     // height must be connected to player health in final
-    healthBarHeight = 50;    // delete this after
     rectMode(CENTER);
-    healthBar = createShape(RECT,0,0,5,50);    // delete this after
-    healthBar.setStroke(0);
-    healthBar.setFill(color(255,50,50));
     healthOutline = createShape(RECT,0,0,5,50);
     healthOutline.setStroke(color(0));
     healthOutline.setFill(color(255));
@@ -182,7 +178,7 @@ class GUI {
     }
  }   
  
- void displayHUD(int gameState, PVector playerPos) {
+ void displayHUD(int gameState, PVector playerPos, float playerHealth) {
    // display HUD for in-game
    if (gameState > 0 && gameState < 10) {
      runTime = millis() - startTime;
@@ -194,10 +190,12 @@ class GUI {
      text("Time elapsed: ",-playerPos.x-120,-playerPos.y-85);
      text(getTimeFormat(runTime),-playerPos.x-60,-playerPos.y-85);
      shape(healthOutline,-playerPos.x-120,-playerPos.y);
-     //healthBar = createShape(RECT,0,0,5,healthBarHeight);    // pass in player health to .displayHUD and normalize to height of healthbar
-     //healthBar.setStroke(0);
-     //healthBar.setFill(color(255,50,50));
-     shape(healthBar,-playerPos.x-120,-playerPos.y);    // delete this after
+     healthBarHeight = playerHealth/2;
+     rectMode(CENTER);
+     healthBar = createShape(RECT,0,0,5,healthBarHeight);    // pass in player health to .displayHUD and normalize to height of healthbar
+     healthBar.setStroke(color(0));
+     healthBar.setFill(color(255,50,50));
+     shape(healthBar,-playerPos.x-120,-playerPos.y);   
      shape(abilityDeck,-playerPos.x,-playerPos.y+75);
      // display ability icons
      
