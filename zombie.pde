@@ -30,7 +30,7 @@ class Zombie {
 
     size = random(15, 30); // Size influences damage and health
     sense = random(100, 200); // Sensing radius
-    speed = map(size, 30, 15, 0.5, 2.0); // Speed inversely proportional to size
+    speed = map(size, 30, 15, 0.2, 0.9); // Speed inversely proportional to size
     maxForce = 0.1;
     damage = map(size, 15, 30, 10, 20); // Damage based on size
     health = (int) map(size, 15, 30, 50, 100); // Health scales with size
@@ -68,6 +68,11 @@ class Zombie {
     acceleration.mult(0);
 
     handleCollisions(zombieList, new PVector(-playerPosition.x, -playerPosition.y));
+
+    if (health <= 0) {
+      alive = false;
+      decomposing = true;
+    }
 
     if (abs(velocity.y) > abs(velocity.x)) {
       if (velocity.y > 0) {
