@@ -2,16 +2,14 @@ class Zombie {
   PVector position;
   PVector velocity;
   PVector direction;
-  
+
   PVector acceleration;
   float size;
   float sense;
   float speed;
   float maxForce;
-  float hungerDrain;
   float damage;
   int health;
-  int hunger;
   boolean alive;
   boolean decomposing;
   boolean pelletGenerated;
@@ -28,15 +26,13 @@ class Zombie {
     velocity = new PVector(random(-1, 1), random(-1, 1));
     acceleration = new PVector(0, 0);
     direction = velocity.copy().normalize();
-    
-    size = random(15, 30); // Size influences damage
+
+    size = random(15, 30); // Size influences damage and health
     sense = random(100, 200); // Sensing radius
     speed = map(size, 30, 15, 0.5, 2.0); // Speed inversely proportional to size
     maxForce = 0.1;
-    hungerDrain = map(speed, 0.5, 2.0, 0.5, 2.0); // Hunger drain based on speed
     damage = map(size, 15, 30, 10, 20); // Damage based on size
-    health = 5000;
-    hunger = 300;
+    health = (int) map(size, 15, 30, 50, 100); // Health scales with size
     alive = true;
     decomposing = false;
     pelletGenerated = false;
@@ -47,30 +43,26 @@ class Zombie {
 
   void move(ArrayList<Zombie> zombieList, PVector playerPosition) {
     if (!alive || isDrowning) return;
-    swarmSense(zombieList, playerPosition);
 
     handleWallCollision();
     if (!alive) return;
 
-    if (PVector.dist(position, new PVector(-playerPosition.x,-playerPosition.y)) < sense) {
-      PVector target = PVector.sub(new PVector(-playerPosition.x,-playerPosition.y), position).normalize().mult(speed);
+    if (PVector.dist(position, new PVector(-playerPosition.x, -playerPosition.y)) < sense) {
+      PVector target = PVector.sub(new PVector(-playerPosition.x, -playerPosition.y), position).normalize().mult(speed);
       applyForce(target);
-    } else {
-      flock(zombieList);
     }
-    
+
     velocity.add(acceleration);
     if (isSlowed) {
-      velocity.limit(speed/2);
-    }
-    else {
+      velocity.limit(speed / 2);
+    } else {
       velocity.limit(speed);
     }
     velocity.limit(speed);
     position.add(velocity);
     acceleration.mult(0);
 
-    handleCollisions(zombieList, new PVector(-playerPosition.x,-playerPosition.y));
+    handleCollisions(zombieList, new PVector(-playerPosition.x, -playerPosition.y));
 
     if (abs(velocity.y) > abs(velocity.x)) {
       if (velocity.y > 0) {
@@ -85,7 +77,6 @@ class Zombie {
   }
 
   void handleWallCollision() {
-
     if (position.x < size) {
       position.x = size;
       velocity.x *= -1;
@@ -122,7 +113,6 @@ class Zombie {
     float playerDistance = PVector.dist(position, playerPosition);
     if (this.check_collision_sphere(playerPosition, player.size)) {
       PVector repulsion = PVector.sub(position, playerPosition).normalize();
-      // zombie prevented from overlapping player
       repulsion.mult(1);
       applyForce(repulsion);
 
@@ -134,157 +124,36 @@ class Zombie {
       // Player is damaged
       if (!player.invincible) {
         player.hitstunDirection = repulsion;
-        player.knockback = damage/7;
+        player.knockback = damage / 7;
         player.damaged = true;
         player.health -= damage;
       }
-      
     }
     if (this.check_collision_sphere(player.hitBoxPos, player.hitBoxSize)) {
       this.decomposing = true;
       this.alive = false;
     }
   }
-  
+
   boolean check_collision_sphere(PVector otherPos, float otherSize) {
     float dist = this.position.dist(otherPos);
-    if (dist <= this.size/2 + otherSize/2) {
+    if (dist <= this.size / 2 + otherSize / 2) {
       return true;
     }
     return false;
   }
-  
+
   boolean check_collision_square(PVector otherPos, PVector otherSize) {
     float deltaX = Math.abs(this.position.x - otherPos.x);
     float deltaY = Math.abs(this.position.y - otherPos.y);
-    if (deltaX < (this.size/2 + otherSize.x/2) && deltaY < (this.size/2 + otherSize.y/2)) {
-    return true;
-  }
+    if (deltaX < (this.size / 2 + otherSize.x / 2) && deltaY < (this.size / 2 + otherSize.y / 2)) {
+      return true;
+    }
     return false;
-  }
-
-  void swarmSense(ArrayList<Zombie> zombieList, PVector playerPosition) {
-    if (PVector.dist(position, new PVector(-playerPosition.x,-playerPosition.y)) < sense) {
-      for (Zombie other : zombieList) {
-        if (other != this && PVector.dist(position, other.position) < sense * 2) {
-          other.sensePlayer(new PVector(-playerPosition.x,-playerPosition.y));
-        }
-      }
-    }
-  }
-
-  void sensePlayer(PVector playerPosition) {
-    if (!alive) return;
-    PVector target = PVector.sub(new PVector(-playerPosition.x,-playerPosition.y), position).normalize().mult(speed);
-    applyForce(target);
-  }
-
-  void flock(ArrayList<Zombie> zombieList) {
-    PVector alignment = align(zombieList);
-    PVector cohesion = cohesion(zombieList);
-    
-    PVector separation = separate(zombieList);
-
-    alignment.mult(1.0);
-    cohesion.mult(1.0);
-    separation.mult(2.0);
-
-    applyForce(alignment);
-    applyForce(cohesion);
-    applyForce(separation);
-  }
-
-  PVector align(ArrayList<Zombie> zombieList) {
-    PVector sum = new PVector(0, 0);
-    int count = 0;
-    for (Zombie other : zombieList) {
-      if (other != this && other.alive) {
-        float d = PVector.dist(position, other.position);
-        if (d < sense) {
-          sum.add(other.velocity);
-          count++;
-        }
-      }
-    }
-    if (count > 0) {
-      sum.div((float) count);
-      sum.normalize();
-      sum.mult(speed);
-      PVector steer = PVector.sub(sum, velocity);
-      steer.limit(maxForce);
-      return steer;
-    }
-    return new PVector(0, 0);
-  }
-
-  PVector cohesion(ArrayList<Zombie> zombieList) {
-    PVector sum = new PVector(0, 0);
-    int count = 0;
-    for (Zombie other : zombieList) {
-      if (other != this && other.alive) {
-        float d = PVector.dist(position, other.position);
-        if (d < sense) {
-          sum.add(other.position);
-          count++;
-        }
-      }
-    }
-    if (count > 0) {
-      sum.div(count);
-      return seek(sum);
-    }
-    return new PVector(0, 0);
-  }
-
-  PVector separate(ArrayList<Zombie> zombieList) {
-    float desiredSeparation = size * 3;
-    PVector sum = new PVector(0, 0);
-    int count = 0;
-    for (Zombie other : zombieList) {
-      float d = PVector.dist(position, other.position);
-      if (d > 0 && d < desiredSeparation) {
-        PVector diff = PVector.sub(position, other.position);
-        diff.normalize();
-        diff.div(d);
-        sum.add(diff);
-        count++;
-      }
-    }
-    if (count > 0) {
-      sum.div(count);
-    }
-    if (sum.mag() > 0) {
-      sum.normalize();
-      sum.mult(speed);
-      PVector steer = PVector.sub(sum, velocity);
-      steer.limit(maxForce);
-      return steer;
-    }
-    return new PVector(0, 0);
-  }
-
-  PVector seek(PVector target) {
-    PVector desired = PVector.sub(target, position);
-    desired.normalize();
-    desired.mult(speed);
-    PVector steer = PVector.sub(desired, velocity);
-    steer.limit(maxForce);
-    return steer;
   }
 
   void applyForce(PVector force) {
     acceleration.add(force);
-  }
-
-  void sufferHunger() {
-    hunger -= hungerDrain;
-    if (hunger <= 0) {
-      health -= 1;
-      if (health <= 0) {
-        alive = false;
-        decomposing = true;
-      }
-    }
   }
 
   void display() {
@@ -294,21 +163,17 @@ class Zombie {
       imageMode(CENTER);
       if (drownTimer <= 0.2) {
         image(splash_sprite[0], 0, 0, size * 1.2, size * 1.2);
-      }
-      else if (drownTimer <= 0.4) {
+      } else if (drownTimer <= 0.4) {
         image(splash_sprite[1], 0, 0, size * 1.2, size * 1.2);
-      }
-      else if (drownTimer <= 0.6) {
+      } else if (drownTimer <= 0.6) {
         image(splash_sprite[2], 0, 0, size * 1.2, size * 1.2);
-      }
-      else {
+      } else {
         this.alive = false;
       }
-      drownTimer += 1/frameRate;
+      drownTimer += 1 / frameRate;
       imageMode(CORNER);
       popMatrix();
-    }
-    else if (alive) {
+    } else if (alive) {
       pushMatrix();
       translate(position.x, position.y);
       if (directionFacing.equals("eastwest") && facingRight) {
@@ -325,8 +190,8 @@ class Zombie {
       }
       if (showHitbox) {
         noFill();
-        stroke(color(255,0,0));
-        ellipse(0,0,size,size);
+        stroke(color(255, 0, 0));
+        ellipse(0, 0, size, size);
       }
       imageMode(CORNER);
       popMatrix();
