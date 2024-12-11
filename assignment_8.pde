@@ -85,7 +85,7 @@ void setup() {
   }
   hs = new HighScore(keys,values);
 
-  gameState = 20;
+  gameState = 0;
   g = new GUI();
   g.display(gameState);
   hs.display(gameState);
