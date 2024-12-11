@@ -187,6 +187,7 @@ void draw() {
   if (player.health <= 0) {
     gameState = 12;
     player.health = 100;
+    startOfLevel = true;
   }
   
   g.display(gameState);
