@@ -60,7 +60,7 @@ class Moving implements State {
     // Abilities
     if (player.firstEquipped) {
        //Handles tier 1 abilities.
-      if (false) {
+      if (player.abilities[0]) {
         // Sword
         player.timer1Max = player.swordTimer;
         pushMatrix();
