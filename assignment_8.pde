@@ -86,7 +86,7 @@ void setup() {
   }
   hs = new HighScore(keys,values);
 
-  gameState = 0;
+  gameState = 3;
   g = new GUI();
   g.display(gameState);
   hs.display(gameState);
@@ -393,7 +393,19 @@ void collisionLevel(ArrayList<Collision> collisions) {
     for (Collision collision: collisions) {
       if (zombie.check_collision_square(new PVector(collision.x+collision.w/2,collision.y+collision.h/2), new PVector(collision.w,collision.h))) {
         if (collision.water && zombie.isWinded) {
-          zombie.alive = false;
+          zombie.isDrowning = true;
+          if (zombie.position.x > collision.x + collision.w) {
+            zombie.position.x -= 10;
+          }
+          else if (zombie.position.x < collision.x) {
+            zombie.position.x += 10;
+          }
+          if (zombie.position.y > collision.y + collision.h) {
+            zombie.position.y -= 10;
+          }
+          else if (zombie.position.y < collision.y) {
+            zombie.position.y += 10;
+          }
         }
         if (zombie.position.x > collision.x + collision.w) {
           zombie.velocity.x += zombie.speed;
