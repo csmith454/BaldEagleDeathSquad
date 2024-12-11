@@ -29,6 +29,7 @@ float mutationRate = 2.0;
 PImage zombieSouthTexture;
 PImage zombieNorthTexture;
 PImage zombieEastWestTexture;
+PImage[] splash_sprite = new PImage[3];
 boolean flipTexture;
 
 JSONObject level1;
@@ -156,6 +157,10 @@ void setup() {
   zombieSouthTexture = loadImage("zombie_facing_south.png");
   zombieNorthTexture = loadImage("zombie_facing_north.png");
   zombieEastWestTexture = loadImage("zombie_facing_eastwest.png");
+  for (int i = 0; i < 3; i++) {
+    String imageName = "splash" + nf(i + 1, 1) + ".png";
+    splash_sprite[i] = loadImage(imageName);
+  }
 }
 
 void draw() {
@@ -376,6 +381,9 @@ void collisionLevel(ArrayList<Collision> collisions) {
     // Zombie wall collisions
     for (Collision collision: collisions) {
       if (zombie.check_collision_square(new PVector(collision.x+collision.w/2,collision.y+collision.h/2), new PVector(collision.w,collision.h))) {
+        if (collision.water && zombie.isWinded) {
+          zombie.alive = false;
+        }
         if (zombie.position.x > collision.x + collision.w) {
           zombie.velocity.x += zombie.speed;
         }

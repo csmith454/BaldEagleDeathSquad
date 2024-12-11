@@ -18,6 +18,9 @@ class Zombie {
   int score;
   boolean facingRight;
   boolean isSlowed;
+  boolean isWinded;
+  boolean isDrowning;
+  float drownTimer;
   String directionFacing;
 
   Zombie(PVector startPosition) {
@@ -305,6 +308,26 @@ class Zombie {
         stroke(color(255,0,0));
         ellipse(0,0,size,size);
       }
+      imageMode(CORNER);
+      popMatrix();
+    }
+    else if (isDrowning) {
+      pushMatrix();
+      translate(position.x, position.y);
+      imageMode(CENTER);
+      if (drownTimer <= 0.25) {
+        image(splash_sprite[0], 0, 0, size * 1.2, size * 1.2);
+      }
+      else if (drownTimer <= 0.5) {
+        image(splash_sprite[1], 0, 0, size * 1.2, size * 1.2);
+      }
+      else if (drownTimer <= 0.75) {
+        image(splash_sprite[2], 0, 0, size * 1.2, size * 1.2);
+      }
+      else {
+        this.alive = false;
+      }
+      drownTimer += 1/frameRate;
       imageMode(CORNER);
       popMatrix();
     }

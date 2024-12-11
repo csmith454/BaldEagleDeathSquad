@@ -18,7 +18,6 @@ class Moving implements State {
   }
   
   void tick() {
-    
     // Handles player movement
     player.idle = true;
     player.diagonal = 0;
@@ -326,9 +325,14 @@ class Moving implements State {
           for (Zombie zombie: zombies) {
             if (zombie.check_collision_sphere(new PVector(-player.pos.x + sin(degree) * 30,-player.pos.y - cos(degree) * 30), 25)) {
               zombie.acceleration.add(new PVector(sin(degree) * 60,-cos(degree) * 60));
+              zombie.isWinded = true;
             }
-            if (zombie.check_collision_sphere(new PVector(-player.pos.x + sin(degree) * 60,-player.pos.y - cos(degree) * 60), 25)) {
+            else if (zombie.check_collision_sphere(new PVector(-player.pos.x + sin(degree) * 60,-player.pos.y - cos(degree) * 60), 25)) {
               zombie.acceleration.add(new PVector(sin(degree) * 30,-cos(degree) * 30));
+              zombie.isWinded = true;
+            }
+            else {
+              zombie.isWinded = false;
             }
           }
         }
