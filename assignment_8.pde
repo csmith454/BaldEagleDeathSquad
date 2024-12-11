@@ -395,78 +395,80 @@ void collisionLevel(ArrayList<Collision> collisions) {
   }
   for (Zombie zombie: zombies) {
     // Zombie wall collisions
-    for (Collision collision: collisions) {
-      if (zombie.check_collision_square(new PVector(collision.x+collision.w/2,collision.y+collision.h/2), new PVector(collision.w,collision.h))) {
-        if (collision.water && zombie.isWinded) {
-          zombie.isDrowning = true;
-          if (zombie.position.x > collision.x + collision.w) {
-            zombie.position.x -= 10;
-          }
-          else if (zombie.position.x < collision.x) {
-            zombie.position.x += 10;
-          }
-          if (zombie.position.y > collision.y + collision.h) {
-            zombie.position.y -= 10;
-          }
-          else if (zombie.position.y < collision.y) {
-            zombie.position.y += 10;
-          }
-        }
-        if (zombie.position.x > collision.x + collision.w) {
-          zombie.velocity.x += zombie.speed;
-        }
-        else if (zombie.position.x < collision.x) {
-          zombie.velocity.x -= zombie.speed;
-        }
-        if (zombie.position.y > collision.y + collision.h) {
-          zombie.velocity.y += zombie.speed;
-        }
-        else if (zombie.position.y < collision.y) {
-          zombie.velocity.y -= zombie.speed;
-        }
-      }
-    }
-    for (Rocket rocket: rockets) {
-      if (rocket.check_collision_sphere(zombie.position,zombie.size)) {
-        remove_rockets.add(rocket);
-        explosions.add(new Explosion(rocket.hitbox,rocket.pixelSize));
-      }
-    }
-    for (Explosion explosion: explosions) {
-      if (explosion.check_collision_sphere(zombie.position,zombie.size) && zombie.invincibilityTimer <= 0.0) {
-        zombie.health -= explosion.damage;
-        zombie.position.add(new PVector((zombie.position.x-explosion.pos.x)*2,(zombie.position.y-explosion.pos.y)*2));
-        zombie.invincibilityTimer = 0.4;
-      }
-    }
-    for (Arrow arrow: arrows) {
-      if (arrow.check_collision_sphere(zombie.position,zombie.size) && zombie.invincibilityTimer <= 0.0) {
-        remove_arrows.add(arrow);
-        zombie.health -= arrow.damage;
-        zombie.position.add(new PVector(sin(arrow.degree)*arrow.damage*2,-cos(arrow.degree)*arrow.damage*2));
-        zombie.invincibilityTimer = 0.4;
-      }
-    }
-    for (Spike spike: spikes) {
-      if (zombie.check_collision_sphere(spike.pos,spike.size) && zombie.invincibilityTimer <= 0.0) {
-        zombie.health -= spike.damage;
-        zombie.invincibilityTimer = 0.4;
-      }
-    }
-    for (Box box: boxes) {
+    if (zombie.alive) {
       for (Collision collision: collisions) {
-        if (zombie.check_collision_square(new PVector(box.pos.x,box.pos.y), new PVector(box.size,box.size))) {
-          if (zombie.position.x > box.pos.x - box.size/2) {
+        if (zombie.check_collision_square(new PVector(collision.x+collision.w/2,collision.y+collision.h/2), new PVector(collision.w,collision.h))) {
+          if (collision.water && zombie.isWinded) {
+            zombie.isDrowning = true;
+            if (zombie.position.x > collision.x + collision.w) {
+              zombie.position.x -= 10;
+            }
+            else if (zombie.position.x < collision.x) {
+              zombie.position.x += 10;
+            }
+            if (zombie.position.y > collision.y + collision.h) {
+              zombie.position.y -= 10;
+            }
+            else if (zombie.position.y < collision.y) {
+              zombie.position.y += 10;
+            }
+          }
+          if (zombie.position.x > collision.x + collision.w) {
             zombie.velocity.x += zombie.speed;
           }
-          else if (zombie.position.x < box.pos.x) {
+          else if (zombie.position.x < collision.x) {
             zombie.velocity.x -= zombie.speed;
           }
-          if (zombie.position.y > box.pos.y - box.size/2) {
+          if (zombie.position.y > collision.y + collision.h) {
             zombie.velocity.y += zombie.speed;
           }
-          else if (zombie.position.y < box.pos.y) {
+          else if (zombie.position.y < collision.y) {
             zombie.velocity.y -= zombie.speed;
+          }
+        }
+      }
+      for (Rocket rocket: rockets) {
+        if (rocket.check_collision_sphere(zombie.position,zombie.size)) {
+          remove_rockets.add(rocket);
+          explosions.add(new Explosion(rocket.hitbox,rocket.pixelSize));
+        }
+      }
+      for (Explosion explosion: explosions) {
+        if (explosion.check_collision_sphere(zombie.position,zombie.size) && zombie.invincibilityTimer <= 0.0) {
+          zombie.health -= explosion.damage;
+          zombie.position.add(new PVector((zombie.position.x-explosion.pos.x)*2,(zombie.position.y-explosion.pos.y)*2));
+          zombie.invincibilityTimer = 0.4;
+        }
+      }
+      for (Arrow arrow: arrows) {
+        if (arrow.check_collision_sphere(zombie.position,zombie.size) && zombie.invincibilityTimer <= 0.0) {
+          remove_arrows.add(arrow);
+          zombie.health -= arrow.damage;
+          zombie.position.add(new PVector(sin(arrow.degree)*arrow.damage*2,-cos(arrow.degree)*arrow.damage*2));
+          zombie.invincibilityTimer = 0.4;
+        }
+      }
+      for (Spike spike: spikes) {
+        if (zombie.check_collision_sphere(spike.pos,spike.size) && zombie.invincibilityTimer <= 0.0) {
+          zombie.health -= spike.damage;
+          zombie.invincibilityTimer = 0.4;
+        }
+      }
+      for (Box box: boxes) {
+        for (Collision collision: collisions) {
+          if (zombie.check_collision_square(new PVector(box.pos.x,box.pos.y), new PVector(box.size,box.size))) {
+            if (zombie.position.x > box.pos.x - box.size/2) {
+              zombie.velocity.x += zombie.speed;
+            }
+            else if (zombie.position.x < box.pos.x) {
+              zombie.velocity.x -= zombie.speed;
+            }
+            if (zombie.position.y > box.pos.y - box.size/2) {
+              zombie.velocity.y += zombie.speed;
+            }
+            else if (zombie.position.y < box.pos.y) {
+              zombie.velocity.y -= zombie.speed;
+            }
           }
         }
       }

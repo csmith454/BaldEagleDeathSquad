@@ -136,7 +136,7 @@ class Zombie {
     }
     if (this.check_collision_sphere(player.hitBoxPos, player.hitBoxSize) && invincibilityTimer <= 0.0) {
       this.health -= player.swordDamage;
-      this.position.add(new PVector((this.position.x+player.pos.x),(this.position.y+player.pos.y)));
+      this.position.add(new PVector((this.position.x+player.pos.x)/2,(this.position.y+player.pos.y)/2));
       invincibilityTimer = 0.4;
     }
   }
