@@ -122,6 +122,9 @@ class GUI {
       mute.animateButton();
       controlsB.display();
       controlsB.animateButton();
+      for (int i = 0; i < player.abilities.length; i++) {
+        player.abilities[i] = false;
+      }
     }
     else if (gameState == 9) {
       background(0);
