@@ -4,6 +4,7 @@ class Explosion {
   float count;
   float lifetime = 0.5;
   float size;
+  float damage = 50;
 
   Explosion(PVector pos,int pixelSize) {
     this.pos = pos;

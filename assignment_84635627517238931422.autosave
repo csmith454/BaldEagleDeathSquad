@@ -184,10 +184,6 @@ void draw() {
     startOfLevel = true;
   }
   
-  if (player.health <= 0) {
-    gameState = 12;
-  }
-  
   g.display(gameState);
   hs.display(gameState);
   
@@ -432,24 +428,21 @@ void collisionLevel(ArrayList<Collision> collisions) {
       }
     }
     for (Explosion explosion: explosions) {
-      if (explosion.check_collision_sphere(zombie.position,zombie.size) && zombie.invincibilityTimer <= 0.0) {
+      if (explosion.check_collision_sphere(zombie.position,zombie.size)) {
         zombie.health -= explosion.damage;
-        zombie.position.add(new PVector((zombie.position.x-explosion.pos.x)*2,(zombie.position.y-explosion.pos.y)*2));
-        zombie.invincibilityTimer = 0.4;
+        zombie.acceleration.add();
       }
     }
     for (Arrow arrow: arrows) {
-      if (arrow.check_collision_sphere(zombie.position,zombie.size) && zombie.invincibilityTimer <= 0.0) {
+      if (arrow.check_collision_sphere(zombie.position,zombie.size)) {
         remove_arrows.add(arrow);
         zombie.health -= arrow.damage;
-        zombie.position.add(new PVector(sin(arrow.degree)*arrow.damage*2,-cos(arrow.degree)*arrow.damage*2));
-        zombie.invincibilityTimer = 0.4;
+        zombie.acceleration.add();
       }
     }
     for (Spike spike: spikes) {
-      if (zombie.check_collision_sphere(spike.pos,spike.size) && zombie.invincibilityTimer <= 0.0) {
+      if (zombie.check_collision_sphere(spike.pos,spike.size)) {
         zombie.health -= spike.damage;
-        zombie.invincibilityTimer = 0.4;
       }
     }
     for (Box box: boxes) {

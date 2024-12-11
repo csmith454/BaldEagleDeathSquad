@@ -25,6 +25,5 @@ class Box {
       rect(pos.x-size/2,pos.y-size/2,size,size);
     }
     count += 1/frameRate;
-    println(this.count);
   }
 }

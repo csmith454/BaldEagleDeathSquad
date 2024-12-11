@@ -6,6 +6,7 @@ class Spike {
   float size;
   float lifetime = 5;
   float count = 0;
+  float damage = 20;
   
   Spike(PVector pos, float pixelSize, PImage spike_sprite, float[] matrix) {
     this.pos = pos;

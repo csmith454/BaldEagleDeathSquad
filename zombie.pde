@@ -22,6 +22,7 @@ class Zombie {
   boolean isDrowning;
   float drownTimer;
   String directionFacing;
+  float invincibilityTimer = 0.0;
 
   Zombie(PVector startPosition) {
     position = startPosition.copy();
@@ -46,6 +47,10 @@ class Zombie {
   }
 
   void move(ArrayList<Zombie> zombieList, PVector playerPosition) {
+    if (invincibilityTimer > 0.0) {
+      invincibilityTimer -= 1/frameRate;
+    }
+    
     if (!alive || isDrowning) return;
     swarmSense(zombieList, playerPosition);
 
@@ -140,9 +145,10 @@ class Zombie {
       }
       
     }
-    if (this.check_collision_sphere(player.hitBoxPos, player.hitBoxSize)) {
-      this.decomposing = true;
-      this.alive = false;
+    if (this.check_collision_sphere(player.hitBoxPos, player.hitBoxSize) && invincibilityTimer <= 0.0) {
+      this.health -= player.swordDamage;
+      this.position.add(new PVector((this.position.x+player.pos.x),(this.position.y+player.pos.y)));
+      invincibilityTimer = 0.4;
     }
   }
   
