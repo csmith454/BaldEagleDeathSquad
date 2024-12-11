@@ -13,12 +13,10 @@ class GUI {
   String PU7;
   String PU8;
   String PU9;
-  String[] deck1 = {"Sword","Spikes","Bow"};
-  String[] deck2 = {"Speed+","Slow\nField","Flip"};
-  String[] deck3 = {"Bazooka","Box","FRD"};
-  String ability1;
-  String ability2;
-  String ability3;
+  String deck1 = "Sword\nSpikes\nBow";
+  String deck2 = "Speed+\nSlowField\nFlip";
+  String deck3 = "Bazooka\nBox\nFRD";
+  String[] abilitiesToDisplay = {"'1'\n","'2'\n","'Spacebar'\n"};
   String initialChoice;
   String nextLevel;
   String endLevel;
@@ -79,9 +77,6 @@ class GUI {
     PU7 = "Bazooka\nReally take out\nyour anger.";
     PU8 = "Placable boxes\nBlock those\npesky zombies.";
     PU9 = "Fus Ro Dah\nWait do we have\nto pay for the\nrights to this? ";
-    ability1 = "'1'\n";
-    ability2 = "'2'\n";
-    ability3 = "'Spacebar'\n";
     
     //create buttons
     begin = new RectButton(3*width/10,3*height/5,color(137,43,51),"Click to try your luck.",80,300);
@@ -103,7 +98,7 @@ class GUI {
     healthOutline = createShape(RECT,0,0,5,50);
     healthOutline.setStroke(color(0));
     healthOutline.setFill(color(255));
-    abilityDeck = createShape(RECT,0,0,75,25);
+    abilityDeck = createShape(RECT,0,0,75,30);
     abilityDeck.setFill(color(214,89,76));
     textBox = createShape(RECT,0,0,100,50);
     textBox.setFill(color(255));
@@ -257,25 +252,10 @@ class GUI {
      shape(healthBar,-playerPos.x-120,-playerPos.y);   
      shape(abilityDeck,-playerPos.x,-playerPos.y+75);
      // display ability icons
-     
-     for (int i = deck1.length; i > 0 ;i--) {
-       if (player.abilities[i+5] == true && gameState == 3) {
-         ability3+=deck3[i];
-         break;
-       }
-       if (player.abilities[i+2] == true && gameState == 2) {
-         ability2+=deck2[i];
-         break;
-       }
-       if (player.abilities[i] == true && gameState == 1) {
-         ability1+=deck1[i];
-         break;
-       }
-     }
-     textSize(9);
-     text(ability1,-playerPos.x-35,-playerPos.y+70);
-     text(ability2,-playerPos.x-15,-playerPos.y+70);
-     text(ability3,-playerPos.x+5,-playerPos.y+70);
+     textSize(5);
+     text(abilitiesToDisplay[0]+deck1,-playerPos.x-35,-playerPos.y+70);
+     text(abilitiesToDisplay[1]+deck2,-playerPos.x-15,-playerPos.y+70);
+     text(abilitiesToDisplay[2]+deck3,-playerPos.x+5,-playerPos.y+70);
    }
  }
  String getTimeFormat(int runTime) {
