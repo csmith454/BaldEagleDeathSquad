@@ -76,11 +76,17 @@ void setup() {
   meatPellets = new ArrayList<PVector>();
   
   loadData();
-  String[] keys = loadStrings("initials.txt");
-  String[] values = loadStrings("scores.txt");
+  String[] initials = loadStrings("initials.txt");
+  String[] scores = loadStrings("scores.txt");
+  ArrayList<String> keys = new ArrayList<String>();
+  ArrayList<String> values = new ArrayList<String>();
+  for (int i = 0; i < initials.length; i++) {
+    keys.add(initials[i]);
+    values.add(scores[i]);
+  }
   hs = new HighScore(keys,values);
 
-  gameState = 20;
+  gameState = 0;
   g = new GUI();
   g.display(gameState);
   hs.display(gameState);
@@ -197,11 +203,16 @@ void draw() {
 
 void keyPressed() {
   player.keyPressed();
+  if (gameState == 20) {
+    hs.keyPressed();
+  }
 }
-
 
 void keyReleased() {
   player.keyReleased();
+  if (gameState == 20) {
+    hs.keyReleased();
+  }
 }
 
 void mousePressed() {
@@ -219,7 +230,7 @@ void levelLogic(Level L, ArrayList<Collision> collisions) {
   background(0);
   camera.move_camera();
   L.displayLevel();
-  g.displayHUD(gameState,player.pos);    // eventually pass in player health
+  g.displayHUD(gameState,player.pos,player.health);    // eventually pass in player health
   if (startOfLevel) {
     player.updatePos(new PVector(-L.spawns.get(1).x-20,-L.spawns.get(1).y)); // Make this the spawn position
     startOfLevel = false;

@@ -4,12 +4,18 @@ class GUI {
   PFont shPinscherReg;
   // start and end screen display
   String title;
+  String PU1;
+  String PU2;
+  String PU3;
+  String PU4;
+  String PU5;
+  String PU6;
   String nextLevel;
   String endLevel;
   String credits;
   String congrats;
+  PShape textBox;
   
-  //String highScores;
   RectButton begin;
   RectButton level1Select;
   RectButton level2Select;
@@ -19,6 +25,8 @@ class GUI {
   RectButton PUChoice2;
   RectButton PUChoice3;
   RectButton PUChoice4;
+  RectButton PUChoice5;
+  RectButton PUChoice6;
   RectButton returnToMenu;
   RectButton controlsB;
   
@@ -27,10 +35,13 @@ class GUI {
   String controls;
   int startTime;
   int runTime;
-  int endTime;
+  int endTime1;
+  int endTime2;
+  int endTime3;
+  int totalTime;
   PShape healthOutline;
   PShape healthBar;
-  int healthBarHeight;
+  float healthBarHeight;
   PShape abilityDeck;
   
   GUI() {
@@ -45,28 +56,35 @@ class GUI {
     endLevel = "Good try.\nYou'll need to do better to defeat\nTHE HIVE";
     congrats = "You beat all three levels.\nWe're quite impressed.";
     controls = "Use WASD to navigate your player around the map.\nClick Left Mouse Button to use your selected ability.\nSelect different abilities with '1', '2', '3'.\nKeep in mind that you will only have one ability until you beat level 1.\nUse Spacebar to DO A FLIP!";
+    PU1 = "";
+    PU2 = "";
+    PU3 = "";
+    PU4 = "";
+    PU5 = "";
+    PU6 = "";
     
     //create buttons
     begin = new RectButton(3*width/10,3*height/5,color(137,43,51),"Click to try your luck.",80,300);
     mute = new RectButton(4.5*width/5,0.5*height/5,color(100),"Mute",90,100);
-    PUChoice1 = new RectButton(3*width/10,2.5*height/5,color(50,100,200),"Option 1",200,200);
-    PUChoice2 = new RectButton(7*width/10,2.5*height/5,color(50,100,200),"Option 2",200,200);
-    PUChoice3 = new RectButton(3*width/10,2.5*height/5,color(50,100,200),"Option 1-1",200,200);
-    PUChoice4 = new RectButton(7*width/10,2.5*height/5,color(50,100,200),"Option 2-2",200,200);
+    PUChoice1 = new RectButton(2*width/10,2.5*height/5,color(50,100,200),PU1,200,200);
+    PUChoice2 = new RectButton(5*width/10,2.5*height/5,color(50,100,200),PU2,200,200);
+    PUChoice3 = new RectButton(8*width/10,2.5*height/5,color(50,100,200),PU3,200,200);
+    PUChoice4 = new RectButton(2*width/10,2.5*height/5,color(50,100,200),PU4,200,200);
+    PUChoice5 = new RectButton(5*width/10,2.5*height/5,color(50,100,200),PU5,200,200);
+    PUChoice6 = new RectButton(8*width/10,2.5*height/5,color(50,100,200),PU6,200,200);
     returnToMenu = new RectButton(width/2,4*height/5,color(50,100,200),"Return to main menu",200,250);
     controlsB = new RectButton(3.9*width/5,0.5*height/5,color(100),"Controls",90,100);
     
     // height must be connected to player health in final
-    healthBarHeight = 50;    // delete this after
     rectMode(CENTER);
-    healthBar = createShape(RECT,0,0,5,50);    // delete this after
-    healthBar.setStroke(0);
-    healthBar.setFill(color(255,50,50));
     healthOutline = createShape(RECT,0,0,5,50);
     healthOutline.setStroke(color(0));
     healthOutline.setFill(color(255));
     abilityDeck = createShape(RECT,0,0,75,25);
     abilityDeck.setFill(color(214,89,76));
+    textBox = createShape(RECT,0,0,100,50);
+    textBox.setFill(color(255));
+    textBox.setStroke(color(200));
     rectMode(CORNER);
   }
   
@@ -90,6 +108,7 @@ class GUI {
     else if (gameState == 10) {   // first progression; to second level
       background(0);
       String endTime = getTimeFormat(runTime);
+      endTime1 = runTime;
       startTime = millis();
       // display endscreen
       textAlign(CENTER);
@@ -103,10 +122,13 @@ class GUI {
         PUChoice1.animateButton();
         PUChoice2.display();
         PUChoice2.animateButton();
+        PUChoice3.display();
+        PUChoice3.animateButton();
     }
     else if (gameState == 11) {    // second progression; to third level
       background(0);
       String endTime = getTimeFormat(runTime);
+      endTime2 = runTime;
       startTime = millis();
       // display endscreen
       textAlign(CENTER);
@@ -117,10 +139,12 @@ class GUI {
       text("Time elapsed: ",1*width/10,0.5*height/5);
       text(endTime,2*width/10,0.5*height/5);
       // present selection for next power up
-        PUChoice3.display();
-        PUChoice3.animateButton();
         PUChoice4.display();
         PUChoice4.animateButton();
+        PUChoice5.display();
+        PUChoice5.animateButton();
+        PUChoice6.display();
+        PUChoice6.animateButton();
     }
     else if (gameState == 12){        // fail screen
       background(0);
@@ -139,10 +163,26 @@ class GUI {
     }
     else if (gameState == 20) {    // completed all levels
       background(0);
+      textAlign(CENTER);
       textSize(54);
       fill(255);
-      text(congrats,width/2,height/2-50);
+      text(congrats,width/2,1*height/5);
       textSize(28);
+      endTime3 = runTime;
+      // display textbox to type in 
+      shape(textBox,width/2,2.5*height/5);
+      text(hs.enterInitials,width/2,2.5*height/5-40);
+      textSize(15);
+      text(hs.pressEnter, width/2,2.5*height/5+50);
+      fill(0);
+      textSize(28);
+      text(hs.contents.toUpperCase(),width/2,2.5*height/5+5);
+      
+      // display time
+      totalTime = endTime1 + endTime2 + endTime3;
+      fill(255);
+      text(getTimeFormat(totalTime),width/2,2*height/5);
+
       returnToMenu.display();
       returnToMenu.animateButton();
     }
@@ -158,7 +198,7 @@ class GUI {
     }
  }   
  
- void displayHUD(int gameState, PVector playerPos) {
+ void displayHUD(int gameState, PVector playerPos, float playerHealth) {
    // display HUD for in-game
    if (gameState > 0 && gameState < 10) {
      runTime = millis() - startTime;
@@ -170,10 +210,12 @@ class GUI {
      text("Time elapsed: ",-playerPos.x-120,-playerPos.y-85);
      text(getTimeFormat(runTime),-playerPos.x-60,-playerPos.y-85);
      shape(healthOutline,-playerPos.x-120,-playerPos.y);
-     //healthBar = createShape(RECT,0,0,5,healthBarHeight);    // pass in player health to .displayHUD and normalize to height of healthbar
-     //healthBar.setStroke(0);
-     //healthBar.setFill(color(255,50,50));
-     shape(healthBar,-playerPos.x-120,-playerPos.y);    // delete this after
+     healthBarHeight = playerHealth/2;
+     rectMode(CENTER);
+     healthBar = createShape(RECT,0,0,5,healthBarHeight);    // pass in player health to .displayHUD and normalize to height of healthbar
+     healthBar.setStroke(color(0));
+     healthBar.setFill(color(255,50,50));
+     shape(healthBar,-playerPos.x-120,-playerPos.y);   
      shape(abilityDeck,-playerPos.x,-playerPos.y+75);
      // display ability icons
      
@@ -211,21 +253,29 @@ class GUI {
     }
     else if (gameState == 10) {
       if (PUChoice1.isPressed()) {
-        // add new ability
+        player.abilities[1] = true;
         gameState = 2;
       }
       else if (PUChoice2.isPressed()) {
-        // add new ability
+        player.abilities[2] = true;
+        gameState = 2;
+      }
+      else if (PUChoice3.isPressed()) {
+        player.abilities[3] = true;
         gameState = 2;
       }
     }  
     else if (gameState == 11) {
-      if (PUChoice3.isPressed()) {
-        // add new ability
+      if (PUChoice4.isPressed()) {
+        player.abilities[4] = true;
         gameState = 3;
       }  
-      else if (PUChoice4.isPressed()) {
-        // add new ability
+      else if (PUChoice5.isPressed()) {
+        player.abilities[5] = true;
+        gameState = 3;
+      }
+      else if (PUChoice6.isPressed()) {
+        player.abilities[6] = true;
         gameState = 3;
       }
     }
