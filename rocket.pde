@@ -59,10 +59,23 @@ class Rocket {
     this.move();
   }
   
-  boolean check_collision(PVector otherPos, float otherSize) {
-    float dist = this.hitbox.dist(otherPos);
-    if (dist <= this.size + otherSize) {
-      return true;
+  boolean check_collision_sphere(PVector otherPos, float otherSize) {
+    if (hitbox.x != 0 && hitbox.y != 0) {
+      float dist = this.hitbox.dist(otherPos);
+      if (dist <= this.size/2 + otherSize/2) {
+        return true;
+      }
+    }
+    return false;
+  }
+  
+  boolean check_collision_square(PVector otherPos, PVector otherSize) {
+    if (hitbox.x != 0 && hitbox.y != 0) {
+      float deltaX = Math.abs(this.hitbox.x - otherPos.x);
+      float deltaY = Math.abs(this.hitbox.y - otherPos.y);
+      if (deltaX < (this.size/2 + otherSize.x/2) && deltaY < (this.size/2 + otherSize.y/2)) {
+        return true;
+      }
     }
     return false;
   }

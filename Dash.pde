@@ -13,7 +13,7 @@ class Dash implements State {
       System.arraycopy(player.inputBuffer, 0, dashBuffer, 0, player.inputBuffer.length);
     }
     speedStorage = player.speed;
-    player.speed *= 1.5;
+    player.speed *= 2.5;
     player.isDashing = true;
   }
   

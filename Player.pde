@@ -15,14 +15,18 @@ class Player {
   PImage[] side_sprite_I = new PImage[numFrames];
   PImage rocketLauncher_sprite;
   PImage rocket_sprite;
+  PImage[] explosion_sprite = new PImage[4];
   PImage sword_sprite;
   PImage spike_sprite;
   PImage[] bow_sprite = new PImage[3];
-  PImage arrow;
+  PImage arrow_sprite;
+  PImage box_sprite;
+  PImage[] wind_sprite = new PImage[2];
   
   // Character
   float health = 100;
   float speed = 2;
+  boolean isFast = false;
   PVector pos = new PVector(0,0);
   PVector vel = new PVector(0,0);
   PVector acel = new PVector(0,0);
@@ -35,6 +39,8 @@ class Player {
   float knockback;
   boolean[] abilities = new boolean[9];
   boolean isDashing = false;
+  boolean ability2Cooldown = false;
+  boolean ability3Cooldown = false;
   boolean firstEquipped = true;
   boolean damaged = false;
   boolean invincible = false;
@@ -47,7 +53,7 @@ class Player {
   float timer3Max = 0.0;
   float swordTimer = 0.7;
   float spikeTimer = 1.5;
-  float bowPullback = 0.5;
+  float bowPullback = 2.0;
   float boostTimer = 3.0;
   float slowTimer = 5.0;
   float jumpTimer = 1.0;
@@ -56,7 +62,7 @@ class Player {
   float rocketTimer = 2.0;
   float blockTimer = 2.5;
   int blockCount = 3;
-  float windAmount = 100;
+  float windAmount = 2.5;
   
   
   // Inputs
@@ -71,10 +77,12 @@ class Player {
   // Other Entitites
   ArrayList<Rocket> rockets;
   ArrayList<Spike> spikes;
+  ArrayList<Arrow> arrows;
   
-  Player(float[] matrix, ArrayList<Rocket> rockets, ArrayList<Spike> spikes) {
+  Player(float[] matrix, ArrayList<Rocket> rockets, ArrayList<Spike> spikes, ArrayList<Arrow> arrows) {
     this.rockets = rockets;
     this.spikes = spikes;
+    this.arrows = arrows;
     stateMachine = new StateMachine();
     for (int i = 0; i < abilities.length; i++) {
       abilities[i] = true; // Currently set to true for testing purposes, later set it to false when abiliies become unlockable.
@@ -97,7 +105,6 @@ class Player {
   }
   
   void update() {
-    println(health);
     pushMatrix();
     stateMachine.tick();
     popMatrix();
@@ -110,7 +117,7 @@ class Player {
       invincible = false;
     }
     
-    // decceleration
+    // deceleration
     if (vel.x >= 0.1) {
       vel.x -= player.pixelSize * player.speed/frameRate/player.acelModifier/2;
     }
@@ -135,25 +142,29 @@ class Player {
         change /= 1.41421356237;
     }
     
+    if (isFast) {
+      change *= 2;
+    }
     vel.x = constrain(vel.x + acel.x,-change,change);
     vel.y = constrain(vel.y + acel.y,-change,change);
     pos.add(vel);
     
-    if (timer1 < timer1Max) {
-      timer1 += 1.0/frameRate;
-    }
-    if (timer2 < timer2Max) {
-      timer2 += 1.0/frameRate;
-    }
-    if (timer3 < timer3Max) {
-      timer3 += 1.0/frameRate;
-    }
+    timer1 = constrain(timer1 + 1.0/frameRate, 0, timer1Max);
+    timer2 = constrain(timer2 + 1.0/frameRate, 0, timer2Max);
+    timer3 = constrain(timer3 + 1.0/frameRate, 0, timer3Max);
     
     if (showHitbox) {
       noFill();
       stroke(255);
       ellipse(-pos.x,-pos.y,size,size); // Hurtbox
       ellipse(hitBoxPos.x,hitBoxPos.y,hitBoxSize,hitBoxSize); //Hitbox
+    }
+    
+    // Particles if boosting
+    if (isFast) {
+      if (frameCount % (int(frameRate/7)) == 0) {
+        particles.add(new Particle(new PVector(-pos.x + random(-10,10),-pos.y + random(-10,10)), new PVector(0,0)));
+      }
     }
   }
   

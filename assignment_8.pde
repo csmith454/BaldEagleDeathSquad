@@ -4,11 +4,19 @@ ArrayList<Rocket> rockets = new ArrayList<Rocket>();
 ArrayList<Rocket> remove_rockets = new ArrayList<Rocket>();
 ArrayList<Spike> spikes = new ArrayList<Spike>();
 ArrayList<Spike> remove_spikes = new ArrayList<Spike>();
+ArrayList<Explosion> explosions = new ArrayList<Explosion>();
+ArrayList<Explosion> remove_explosions = new ArrayList<Explosion>();
+ArrayList<Arrow> arrows = new ArrayList<Arrow>();
+ArrayList<Arrow> remove_arrows = new ArrayList<Arrow>();
+ArrayList<Particle> particles = new ArrayList<Particle>();
+ArrayList<Particle> remove_particles = new ArrayList<Particle>();
+ArrayList<Box> boxes = new ArrayList<Box>();
+ArrayList<Box> remove_boxes = new ArrayList<Box>();
 
 float[] matrix = {1,0,0,
                   0,1,0,
                   0,0,1}; // Used for manually storing transformations that happen to the world matrix. Processing doesn't have a way that I know of to actually get the matrix to be used by code, so I keep track of my own matrix for use in monitoring positions.
-Player player = new Player(matrix, rockets, spikes);
+Player player = new Player(matrix, rockets, spikes, arrows);
 Camera camera = new Camera(player.pos);
 
 // Zombie information
@@ -84,6 +92,8 @@ void setup() {
     player.back_sprite[i] = loadImage(imageName);
     imageName = "side_" + nf(i + 1, 1) + ".png";
     player.side_sprite[i] = loadImage(imageName);
+    imageName = "explosion" + nf(i+1,1) + ".png";
+    player.explosion_sprite[i] = loadImage(imageName);
   }
   for (int i = 0; i < player.numFrames; i++) {
       player.front_sprite_I[i] = player.front_sprite[i].copy();
@@ -131,11 +141,16 @@ void setup() {
   player.rocket_sprite = loadImage("rocket.png");
   player.sword_sprite = loadImage("sword.png");
   player.spike_sprite = loadImage("spike.png");
+  player.box_sprite = loadImage("box.png");
   for (int i = 0; i < 3; i++) {
     String imageName = "bow_" + nf(i + 1, 1) + ".png";
     player.bow_sprite[i] = loadImage(imageName);
   }
-  player.arrow = loadImage("arrow.png");
+  player.arrow_sprite = loadImage("arrow.png");
+  for (int i = 0; i < 2; i++) {
+    String imageName = "wind" + nf(i + 1, 1) + ".png";
+    player.wind_sprite[i] = loadImage(imageName);
+  }
   
   // Initialize sprites for zombies
   zombieSouthTexture = loadImage("zombie_facing_south.png");
@@ -216,13 +231,29 @@ void levelLogic(Level L, ArrayList<Collision> collisions) {
       remove_spikes.add(spike);
     }
   }
+  for (Arrow arrow: arrows) {
+    arrow.display_move();
+    if (arrow.count >= arrow.lifetime) {
+      remove_arrows.add(arrow);
+    }
+  }
+  for (Box box: boxes) {
+    box.display();
+    if (box.count >= box.lifetime) {
+      remove_boxes.add(box);
+    }
+  }
   rockets.removeAll(remove_rockets);
   spikes.removeAll(remove_spikes);
+  arrows.removeAll(remove_arrows);
+  boxes.removeAll(remove_boxes);
   remove_rockets.clear();
   remove_spikes.clear();
+  remove_arrows.clear();
+  remove_boxes.clear();
   player.update();
   
-  // Handles wall collisions, zombie to gameObject/player collisiosn are handled in the zombie class.
+  // Handles wall collisions, zombie to player collisions are handled in the zombie class.
   collisionLevel(collisions);
   
   // Handles zombie logic
@@ -236,6 +267,24 @@ void levelLogic(Level L, ArrayList<Collision> collisions) {
       zombie.pelletGenerated = true;
     }
   }
+  
+  // Explosions and particles appear above everything else, so they're handled down here.
+  for (Explosion explosion: explosions) {
+    explosion.display();
+    if (explosion.count >= explosion.lifetime) {
+      remove_explosions.add(explosion);
+    }
+  }
+  for (Particle particle: particles) {
+    particle.display_move();
+    if (particle.count >= particle.lifetime) {
+      remove_particles.add(particle);
+    }
+  }
+  explosions.removeAll(remove_explosions);
+  particles.removeAll(remove_particles);
+  remove_explosions.clear();
+  remove_particles.clear();
 
   for (PVector meatPellet : meatPellets) {
     noStroke();
@@ -252,6 +301,7 @@ void collisionLevel(ArrayList<Collision> collisions) {
         stroke(color(0,0,255));
         rect(collision.x,collision.y,collision.w,collision.h);
       }
+      // Wall to Player collisions
       if (player.check_collision_square(new PVector(collision.x+collision.w/2,collision.y+collision.h/2), new PVector(collision.w,collision.h))) {
         if (player.isDashing && player.jumpInternalTimer >= player.jumpInternalSeconds * 0.9 ) {
           player.jumpInternalTimer = 0;
@@ -269,6 +319,18 @@ void collisionLevel(ArrayList<Collision> collisions) {
           else if (-player.pos.y < collision.y) {
             player.vel.y += player.pixelSize * player.speed/frameRate/player.acelModifier*2;
           }
+        }
+      }
+      // Wall to GameObject collisions
+      for (Rocket rocket: rockets) {
+        if (rocket.check_collision_square(new PVector(collision.x+collision.w/2,collision.y+collision.h/2), new PVector(collision.w,collision.h)) && !collision.water) {
+          remove_rockets.add(rocket);
+          explosions.add(new Explosion(rocket.hitbox,rocket.pixelSize));
+        }
+      }
+      for (Arrow arrow: arrows) {
+        if (arrow.check_collision_square(new PVector(collision.x+collision.w/2,collision.y+collision.h/2), new PVector(collision.w,collision.h)) && !collision.water) {
+          remove_arrows.add(arrow);
         }
       }
     }
@@ -293,9 +355,22 @@ void collisionLevel(ArrayList<Collision> collisions) {
           player.vel.y += player.pixelSize * player.speed/frameRate/player.acelModifier*2;
         }
       }
+      // Wall to GameObject collisions
+      for (Rocket rocket: rockets) {
+        if (rocket.check_collision_square(new PVector(collision.x+collision.w/2,collision.y+collision.h/2), new PVector(collision.w,collision.h))) {
+          remove_rockets.add(rocket);
+          explosions.add(new Explosion(rocket.hitbox,rocket.pixelSize));
+        }
+      }
+      for (Arrow arrow: arrows) {
+        if (arrow.check_collision_square(new PVector(collision.x+collision.w/2,collision.y+collision.h/2), new PVector(collision.w,collision.h)) && !collision.water) {
+          remove_arrows.add(arrow);
+        }
+      }
     }
   }
   for (Zombie zombie: zombies) {
+    // Zombie wall collisions
     for (Collision collision: collisions) {
       if (zombie.check_collision_square(new PVector(collision.x+collision.w/2,collision.y+collision.h/2), new PVector(collision.w,collision.h))) {
         if (zombie.position.x > collision.x + collision.w) {
@@ -310,6 +385,80 @@ void collisionLevel(ArrayList<Collision> collisions) {
         else if (zombie.position.y < collision.y) {
           zombie.velocity.y -= zombie.speed;
         }
+      }
+    }
+    for (Rocket rocket: rockets) {
+      if (rocket.check_collision_sphere(zombie.position,zombie.size)) {
+        remove_rockets.add(rocket);
+        explosions.add(new Explosion(rocket.hitbox,rocket.pixelSize));
+      }
+    }
+    for (Explosion explosion: explosions) {
+      if (explosion.check_collision_sphere(zombie.position,zombie.size)) {
+        zombie.alive = false;
+      }
+    }
+    for (Arrow arrow: arrows) {
+      if (arrow.check_collision_sphere(zombie.position,zombie.size)) {
+        remove_arrows.add(arrow);
+        zombie.alive = false;
+      }
+    }
+    for (Spike spike: spikes) {
+      if (zombie.check_collision_sphere(spike.pos,spike.size)) {
+        zombie.alive = false;
+      }
+    }
+    for (Box box: boxes) {
+      for (Collision collision: collisions) {
+        if (zombie.check_collision_square(new PVector(box.pos.x,box.pos.y), new PVector(box.size,box.size))) {
+          if (zombie.position.x > box.pos.x - box.size/2) {
+            zombie.velocity.x += zombie.speed;
+          }
+          else if (zombie.position.x < box.pos.x) {
+            zombie.velocity.x -= zombie.speed;
+          }
+          if (zombie.position.y > box.pos.y - box.size/2) {
+            zombie.velocity.y += zombie.speed;
+          }
+          else if (zombie.position.y < box.pos.y) {
+            zombie.velocity.y -= zombie.speed;
+          }
+        }
+      }
+    }
+  }
+  for (Box box: boxes) {
+    // Wall to Player collisions
+    if (player.check_collision_square(new PVector(box.pos.x,box.pos.y), new PVector(box.size,box.size))) {
+      if (player.isDashing && player.jumpInternalTimer >= player.jumpInternalSeconds * 0.9 ) {
+        player.jumpInternalTimer = 0;
+      }
+      if (!player.isDashing) {
+        if (-player.pos.x > box.pos.x - box.size/2) {
+          player.vel.x -= player.pixelSize * player.speed/frameRate/player.acelModifier*2;
+        }
+        else if (-player.pos.x < box.pos.x) {
+          player.vel.x += player.pixelSize * player.speed/frameRate/player.acelModifier*2;
+        }
+        if (-player.pos.y > box.pos.y - box.size/2) {
+          player.vel.y -= player.pixelSize * player.speed/frameRate/player.acelModifier*2;
+        }
+        else if (-player.pos.y < box.pos.y) {
+          player.vel.y += player.pixelSize * player.speed/frameRate/player.acelModifier*2;
+        }
+      }
+    }
+    // Wall to GameObject collisions
+    for (Rocket rocket: rockets) {
+      if (rocket.check_collision_square(new PVector(box.pos.x,box.pos.y), new PVector(box.size,box.size))) {
+        remove_rockets.add(rocket);
+        explosions.add(new Explosion(rocket.hitbox,rocket.pixelSize));
+      }
+    }
+    for (Arrow arrow: arrows) {
+      if (arrow.check_collision_square(new PVector(box.pos.x,box.pos.y), new PVector(box.size,box.size))) {
+        remove_arrows.add(arrow);
       }
     }
   }

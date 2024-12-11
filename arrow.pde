@@ -15,7 +15,7 @@ class Arrow {
     this.degree = degree;
     this.arrow_sprite = sprite;
     this.pixelSize = pixelSize;
-    this.vel = pixelSize*3.5;
+    this.vel = pixelSize*10;
     this.matrix = matrix;
     size = 12;
   }
@@ -27,23 +27,17 @@ class Arrow {
                                                 0,1,-pos.y,
                                                 0,0,1});
     rotate(degree);
-    printMatrix();
-    println(matrix);
     translate(-player.pixelSize/2,-player.pixelSize/2);
-    matrix = this.multMatrix(matrix,new float[] {1,0,sin(degree) * (player.pixelSize * 0.9),
-                                                0,1,-cos(degree) * (player.pixelSize * 0.9),
-                                                0,0,1});
     image(arrow_sprite,0,0,player.pixelSize,player.pixelSize);
     popMatrix();
     
-    noFill();
-    stroke(255);
-    ellipse(this.matrix[2],this.matrix[5],size,size); // Hitbox
+    if (showHitbox) {
+      noFill();
+      stroke(255);
+      ellipse(this.matrix[2],this.matrix[5],size,size); // Hitbox
+    }
     
     this.hitbox = new PVector(this.matrix[2],this.matrix[5]);
-    matrix = this.multMatrix(matrix,new float[] {1,0,-sin(degree) * (player.pixelSize * 0.9),
-                                                0,1,cos(degree) * (player.pixelSize * 0.9),
-                                                0,0,1});
     matrix = this.multMatrix(matrix,new float[] {1,0,pos.x,
                                                 0,1,pos.y,
                                                 0,0,1});
@@ -59,10 +53,23 @@ class Arrow {
     this.move();
   }
   
-  boolean check_collision(PVector otherPos, float otherSize) {
-    float dist = this.hitbox.dist(otherPos);
-    if (dist <= this.size + otherSize) {
-      return true;
+  boolean check_collision_sphere(PVector otherPos, float otherSize) {
+    if (hitbox.x != 0 && hitbox.y != 0) {
+      float dist = this.hitbox.dist(otherPos);
+      if (dist <= this.size/2 + otherSize/2) {
+        return true;
+      }
+    }
+    return false;
+  }
+  
+  boolean check_collision_square(PVector otherPos, PVector otherSize) {
+    if (hitbox.x != 0 && hitbox.y != 0) {
+      float deltaX = Math.abs(this.hitbox.x - otherPos.x);
+      float deltaY = Math.abs(this.hitbox.y - otherPos.y);
+      if (deltaX < (this.size/2 + otherSize.x/2) && deltaY < (this.size/2 + otherSize.y/2)) {
+        return true;
+      }
     }
     return false;
   }

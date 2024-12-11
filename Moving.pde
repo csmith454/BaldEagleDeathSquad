@@ -1,6 +1,7 @@
 class Moving implements State {
   float degree = 0;
   float hitBoxSize_Store;
+  boolean to_dash = false;
   
   Moving(float hitBoxSize) {
     hitBoxSize_Store = hitBoxSize;
@@ -59,7 +60,7 @@ class Moving implements State {
     // Abilities
     if (player.firstEquipped) {
        //Handles tier 1 abilities.
-      if (!player.spike) {
+      if (false) {
         // Sword
         player.timer1Max = player.swordTimer;
         pushMatrix();
@@ -99,7 +100,7 @@ class Moving implements State {
                                                       0,1,player.pos.y,
                                                       0,0,1});
       }
-      else if (player.spike) {
+      else if (player.abilities[1]) {
         // Spike
         player.timer1Max = player.spikeTimer;
         pushMatrix();
@@ -139,22 +140,101 @@ class Moving implements State {
       else if (player.abilities[2]) {
         // Bow
         player.timer1Max = player.bowPullback;
+        pushMatrix();
+        translate(-player.pos.x-player.pixelSize/2,-player.pos.y-player.pixelSize);
+        
+        // Makes the bow rotate around the player.
+        translate(player.pixelSize/2,player.pixelSize);
+        if (mouseY != height / 2 && mouseX != width / 2) {
+          degree = atan2((mouseY - height/2),(mouseX - width/2)) + radians(90);
+          rotate(degree);
+        }
+        translate(-player.pixelSize/2,-player.pixelSize);
+        if (!player.inputBuffer[5]) {
+          player.timer1 = 0.0;
+          image(player.bow_sprite[0],0,player.pixelSize*0.2,player.pixelSize,player.pixelSize);
+        }
+        else {
+          player.timer1 += 1/frameRate;
+          if (player.timer1 < player.timer1Max/3) {
+            image(player.bow_sprite[0],0,player.pixelSize*0.2,player.pixelSize,player.pixelSize);
+          }
+          else if (player.timer1 < player.timer1Max/3*2) {
+            image(player.bow_sprite[1],0,player.pixelSize*0.2,player.pixelSize,player.pixelSize);
+          }
+          else {
+            image(player.bow_sprite[2],0,player.pixelSize*0.2,player.pixelSize,player.pixelSize);
+          }
+          if (player.timer1 >= player.timer1Max) {
+            player.arrows.add(new Arrow(new PVector(player.pos.x, player.pos.y),degree,player.arrow_sprite, player.pixelSize, player.matrix));
+            player.timer1 = 0.0;
+          }
+        }
+        popMatrix();
       }
     }
     // Tier 2 abilities
     if (player.abilities[3]) {
       // Boost
       player.timer2Max = player.boostTimer;
+      if (player.timer2 >= player.timer2Max) {
+        player.ability2Cooldown = false;
+      }
+      if (player.inputBuffer[4] && player.timer2 > 0.0 && player.ability2Cooldown == false) {
+        player.timer2 -= 2/frameRate;
+        player.isFast = true;
+      }
+      else if (player.inputBuffer[4] && player.timer2 <= 0.0) {
+        player.ability2Cooldown = true;
+      }
+      else {
+        player.isFast = false;
+      }
     }
     else if (player.abilities[4]) {
       // Slowness
       player.timer2Max = player.slowTimer;
+      if (player.timer2 >= player.timer2Max) {
+        player.ability2Cooldown = false;
+      }
+      if (player.inputBuffer[4] && player.timer2 > 0.0 && player.ability2Cooldown == false) {
+        player.timer2 -= 2/frameRate;
+        noStroke();
+        fill(color(200,50,200,90));
+        ellipse(-player.pos.x,-player.pos.y,100,100);
+        if (showHitbox) {
+          noFill();
+          stroke(255);
+          ellipse(-player.pos.x,-player.pos.y,100,100);
+        }
+        for (Zombie zombie: zombies) {
+          if (zombie.check_collision_sphere(new PVector(-player.pos.x,-player.pos.y),100)) {
+            zombie.isSlowed = true;
+          }
+          else {
+            zombie.isSlowed = false;
+          }
+        }
+      }
+      else if (player.inputBuffer[4] && player.timer2 <= 0.0) {
+        player.ability2Cooldown = true;
+      }
+      else {
+        for (Zombie zombie: zombies) {
+          zombie.isSlowed = false;
+        }
+      }
     }
-    else if (player.abilities[5]) { // Jump is unique in that it doesnt need to be selected to use
-        // Jump
-        player.timer2Max = player.jumpTimer;
+    else if (player.abilities[5]) {
+      // Jump
+      player.timer2Max = player.jumpTimer;
+      if (player.inputBuffer[4] && player.timer2 >= player.timer2Max) {
+        to_dash = true;
+        player.timer2 = 0.0;
+      }
     }
     if (!player.firstEquipped) {
+      player.hitBoxSize = 0;
       // Tier 3 abilities
       if (player.abilities[6]) {
         // Rocket Launcher
@@ -183,9 +263,91 @@ class Moving implements State {
       else if (player.abilities[7]) {
         // Blocks
         player.timer3Max = player.blockTimer;
+        pushMatrix();
+        translate(-player.pos.x,-player.pos.y);
+        player.matrix = player.multMatrix(player.matrix, new float[] {1,0,-player.pos.x,
+                                                      0,1,-player.pos.y,
+                                                      0,0,1});
+
+        degree = atan2((mouseY - height/2),(mouseX - width/2));
+        player.matrix = player.multMatrix(player.matrix, new float[] {1,0,sin(degree) * 30,
+                                                      0,1,-cos(degree) * 30,
+                                                      0,0,1});
+        if (player.inputBuffer[5] && player.timer3 >= player.blockTimer) {
+          player.timer3 = 0.0;
+          boxes.add(new Box(new PVector(-player.pos.x + sin(degree + radians(90)) * 30, -player.pos.y - cos(degree + radians(90)) * 30),player.pixelSize,player.box_sprite,player.matrix));
+        }
+        if (player.timer3 < player.blockTimer) {
+          fill(color(230,50,50));
+          stroke(color(230,50,50));
+          
+        }
+        else {
+          fill(color(50,230,50));
+          stroke(color(50,230,50));
+        }
+        rect(-player.pixelSize/4 + sin(degree + radians(90)) * 30,-player.pixelSize/4 - cos(degree + radians(90)) * 30,player.pixelSize/2,player.pixelSize/2);
+        popMatrix();
+        player.matrix = player.multMatrix(player.matrix, new float[] {1,0,-sin(degree) * 30,
+                                                      0,1,cos(degree) * 30,
+                                                      0,0,1});
+        player.matrix = player.multMatrix(player.matrix, new float[] {1,0,player.pos.x,
+                                                      0,1,player.pos.y,
+                                                      0,0,1});
       }
       else if (player.abilities[8]) {
         // Wind
+        player.timer3Max = player.windAmount;
+        pushMatrix();
+        translate(-player.pos.x-player.pixelSize/2,-player.pos.y-player.pixelSize);
+        
+        // Makes the Wind machine rotate around the player.
+        translate(player.pixelSize/2,player.pixelSize);
+        if (mouseY != height / 2 && mouseX != width / 2) {
+          degree = atan2((mouseY - height/2),(mouseX - width/2)) + radians(90);
+          rotate(degree);
+        }
+        translate(-player.pixelSize/2,-player.pixelSize);
+        
+        if (player.timer3 >= player.timer3Max) {
+          player.ability3Cooldown = false;
+        }
+        if (player.inputBuffer[5] && player.timer3 > 0.0 && player.ability3Cooldown == false) {
+          player.timer3 -= 2/frameRate;
+          if (frameCount % 10 < 5) {
+            image(player.wind_sprite[1],0,-player.pixelSize * 0.1,player.pixelSize,player.pixelSize);
+          }
+          else {
+            image(player.wind_sprite[0],0,-player.pixelSize * 0.1,player.pixelSize,player.pixelSize);
+          }
+          if (frameCount % (int(frameRate/7)) == 0) {
+            particles.add(new Particle(new PVector(-player.pos.x + random(-10,10) + sin(degree) * 20,-player.pos.y + random(-10,10) - cos(degree) * 20), new PVector(sin(degree) * 150,-cos(degree) * 150)));
+          }
+          for (Zombie zombie: zombies) {
+            if (zombie.check_collision_sphere(new PVector(-player.pos.x + sin(degree) * 30,-player.pos.y - cos(degree) * 30), 25)) {
+              zombie.acceleration.add(new PVector(sin(degree) * 60,-cos(degree) * 60));
+            }
+            if (zombie.check_collision_sphere(new PVector(-player.pos.x + sin(degree) * 60,-player.pos.y - cos(degree) * 60), 25)) {
+              zombie.acceleration.add(new PVector(sin(degree) * 30,-cos(degree) * 30));
+            }
+          }
+        }
+        else if (player.inputBuffer[5] && player.timer3 <= 0.0) {
+          player.ability3Cooldown = true;
+          image(player.wind_sprite[0],0,-player.pixelSize * 0.1,player.pixelSize,player.pixelSize);
+        }
+        else {
+          image(player.wind_sprite[0],0,-player.pixelSize * 0.1,player.pixelSize,player.pixelSize);
+        }
+        popMatrix();
+        if (player.inputBuffer[5] && player.timer3 > 0.0 && player.ability3Cooldown == false) {
+          if (showHitbox) {
+            noFill();
+            stroke(255);
+            ellipse(-player.pos.x + sin(degree) * 30,-player.pos.y - cos(degree) * 30,25,25);
+            ellipse(-player.pos.x + sin(degree) * 60,-player.pos.y - cos(degree) * 60,25,25);
+          }
+        }
       }
     }
     
@@ -229,7 +391,8 @@ class Moving implements State {
   }
   
   Boolean toDash() {
-    if (player.inputBuffer[4]) {
+    if (to_dash) {
+      to_dash = false;
       return true;
     }
     return false;

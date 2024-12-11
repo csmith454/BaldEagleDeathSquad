@@ -17,6 +17,7 @@ class Zombie {
   boolean pelletGenerated;
   int score;
   boolean facingRight;
+  boolean isSlowed;
   String directionFacing;
 
   Zombie(PVector startPosition) {
@@ -54,8 +55,14 @@ class Zombie {
     } else {
       flock(zombieList);
     }
-
+    
     velocity.add(acceleration);
+    if (isSlowed) {
+      velocity.limit(speed/2);
+    }
+    else {
+      velocity.limit(speed);
+    }
     velocity.limit(speed);
     position.add(velocity);
     acceleration.mult(0);
