@@ -121,7 +121,7 @@ class Zombie {
     }
 
     float playerDistance = PVector.dist(position, playerPosition);
-    if (this.check_collision_sphere(playerPosition, player.size)) {
+    if (this.check_collision_sphere(playerPosition, player.size) && !player.isDashing) {
       PVector repulsion = PVector.sub(position, playerPosition).normalize();
       repulsion.mult(1);
       applyForce(repulsion);

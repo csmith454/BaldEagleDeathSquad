@@ -1,4 +1,4 @@
-boolean showHitbox = false;
+boolean showHitbox = true;
 
 ArrayList<Rocket> rockets = new ArrayList<Rocket>();
 ArrayList<Rocket> remove_rockets = new ArrayList<Rocket>();
