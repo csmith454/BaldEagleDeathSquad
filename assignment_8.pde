@@ -230,7 +230,6 @@ void mouseReleased() {
 }
 
 // Functions
-
 void levelLogic(Level L, ArrayList<Collision> collisions) {
   background(0);
   camera.move_camera();
@@ -239,7 +238,7 @@ void levelLogic(Level L, ArrayList<Collision> collisions) {
   if (startOfLevel) {
     player.updatePos(new PVector(-L.spawns.get(1).x-20,-L.spawns.get(1).y)); // Make this the spawn position
     startOfLevel = false;
-    spawnZombies(7);
+    spawnZombies(20);
   }
   
   // Handles all character game objects
@@ -282,15 +281,16 @@ void levelLogic(Level L, ArrayList<Collision> collisions) {
   
   // Handles zombie logic
   for (Zombie zombie : zombies) {
-    zombie.move(zombies, player.pos);
-    zombie.sufferHunger();
+    zombie.move(zombies, player.pos); // Pass both the zombie list and the player position
     zombie.display();
 
     if (zombie.decomposing && !zombie.pelletGenerated) {
-      meatPellets.add(zombie.position.copy());
-      zombie.pelletGenerated = true;
+        meatPellets.add(zombie.position.copy());
+        zombie.pelletGenerated = true;
     }
-  }
+}
+
+
   
   // Explosions and particles appear above everything else, so they're handled down here.
   for (Explosion explosion: explosions) {
@@ -734,7 +734,6 @@ void evolveZombies() {
     avgSize += topZombie.size;
     avgSense += topZombie.sense;
     avgSpeed += topZombie.speed;
-    avgHungerDrain += topZombie.hungerDrain;
     avgDamage += topZombie.damage;
   }
 
@@ -750,7 +749,6 @@ void evolveZombies() {
     zombie.size = avgSize + random(-mutationRate, mutationRate);
     zombie.sense = avgSense + random(-mutationRate * 10, mutationRate * 10);
     zombie.speed = avgSpeed + random(-mutationRate * 0.1, mutationRate * 0.1);
-    zombie.hungerDrain = avgHungerDrain + random(-mutationRate * 0.1, mutationRate * 0.1);
     zombie.damage = avgDamage + random(-mutationRate, mutationRate);
   }
 }
