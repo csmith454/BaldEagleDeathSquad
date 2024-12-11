@@ -267,7 +267,7 @@ class GUI {
   void mousePressed() {
     if (gameState == 0) {
       if (begin.isPressed()) {
-      gameState = 9;
+        gameState = 9;
       }
       else if (controlsB.isPressed()) {
         gameState = 13;
@@ -281,7 +281,7 @@ class GUI {
         gameState = 0;
       }
     }
-    else if (gameState == 9) {
+    else if (gameState == 9) {    
       if (PUChoice1.isPressed()) {
         player.abilities[0] = true;
         gameState = 1;
