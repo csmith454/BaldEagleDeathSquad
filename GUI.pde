@@ -8,8 +8,8 @@ class GUI {
   String endLevel;
   String credits;
   String congrats;
+  PShape textBox;
   
-  //String highScores;
   RectButton begin;
   RectButton level1Select;
   RectButton level2Select;
@@ -27,7 +27,10 @@ class GUI {
   String controls;
   int startTime;
   int runTime;
-  int endTime;
+  int endTime1;
+  int endTime2;
+  int endTime3;
+  int totalTime;
   PShape healthOutline;
   PShape healthBar;
   int healthBarHeight;
@@ -67,6 +70,9 @@ class GUI {
     healthOutline.setFill(color(255));
     abilityDeck = createShape(RECT,0,0,75,25);
     abilityDeck.setFill(color(214,89,76));
+    textBox = createShape(RECT,0,0,100,50);
+    textBox.setFill(color(255));
+    textBox.setStroke(color(200));
     rectMode(CORNER);
   }
   
@@ -90,6 +96,7 @@ class GUI {
     else if (gameState == 10) {   // first progression; to second level
       background(0);
       String endTime = getTimeFormat(runTime);
+      endTime1 = runTime;
       startTime = millis();
       // display endscreen
       textAlign(CENTER);
@@ -107,6 +114,7 @@ class GUI {
     else if (gameState == 11) {    // second progression; to third level
       background(0);
       String endTime = getTimeFormat(runTime);
+      endTime2 = runTime;
       startTime = millis();
       // display endscreen
       textAlign(CENTER);
@@ -139,10 +147,26 @@ class GUI {
     }
     else if (gameState == 20) {    // completed all levels
       background(0);
+      textAlign(CENTER);
       textSize(54);
       fill(255);
-      text(congrats,width/2,height/2-50);
+      text(congrats,width/2,1*height/5);
       textSize(28);
+      endTime3 = runTime;
+      // display textbox to type in 
+      shape(textBox,width/2,2.5*height/5);
+      text(hs.enterInitials,width/2,2.5*height/5-40);
+      textSize(15);
+      text(hs.pressEnter, width/2,2.5*height/5+50);
+      fill(0);
+      textSize(28);
+      text(hs.contents.toUpperCase(),width/2,2.5*height/5+5);
+      
+      // display time
+      totalTime = endTime1 + endTime2 + endTime3;
+      fill(255);
+      text(getTimeFormat(totalTime),width/2,2*height/5);
+
       returnToMenu.display();
       returnToMenu.animateButton();
     }

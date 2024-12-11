@@ -67,8 +67,14 @@ void setup() {
   meatPellets = new ArrayList<PVector>();
   
   loadData();
-  String[] keys = loadStrings("initials.txt");
-  String[] values = loadStrings("scores.txt");
+  String[] initials = loadStrings("initials.txt");
+  String[] scores = loadStrings("scores.txt");
+  ArrayList<String> keys = new ArrayList<String>();
+  ArrayList<String> values = new ArrayList<String>();
+  for (int i = 0; i < initials.length; i++) {
+    keys.add(initials[i]);
+    values.add(scores[i]);
+  }
   hs = new HighScore(keys,values);
 
   gameState = 20;
@@ -135,11 +141,16 @@ void draw() {
 
 void keyPressed() {
   player.keyPressed();
+  if (gameState == 20) {
+    hs.keyPressed();
+  }
 }
-
 
 void keyReleased() {
   player.keyReleased();
+  if (gameState == 20) {
+    hs.keyReleased();
+  }
 }
 
 void mousePressed() {
