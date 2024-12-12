@@ -297,53 +297,50 @@ class GUI {
     }
     else if (gameState == 9) {    
       if (millis() - startTime > 500) {
-        
-      if (PUChoice1.isPressed()) {
-        player.abilities[0] = true;
-        gameState = 1;
+        if (PUChoice1.isPressed()) {
+          player.abilities[0] = true;
+          gameState = 1;
+        }
+        else if (PUChoice2.isPressed()) {
+          player.abilities[1] = true;
+          gameState = 1;
+        }
+        else if (PUChoice3.isPressed()) {
+          player.abilities[2] = true;
+          gameState = 1;
+        }
       }
-      else if (PUChoice2.isPressed()) {
-        player.abilities[1] = true;
-        gameState = 1;
-      }
-      else if (PUChoice3.isPressed()) {
-        player.abilities[2] = true;
-        gameState = 1;
-      }
-    }
     }
     else if (gameState == 10) {
-      if (millis() - startTime > 500) {
-        
-      if (PUChoice4.isPressed()) {
-        player.abilities[3] = true;
-        gameState = 2;
-      }
-      else if (PUChoice5.isPressed()) {
-        player.abilities[4] = true;
-        gameState = 2;
-      }
-      else if (PUChoice6.isPressed()) {
-        player.abilities[5] = true;
-        gameState = 2;
-      }
+      if (millis() - startTime > 1) {
+        if (PUChoice4.isPressed()) {
+          player.abilities[3] = true;
+          gameState = 2;
+        }
+        else if (PUChoice5.isPressed()) {
+          player.abilities[4] = true;
+          gameState = 2;
+        }
+        else if (PUChoice6.isPressed()) {
+          player.abilities[5] = true;
+          gameState = 2;
+        }
       }
     }  
     else if (gameState == 11) {
       if (millis() - startTime > 500) {
-        
-      if (PUChoice7.isPressed()) {
-        player.abilities[6] = true;
-        gameState = 3;
-      }  
-      else if (PUChoice8.isPressed()) {
-        player.abilities[7] = true;
-        gameState = 3;
-      }
-      else if (PUChoice9.isPressed()) {
-        player.abilities[8] = true;
-        gameState = 3;
-      }
+        if (PUChoice7.isPressed()) {
+          player.abilities[6] = true;
+          gameState = 3;
+        }    
+        else if (PUChoice8.isPressed()) {
+          player.abilities[7] = true;
+          gameState = 3;
+        }
+        else if (PUChoice9.isPressed()) {
+          player.abilities[8] = true;
+          gameState = 3;
+        }
       }
     }
   }
