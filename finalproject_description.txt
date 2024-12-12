@@ -1,0 +1,7 @@
+Bald Eagle Death Squad presents: The Hive
+
+Daniel - 
+
+Asas - 
+
+Cole - I worked on the level generation from JSON files (encapsulated in the Level and Tiles classes).  Apart of this was the creation of many unique, seamless tiles that cultivate the space.  Using Tiled, I was able to provide lists of collision and spawn objects with certain characteristics that allow for complex interaction between the map and various entities.  I also created the GUI class, which includes handling for the main screen, in-game HUD, power-up select screens, the death, and the win screen.  Utilizing game states, it was relatively straight forward to craft the navigation between levels, but I found it more challenging to handle the various interactions and/or checks that needed to be addressed in order to meet the requirements of progression.  To make progression fluid, I used a Button and RectButton class with button animation to provide more interactivity and agency for the player. I also created the HighScore class that allows for data input and output that is saved between instances of the game. I really enjoyed helping create this project, and I think the final product is a genuinely fun and developed game.
