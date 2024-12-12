@@ -23,6 +23,7 @@ class GUI {
   String credits;
   String congrats;
   PShape textBox;
+  boolean typeable;
   
   RectButton begin;
   RectButton level1Select;
@@ -60,6 +61,7 @@ class GUI {
     shPinscherReg = createFont("SHPinscher-Regular.otf",32);
     textFont(shPinscherReg);
     
+    typeable = false;
     // create strings
     title = "THE HIVE";
     credits = "BALD EAGLE DEATH SQUAD STUDIOS";
@@ -199,6 +201,9 @@ class GUI {
       returnToMenu.animateButton();
     }
     else if (gameState == 20) {    // completed all levels
+      if (millis() - startTime > 500) {
+        typeable = true;
+      }
       background(0);
       textAlign(CENTER);
       textSize(54);
@@ -208,7 +213,6 @@ class GUI {
       endTime3 = runTime;
       // display textbox to type in 
       shape(textBox,width/2,2.5*height/5);
-      text(hs.enterInitials,width/2,2.5*height/5-40);
       textSize(15);
       text(hs.pressEnter, width/2,2.5*height/5+50);
       fill(0);
@@ -257,8 +261,8 @@ class GUI {
      // display ability icons
      textSize(5);
      text(abilitiesToDisplay[0]+deck1,-playerPos.x-35,-playerPos.y+70);
-     text(abilitiesToDisplay[1]+deck2,-playerPos.x-15,-playerPos.y+70);
-     text(abilitiesToDisplay[2]+deck3,-playerPos.x+5,-playerPos.y+70);
+     text(abilitiesToDisplay[1]+deck3,-playerPos.x-15,-playerPos.y+70);
+     text(abilitiesToDisplay[2]+deck2,-playerPos.x+5,-playerPos.y+70);
    }
  }
  String getTimeFormat(int runTime) {

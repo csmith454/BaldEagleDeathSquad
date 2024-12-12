@@ -1,4 +1,5 @@
 boolean showHitbox = false;
+boolean showHitbox = false;
 
 ArrayList<Rocket> rockets = new ArrayList<Rocket>();
 ArrayList<Rocket> remove_rockets = new ArrayList<Rocket>();
@@ -173,6 +174,7 @@ void draw() {
   // control transitions between levels
   if (countZombiesAlive() == 0 && gameState == 3 && startOfLevel == false) {
     gameState = 20;
+    g.startTime = millis();
     startOfLevel = true;
   }
   else if (countZombiesAlive() == 0 && gameState == 1 && startOfLevel == false) {
@@ -240,7 +242,7 @@ void levelLogic(Level L, ArrayList<Collision> collisions) {
   if (startOfLevel) {
     player.updatePos(new PVector(-L.spawns.get(1).x-20,-L.spawns.get(1).y)); // Make this the spawn position
     startOfLevel = false;
-    spawnZombies(25);
+    spawnZombies(1);
   }
   
   // Handles all character game objects
