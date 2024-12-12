@@ -311,6 +311,7 @@ class GUI {
         gameState = 1;
       }
     }
+    }
     else if (gameState == 10) {
       if (millis() - startTime > 500) {
         
@@ -345,6 +346,5 @@ class GUI {
       }
       }
     }
-  }
   }
 }
