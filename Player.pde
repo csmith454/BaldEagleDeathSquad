@@ -25,7 +25,7 @@ class Player {
   
   // Character
   float health = 100;
-  float speed = 2;
+  float speed = 3;
   boolean isFast = false;
   PVector pos = new PVector(0,0);
   PVector vel = new PVector(0,0);
@@ -52,7 +52,7 @@ class Player {
   float timer2Max = 0.0;
   float timer3Max = 0.0;
   float swordTimer = 0.7;
-  float swordDamage = 30;
+  float swordDamage = 35;
   float spikeTimer = 1.5;
   float bowPullback = 2.0;
   float boostTimer = 3.0;
@@ -106,7 +106,8 @@ class Player {
   }
   
   void update() {
-    println(pos);
+    pos.x = constrain(pos.x,-585,-10);
+    pos.y = constrain(pos.y,-585,-10);
     pushMatrix();
     stateMachine.tick();
     popMatrix();

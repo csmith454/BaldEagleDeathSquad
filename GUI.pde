@@ -14,9 +14,10 @@ class GUI {
   String PU8;
   String PU9;
   String deck1 = "Sword\nSpikes\nBow";
-  String deck2 = "Speed+\nSlowField\nFlip";
-  String deck3 = "Bazooka\nBox\nFRD";
+  String deck2 = "Bazooka\nBox\nFRD";
+  String deck3 = "Speed+\nSlowField\nFlip";
   String[] abilitiesToDisplay = {"'1'\n","'Spacebar'\n","'2'\n"};
+  float selectTimer = 0.0;
   String initialChoice;
   String nextLevel;
   String endLevel;
@@ -129,6 +130,7 @@ class GUI {
       }
     }
     else if (gameState == 9) {
+      selectTimer += 1/frameRate;
       background(0);
       textAlign(CENTER);
       textSize(42);
@@ -143,6 +145,7 @@ class GUI {
       PUChoice3.animateButton();
     }
     else if (gameState == 10) {   // first progression; to second level
+      selectTimer += 1/frameRate;
       background(0);
       String endTime = getTimeFormat(runTime);
       endTime1 = runTime;
@@ -163,6 +166,7 @@ class GUI {
       PUChoice6.animateButton();
     }
     else if (gameState == 11) {    // second progression; to third level
+      selectTimer += 1/frameRate;
       background(0);
       String endTime = getTimeFormat(runTime);
       endTime2 = runTime;
@@ -295,46 +299,56 @@ class GUI {
         gameState = 0;
       }
     }
-    else if (gameState == 9) {    
-      if (PUChoice1.isPressed()) {
+    else if (gameState == 9) {  
+      
+      if (PUChoice1.isPressed() && selectTimer >= 0.5) {
         player.abilities[0] = true;
         gameState = 1;
+        selectTimer = 0.0;
       }
-      else if (PUChoice2.isPressed()) {
+      else if (PUChoice2.isPressed() && selectTimer >= 0.5) {
         player.abilities[1] = true;
         gameState = 1;
+        selectTimer = 0.0;
       }
-      else if (PUChoice3.isPressed()) {
+      else if (PUChoice3.isPressed() && selectTimer >= 0.5) {
         player.abilities[2] = true;
         gameState = 1;
+        selectTimer = 0.0;
       }
     }
     else if (gameState == 10) {
-      if (PUChoice4.isPressed()) {
+      if (PUChoice4.isPressed() && selectTimer >= 0.5) {
         player.abilities[3] = true;
         gameState = 2;
+        selectTimer = 0.0;
       }
-      else if (PUChoice5.isPressed()) {
+      else if (PUChoice5.isPressed() && selectTimer >= 0.5) {
         player.abilities[4] = true;
         gameState = 2;
+        selectTimer = 0.0;
       }
-      else if (PUChoice6.isPressed()) {
+      else if (PUChoice6.isPressed() && selectTimer >= 0.5) {
         player.abilities[5] = true;
         gameState = 2;
+        selectTimer = 0.0;
       }
     }  
     else if (gameState == 11) {
-      if (PUChoice7.isPressed()) {
+      if (PUChoice7.isPressed() && selectTimer >= 0.5) {
         player.abilities[6] = true;
         gameState = 3;
+        selectTimer = 0.0;
       }  
-      else if (PUChoice8.isPressed()) {
+      else if (PUChoice8.isPressed() && selectTimer >= 0.5) {
         player.abilities[7] = true;
         gameState = 3;
+        selectTimer = 0.0;
       }
-      else if (PUChoice9.isPressed()) {
+      else if (PUChoice9.isPressed() && selectTimer >= 0.5) {
         player.abilities[8] = true;
         gameState = 3;
+        selectTimer = 0.0;
       }
     }
   }

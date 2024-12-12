@@ -1,5 +1,4 @@
 boolean showHitbox = false;
-boolean showHitbox = false;
 
 ArrayList<Rocket> rockets = new ArrayList<Rocket>();
 ArrayList<Rocket> remove_rockets = new ArrayList<Rocket>();
@@ -30,6 +29,9 @@ float mutationRate = 2.0;
 PImage zombieSouthTexture;
 PImage zombieNorthTexture;
 PImage zombieEastWestTexture;
+PImage zombieSouthTexture_D;
+PImage zombieNorthTexture_D;
+PImage zombieEastWestTexture_D;
 PImage[] splash_sprite = new PImage[3];
 boolean flipTexture;
 
@@ -104,47 +106,47 @@ void setup() {
     player.explosion_sprite[i] = loadImage(imageName);
   }
   for (int i = 0; i < player.numFrames; i++) {
-      player.front_sprite_I[i] = player.front_sprite[i].copy();
-      player.front_sprite_I[i].loadPixels();
-      for (int j = 0; j < player.front_sprite_I[i].pixels.length; j++) {
-        color c = player.front_sprite_I[i].pixels[j];
-        float a = alpha(c);
-        if (a > 0) {
-          float r = red(c) * 1.5;
-          float g = green(c) * 2;
-          float b = blue(c) * 2;
-          player.front_sprite_I[i].pixels[j] = color(constrain(r, 0, 255), constrain(g, 0, 255), constrain(b, 0, 255));
-        }
+    player.front_sprite_I[i] = player.front_sprite[i].copy();
+    player.front_sprite_I[i].loadPixels();
+    for (int j = 0; j < player.front_sprite_I[i].pixels.length; j++) {
+      color c = player.front_sprite_I[i].pixels[j];
+      float a = alpha(c);
+      if (a > 0) {
+        float r = red(c) * 1.5;
+        float g = green(c) * 2;
+        float b = blue(c) * 2;
+        player.front_sprite_I[i].pixels[j] = color(constrain(r, 0, 255), constrain(g, 0, 255), constrain(b, 0, 255));
       }
     }
-    for (int i = 0; i < player.numFrames; i++) {
-      player.side_sprite_I[i] = player.side_sprite[i].copy();
-      player.side_sprite_I[i].loadPixels();
-      for (int j = 0; j < player.side_sprite_I[i].pixels.length; j++) {
-        color c = player.side_sprite_I[i].pixels[j];
-        float a = alpha(c);
-        if (a > 0) {
-          float r = red(c) * 1.5;
-          float g = green(c) * 2;
-          float b = blue(c) * 2;
-          player.side_sprite_I[i].pixels[j] = color(constrain(r, 0, 255), constrain(g, 0, 255), constrain(b, 0, 255));
-        }
+  }
+  for (int i = 0; i < player.numFrames; i++) {
+    player.side_sprite_I[i] = player.side_sprite[i].copy();
+    player.side_sprite_I[i].loadPixels();
+    for (int j = 0; j < player.side_sprite_I[i].pixels.length; j++) {
+      color c = player.side_sprite_I[i].pixels[j];
+      float a = alpha(c);
+      if (a > 0) {
+        float r = red(c) * 1.5;
+        float g = green(c) * 2;
+        float b = blue(c) * 2;
+        player.side_sprite_I[i].pixels[j] = color(constrain(r, 0, 255), constrain(g, 0, 255), constrain(b, 0, 255));
       }
     }
-    for (int i = 0; i < player.numFrames; i++) {
-      player.back_sprite_I[i] = player.back_sprite[i].copy();
-      player.back_sprite_I[i].loadPixels();
-      for (int j = 0; j < player.back_sprite_I[i].pixels.length; j++) {
-        color c = player.back_sprite_I[i].pixels[j];
-        float a = alpha(c);
-        if (a > 0) {
-          float r = red(c) * 1.5;
-          float g = green(c) * 2;
-          float b = blue(c) * 2;
-          player.back_sprite_I[i].pixels[j] = color(constrain(r, 0, 255), constrain(g, 0, 255), constrain(b, 0, 255));
-        }
+  }
+  for (int i = 0; i < player.numFrames; i++) {
+    player.back_sprite_I[i] = player.back_sprite[i].copy();
+    player.back_sprite_I[i].loadPixels();
+    for (int j = 0; j < player.back_sprite_I[i].pixels.length; j++) {
+      color c = player.back_sprite_I[i].pixels[j];
+      float a = alpha(c);
+      if (a > 0) {
+        float r = red(c) * 1.5;
+        float g = green(c) * 2;
+        float b = blue(c) * 2;
+        player.back_sprite_I[i].pixels[j] = color(constrain(r, 0, 255), constrain(g, 0, 255), constrain(b, 0, 255));
       }
     }
+  }
   player.rocketLauncher_sprite = loadImage("rocketLauncher.png");
   player.rocket_sprite = loadImage("rocket.png");
   player.sword_sprite = loadImage("sword.png");
@@ -164,6 +166,42 @@ void setup() {
   zombieSouthTexture = loadImage("zombie_facing_south.png");
   zombieNorthTexture = loadImage("zombie_facing_north.png");
   zombieEastWestTexture = loadImage("zombie_facing_eastwest.png");
+  zombieSouthTexture_D = zombieSouthTexture.copy();
+  zombieSouthTexture_D.loadPixels();
+  for (int i = 0; i < zombieSouthTexture.pixels.length; i++) {
+    color c = zombieSouthTexture.pixels[i];
+    float a = alpha(c);
+    if (a > 0) {
+      float r = red(c) * 3;
+      float g = green(c);
+      float b = blue(c);
+      zombieSouthTexture.pixels[i] = color(constrain(r, 0, 255), constrain(g, 0, 255), constrain(b, 0, 255));
+    }
+  }
+  zombieNorthTexture_D = zombieNorthTexture.copy();
+  zombieNorthTexture_D.loadPixels();
+  for (int i = 0; i < zombieNorthTexture.pixels.length; i++) {
+    color c = zombieNorthTexture.pixels[i];
+    float a = alpha(c);
+    if (a > 0) {
+      float r = red(c) * 3;
+      float g = green(c);
+      float b = blue(c);
+      zombieNorthTexture.pixels[i] = color(constrain(r, 0, 255), constrain(g, 0, 255), constrain(b, 0, 255));
+    }
+  }
+  zombieEastWestTexture_D = zombieEastWestTexture.copy();
+  zombieEastWestTexture_D.loadPixels();
+  for (int i = 0; i < zombieEastWestTexture.pixels.length; i++) {
+    color c = zombieEastWestTexture.pixels[i];
+    float a = alpha(c);
+    if (a > 0) {
+      float r = red(c) * 3;
+      float g = green(c);
+      float b = blue(c);
+      zombieEastWestTexture.pixels[i] = color(constrain(r, 0, 255), constrain(g, 0, 255), constrain(b, 0, 255));
+    }
+  }
   for (int i = 0; i < 3; i++) {
     String imageName = "splash" + nf(i + 1, 1) + ".png";
     splash_sprite[i] = loadImage(imageName);
@@ -197,7 +235,6 @@ void draw() {
   
   if (gameState == 1) {
     // display level 1
-    player.abilities[6] = true;
     levelLogic(L1, collision1);
   }
   else if (gameState == 2) {
@@ -242,7 +279,15 @@ void levelLogic(Level L, ArrayList<Collision> collisions) {
   if (startOfLevel) {
     player.updatePos(new PVector(-L.spawns.get(1).x-20,-L.spawns.get(1).y)); // Make this the spawn position
     startOfLevel = false;
-    spawnZombies(1);
+    if (L == L1) {
+      spawnZombies(1);
+    }
+    else if(L == L2) {
+      spawnZombies(1);
+    }
+    else {
+      spawnZombies(30);
+    }
   }
   
   // Handles all character game objects

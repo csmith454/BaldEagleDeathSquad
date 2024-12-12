@@ -89,7 +89,14 @@ class Moving implements State {
                                                                     0,1,-cos(degree) * (player.pixelSize * 0.7),
                                                                     0,0,1});
         translate(-player.pixelSize/2,-player.pixelSize);
+        if (!(player.timer1 < player.swordTimer/1.5)) {
+          rotate(45);
+          translate(player.pixelSize/2,-player.pixelSize/3);
+        }
         image(player.sword_sprite,0,-player.pixelSize * 0.1,player.pixelSize,player.pixelSize);
+        //if (!(player.timer1 < player.swordTimer/1.5)) {
+        //  translate(-player.pixelSize/2,-player.pixelSize);
+        //}
         player.hitBoxPos = new PVector(player.matrix[2],player.matrix[5]);
         popMatrix();
         player.matrix = player.multMatrix(player.matrix,new float[] {1,0,-sin(degree) * (player.pixelSize * 0.7),
@@ -110,13 +117,13 @@ class Moving implements State {
 
         degree = atan2((mouseY - height/2),(mouseX - width/2));
         rotate(degree);
-        translate(30,0);
-        player.matrix = player.multMatrix(player.matrix, new float[] {1,0,sin(degree) * 30,
-                                                      0,1,-cos(degree) * 30,
+        translate(15,0);
+        player.matrix = player.multMatrix(player.matrix, new float[] {1,0,sin(degree) * 15,
+                                                      0,1,-cos(degree) * 15,
                                                       0,0,1});
         if (player.inputBuffer[5] && player.timer1 >= player.spikeTimer) {
           player.timer1 = 0.0;
-          player.spikes.add(new Spike(new PVector(-player.pos.x + sin(degree + radians(90)) * 30, -player.pos.y - cos(degree + radians(90)) * 30),player.pixelSize,player.spike_sprite,player.matrix));
+          player.spikes.add(new Spike(new PVector(-player.pos.x + sin(degree + radians(90)) * 15, -player.pos.y - cos(degree + radians(90)) * 15),player.pixelSize,player.spike_sprite,player.matrix));
         }
         if (player.timer1 < player.spikeTimer) {
           fill(color(230,50,50));
@@ -129,8 +136,8 @@ class Moving implements State {
         }
         ellipse(0,0,player.pixelSize/2,player.pixelSize/2);
         popMatrix();
-        player.matrix = player.multMatrix(player.matrix, new float[] {1,0,-sin(degree) * 30,
-                                                      0,1,cos(degree) * 30,
+        player.matrix = player.multMatrix(player.matrix, new float[] {1,0,-sin(degree) * 15,
+                                                      0,1,cos(degree) * 15,
                                                       0,0,1});
         player.matrix = player.multMatrix(player.matrix, new float[] {1,0,player.pos.x,
                                                       0,1,player.pos.y,

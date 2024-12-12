@@ -10,7 +10,7 @@ class Hitstun implements State {
   void onEnter() {
     speedStorage = player.speed;
     decelStorage = player.acelModifier;
-    player.speed *= player.knockback;
+    player.speed = player.knockback * 2;
     player.acelModifier *= player.speed;
     player.vel.add(new PVector(player.hitstunDirection.x/abs(player.hitstunDirection.x) * player.speed, player.hitstunDirection.y/abs(player.hitstunDirection.y) * player.speed));
     timer = 0;

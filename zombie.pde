@@ -18,6 +18,7 @@ class Zombie {
   boolean isSlowed;
   boolean isWinded;
   boolean isDrowning;
+  boolean isDamaged = false;
   float drownTimer;
   String directionFacing;
   float invincibilityTimer = 0.0;
@@ -193,13 +194,28 @@ class Zombie {
         scale(-1, 1);
       }
       imageMode(CENTER);
-
+      
       if (directionFacing.equals("south")) {
-        image(zombieSouthTexture, 0, 0, size * 1.2, size * 1.2);
+        if (invincibilityTimer <= 0.25) {
+          image(zombieSouthTexture_D, 0, 0, size * 1.2, size * 1.2);
+        }
+        else {
+          image(zombieSouthTexture, 0, 0, size * 1.2, size * 1.2);
+        }
       } else if (directionFacing.equals("north")) {
-        image(zombieNorthTexture, 0, 0, size * 1.2, size * 1.2);
+        if (invincibilityTimer <= 0.25) {
+          image(zombieNorthTexture_D, 0, 0, size * 1.2, size * 1.2);
+        }
+        else {
+          image(zombieNorthTexture, 0, 0, size * 1.2, size * 1.2);
+        }
       } else {
-        image(zombieEastWestTexture, 0, 0, size * 1.2, size * 1.2);
+        if (invincibilityTimer <= 0.25) {
+          image(zombieEastWestTexture_D, 0, 0, size * 1.2, size * 1.2);
+        }
+        else {
+          image(zombieEastWestTexture, 0, 0, size * 1.2, size * 1.2);
+        }
       }
       if (showHitbox) {
         noFill();
