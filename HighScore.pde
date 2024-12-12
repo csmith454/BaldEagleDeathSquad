@@ -19,7 +19,6 @@ class HighScore {
     this.title = "Highscores";
     this.initials = "Initials";
     this.time = "Time elapsed";
-    this.enterInitials = "Press 't' to enter your initials.";
     this.pressEnter = "Press 'Enter' or 'Return' to save your time.";
     this.contents = "";
     rectMode(CENTER);
@@ -60,10 +59,7 @@ class HighScore {
   
   void keyPressed() {
     if (pressed == false) {
-      if (key == 't') {
-        canType = true;
-      }
-      if (canType) {
+      if (g.typeable) {
         if(key == BACKSPACE || key == DELETE){
           contents = "";
         }
