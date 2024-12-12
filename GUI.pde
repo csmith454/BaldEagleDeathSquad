@@ -261,8 +261,8 @@ class GUI {
      // display ability icons
      textSize(5);
      text(abilitiesToDisplay[0]+deck1,-playerPos.x-35,-playerPos.y+70);
-     text(abilitiesToDisplay[1]+deck2,-playerPos.x-15,-playerPos.y+70);
-     text(abilitiesToDisplay[2]+deck3,-playerPos.x+5,-playerPos.y+70);
+     text(abilitiesToDisplay[1]+deck3,-playerPos.x-15,-playerPos.y+70);
+     text(abilitiesToDisplay[2]+deck2,-playerPos.x+5,-playerPos.y+70);
    }
  }
  String getTimeFormat(int runTime) {
