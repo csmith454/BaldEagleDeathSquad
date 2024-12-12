@@ -379,26 +379,26 @@ class Moving implements State {
     translate(xPos-player.pixelSize/2,-player.pos.y-player.pixelSize*0.8);
     if (player.direction == "down") {
       if (!player.invincible) {
-        image(player.side_sprite[0], 0,0,player.pixelSize,player.pixelSize);
+        image(player.side_sprite[frame], 0,0,player.pixelSize,player.pixelSize);
       }
       else {
-        image(player.front_sprite_I[0],0,0,player.pixelSize,player.pixelSize);
+        image(player.front_sprite_I[frame],0,0,player.pixelSize,player.pixelSize);
       }
     }
     else if (player.direction == "up") {
       if (!player.invincible) {
-        image(player.side_sprite[0], 0,0,player.pixelSize,player.pixelSize);
+        image(player.side_sprite[frame], 0,0,player.pixelSize,player.pixelSize);
       }
       else {
-        image(player.front_sprite_I[0],0,0,player.pixelSize,player.pixelSize);
+        image(player.front_sprite_I[frame],0,0,player.pixelSize,player.pixelSize);
       }
     }
     else if (player.direction == "side") {
       if (!player.invincible) {
-        image(player.side_sprite[0], 0,0,player.pixelSize,player.pixelSize);
+        image(player.side_sprite[frame], 0,0,player.pixelSize,player.pixelSize);
       }
       else {
-        image(player.front_sprite_I[0],0,0,player.pixelSize,player.pixelSize);
+        image(player.front_sprite_I[frame],0,0,player.pixelSize,player.pixelSize);
       }
     }
     popMatrix();

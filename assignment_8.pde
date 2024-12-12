@@ -282,10 +282,10 @@ void levelLogic(Level L, ArrayList<Collision> collisions) {
     player.updatePos(new PVector(-L.spawns.get(1).x-20,-L.spawns.get(1).y)); // Make this the spawn position
     startOfLevel = false;
     if (L == L1) {
-      spawnZombies(1);
+      spawnZombies(10);
     }
     else if(L == L2) {
-      spawnZombies(1);
+      spawnZombies(20);
     }
     else {
       spawnZombies(30);
