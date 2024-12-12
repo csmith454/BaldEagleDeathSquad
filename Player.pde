@@ -52,7 +52,7 @@ class Player {
   float timer2Max = 0.0;
   float timer3Max = 0.0;
   float swordTimer = 0.7;
-  float swordDamage = 20;
+  float swordDamage = 30;
   float spikeTimer = 1.5;
   float bowPullback = 2.0;
   float boostTimer = 3.0;
@@ -106,6 +106,7 @@ class Player {
   }
   
   void update() {
+    println(pos);
     pushMatrix();
     stateMachine.tick();
     popMatrix();

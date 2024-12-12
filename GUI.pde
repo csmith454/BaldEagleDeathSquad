@@ -16,7 +16,7 @@ class GUI {
   String deck1 = "Sword\nSpikes\nBow";
   String deck2 = "Speed+\nSlowField\nFlip";
   String deck3 = "Bazooka\nBox\nFRD";
-  String[] abilitiesToDisplay = {"'1'\n","'2'\n","'Spacebar'\n"};
+  String[] abilitiesToDisplay = {"'1'\n","'Spacebar'\n","'2'\n"};
   String initialChoice;
   String nextLevel;
   String endLevel;

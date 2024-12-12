@@ -9,7 +9,7 @@ class Arrow {
   float size;
   float lifetime = 10;
   float count = 0;
-  float damage = 30;
+  float damage = 40;
   
   Arrow(PVector pos, float degree, PImage sprite, int pixelSize, float[] matrix) {
     this.pos = pos;

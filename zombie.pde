@@ -64,6 +64,8 @@ class Zombie {
       velocity.limit(speed);
     }
     velocity.limit(speed);
+    position.x = constrain(position.x + velocity.x, 0, 590);
+    position.y = constrain(position.y + velocity.y, 0, 590);
     position.add(velocity);
     acceleration.mult(0);
 

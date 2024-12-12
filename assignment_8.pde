@@ -1,4 +1,4 @@
-boolean showHitbox = true;
+boolean showHitbox = false;
 
 ArrayList<Rocket> rockets = new ArrayList<Rocket>();
 ArrayList<Rocket> remove_rockets = new ArrayList<Rocket>();
@@ -195,6 +195,7 @@ void draw() {
   
   if (gameState == 1) {
     // display level 1
+    player.abilities[6] = true;
     levelLogic(L1, collision1);
   }
   else if (gameState == 2) {
@@ -239,7 +240,7 @@ void levelLogic(Level L, ArrayList<Collision> collisions) {
   if (startOfLevel) {
     player.updatePos(new PVector(-L.spawns.get(1).x-20,-L.spawns.get(1).y)); // Make this the spawn position
     startOfLevel = false;
-    spawnZombies(20);
+    spawnZombies(25);
   }
   
   // Handles all character game objects
@@ -445,7 +446,7 @@ void collisionLevel(ArrayList<Collision> collisions) {
         if (arrow.check_collision_sphere(zombie.position,zombie.size) && zombie.invincibilityTimer <= 0.0) {
           remove_arrows.add(arrow);
           zombie.health -= arrow.damage;
-          zombie.position.add(new PVector(sin(arrow.degree)*arrow.damage*2,-cos(arrow.degree)*arrow.damage*2));
+          zombie.position.add(new PVector(sin(arrow.degree)*arrow.damage*0.25,-cos(arrow.degree)*arrow.damage*0.25));
           zombie.invincibilityTimer = 0.4;
         }
       }
