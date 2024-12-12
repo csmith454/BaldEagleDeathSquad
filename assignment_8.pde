@@ -178,10 +178,12 @@ void draw() {
   }
   else if (countZombiesAlive() == 0 && gameState == 1 && startOfLevel == false) {
     gameState = 10;
+    g.startTime = millis();
     startOfLevel = true;
   }
   else if (countZombiesAlive() == 0 && gameState == 2 && startOfLevel == false) {
     gameState = 11;
+    g.startTime = millis();
     startOfLevel = true;
   }
   

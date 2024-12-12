@@ -296,6 +296,8 @@ class GUI {
       }
     }
     else if (gameState == 9) {    
+      if (millis() - startTime > 500) {
+        
       if (PUChoice1.isPressed()) {
         player.abilities[0] = true;
         gameState = 1;
@@ -310,6 +312,8 @@ class GUI {
       }
     }
     else if (gameState == 10) {
+      if (millis() - startTime > 500) {
+        
       if (PUChoice4.isPressed()) {
         player.abilities[3] = true;
         gameState = 2;
@@ -322,8 +326,11 @@ class GUI {
         player.abilities[5] = true;
         gameState = 2;
       }
+      }
     }  
     else if (gameState == 11) {
+      if (millis() - startTime > 500) {
+        
       if (PUChoice7.isPressed()) {
         player.abilities[6] = true;
         gameState = 3;
@@ -336,6 +343,8 @@ class GUI {
         player.abilities[8] = true;
         gameState = 3;
       }
+      }
     }
+  }
   }
 }
