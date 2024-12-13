@@ -1,3 +1,15 @@
+import ddf.minim.*; // Import Minim library
+boolean isMuted = false; // Tracks if the music is muted
+Minim minim;
+AudioPlayer levelMusic;
+boolean isMusicPlaying = false; // To track if the music is currently playing
+AudioPlayer scoreMusic;
+boolean isScoreMusicPlaying = false; // To track if the score music is currently playing
+AudioPlayer zombieGroan; // For zombie groaning sound
+AudioPlayer hurtSound; // Sound played when a zombie takes damage
+int zombieGroanInterval = 3000; // Time interval in milliseconds between potential groans
+int lastGroanTime = 0; // Tracks the last time a groan occurred
+
 boolean showHitbox = false;
 
 ArrayList<Rocket> rockets = new ArrayList<Rocket>();
@@ -63,6 +75,20 @@ void setup() {
   noSmooth();
   size(1000,800);
   frameRate(60);
+  
+  // Initialize Minim and load the hurt sound
+  minim = new Minim(this);
+  levelMusic = minim.loadFile("LevelMusic.wav");
+  scoreMusic = minim.loadFile("ScoreTrack.wav");
+  zombieGroan = minim.loadFile("ZombieGroan.wav");
+  hurtSound = minim.loadFile("HurtSound.wav");
+
+  // Start music tracks in loop mode but pause them initially
+  levelMusic.loop();
+  levelMusic.pause();
+  scoreMusic.loop();
+  scoreMusic.pause();
+
   
   allCollisions = new ArrayList<ArrayList<Collision>>();
   collision1 = new ArrayList<Collision>();
@@ -209,6 +235,38 @@ void setup() {
 }
 
 void draw() {
+  
+ if (!isMuted) { // Only manage music if not muted
+    if (gameState == 1 || gameState == 2 || gameState == 3) {
+        if (!isMusicPlaying) {
+            levelMusic.loop();
+            scoreMusic.pause();
+            isMusicPlaying = true;
+            isScoreMusicPlaying = false;
+        }
+    } else {
+        if (!isScoreMusicPlaying) {
+            scoreMusic.loop();
+            levelMusic.pause();
+            isScoreMusicPlaying = true;
+            isMusicPlaying = false;
+        }
+    }
+  }
+  
+  // Random zombie groan logic
+  if (millis() - lastGroanTime >= zombieGroanInterval) {
+    if (zombies.size() > 0) { // Only groan if there are zombies
+      Zombie randomZombie = zombies.get((int) random(zombies.size())); // Pick a random zombie
+      if (randomZombie.alive) {
+        zombieGroan.rewind(); // Rewind to the beginning of the sound
+        zombieGroan.play();  // Play the groan
+      }
+    }
+    lastGroanTime = millis(); // Update the last groan time
+    zombieGroanInterval = (int) random(2000, 5000); // Set the next interval randomly between 2-5 seconds
+  }
+  
   // control transitions between levels
   if (countZombiesAlive() == 0 && gameState == 3 && startOfLevel == false) {
     gameState = 20;
@@ -804,4 +862,12 @@ void evolveZombies() {
     zombie.speed = avgSpeed + random(-mutationRate * 0.1, mutationRate * 0.1);
     zombie.damage = avgDamage + random(-mutationRate, mutationRate);
   }
+}
+
+void stop() {
+  levelMusic.close();
+  scoreMusic.close();
+  zombieGroan.close(); // Close the zombie groan sound
+  minim.stop();
+  super.stop();
 }
