@@ -81,7 +81,7 @@ void setup() {
   levelMusic = minim.loadFile("LevelMusic.wav");
   scoreMusic = minim.loadFile("ScoreTrack.wav");
   zombieGroan = minim.loadFile("ZombieGroan.wav");
-  hurtSound = minim.loadFile("HurtSound.wav");
+  hurtSound = minim.loadFile("hurtSound.wav");
 
   // Start music tracks in loop mode but pause them initially
   levelMusic.loop();
@@ -236,21 +236,29 @@ void setup() {
 
 void draw() {
   
- if (!isMuted) { // Only manage music if not muted
+if (!isMuted) { // Only manage music if not muted
     if (gameState == 1 || gameState == 2 || gameState == 3) {
-        if (!isMusicPlaying) {
-            levelMusic.loop();
-            scoreMusic.pause();
-            isMusicPlaying = true;
-            isScoreMusicPlaying = false;
-        }
+      if (!isMusicPlaying) {
+        levelMusic.loop();
+        scoreMusic.pause();
+        isMusicPlaying = true;
+        isScoreMusicPlaying = false;
+      }
     } else {
-        if (!isScoreMusicPlaying) {
-            scoreMusic.loop();
-            levelMusic.pause();
-            isScoreMusicPlaying = true;
-            isMusicPlaying = false;
-        }
+      if (!isScoreMusicPlaying) {
+        scoreMusic.loop();
+        levelMusic.pause();
+        isScoreMusicPlaying = true;
+        isMusicPlaying = false;
+      }
+    }
+  } else {
+    // Pause all audio if muted
+    if (isMusicPlaying || isScoreMusicPlaying) {
+      levelMusic.pause();
+      scoreMusic.pause();
+      isMusicPlaying = false;
+      isScoreMusicPlaying = false;
     }
   }
   
@@ -324,6 +332,24 @@ void keyReleased() {
 void mousePressed() {
   g.mousePressed();
   player.mousePressed();
+
+  // Handle mute button
+  if (g.mute.isPressed()) { 
+    isMuted = !isMuted; // Toggle mute state
+    if (isMuted) {
+      levelMusic.pause();
+      scoreMusic.pause();
+      zombieGroan.pause();
+      hurtSound.pause();
+    } else {
+      if (isMusicPlaying) {
+        levelMusic.play();
+      }
+      if (isScoreMusicPlaying) {
+        scoreMusic.play();
+      }
+    }
+  }
 }
 
 void mouseReleased() {
@@ -868,6 +894,10 @@ void stop() {
   levelMusic.close();
   scoreMusic.close();
   zombieGroan.close(); // Close the zombie groan sound
+  hurtSound.close(); // Close the hurt sound
   minim.stop();
   super.stop();
 }
+
+
+
