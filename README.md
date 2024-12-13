@@ -1,6 +1,9 @@
 # BaldEagleDeathSquad 
 # The Hive
 
+Prerequisites:
+This game requires the audio library Minim to experience sound. Please go to Sketch -> Import Library... -> Manage Libraries, and install Minim.
+
 The Hive is a roguelike-inspired game, where the main character traverses through a factory while defeating evolving zombies and gaining power-ups.  There are three tiers of power-ups: a starting offensive weapon selected before the first level, a passive ability selected before the second level, and a powerful offensive weapon selected before the third level.  
 
 Defeat all the zombies of the hive in each level to progress to the next one and try to make your way through all three levels!
